@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherOutreach · SMS Demo Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Spreadsheet parsing / export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iphone-width: 375px;
+            --iphone-height: 812px;
+            --sidebar-width: 420px;
+            --ios-blue: #007AFF;
+            --ios-grey: #E9E9EB;
+            --brand: #005A8C;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ============ SIDEBAR ============ */
+        #config-panel {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            z-index: 200;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        body.sidebar-hidden #config-panel {
+            transform: translateX(-100%);
+            margin-right: calc(var(--sidebar-width) * -1);
+        }
+        .scroll-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 18px;
+            background-color: #fbfcfd;
+        }
+        .input-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        .txt-input {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 9px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.15s;
+            background: #fff;
+            font-family: inherit;
+        }
+        .txt-input:focus { border-color: var(--ios-blue); box-shadow: 0 0 0 3px rgba(0,122,255,0.12); }
+
+        /* ---- Tabs ---- */
+        .tab-btn {
+            flex: 1;
+            padding: 9px 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+        }
+        .tab-btn.active { background: #fff; color: var(--brand); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        /* ---- Editor cards ---- */
+        .step-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--brand);
+            background: #EFF6FF;
+            border: 1px solid #DBEAFE;
+            padding: 3px 9px;
+            border-radius: 999px;
+        }
+        .mini-btn {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 9px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        /* ============ PREVIEW / PHONE ============ */
+        #preview-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 30%, #F1F5F9 0%, #E2E8F0 100%);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .viewport-container {
+            width: var(--iphone-width);
+            height: var(--iphone-height);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .iphone-frame {
+            width: var(--iphone-width);
+            height: var(--iphone-height);
+            background-color: white;
+            border-radius: 44px;
+            box-shadow: 0 0 0 12px #1F2937, 0 0 0 14px #4B5563, 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            position: absolute;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform-origin: center center;
+        }
+        .notch {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 150px; height: 30px;
+            background-color: #1F2937;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 50;
+        }
+        .chat-container {
+            flex-grow: 1;
+            padding: 20px 14px;
+            padding-top: 98px;
+            padding-bottom: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            background: #fff;
+        }
+        .chat-container::-webkit-scrollbar { display: none; }
+        .bubble {
+            max-width: 76%;
+            padding: 9px 14px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.38;
+            position: relative;
+            animation: popIn 0.25s ease-out forwards;
+            opacity: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-bottom: 2px;
+        }
+        .bubble-bot { background-color: var(--ios-grey); color: black; align-self: flex-start; border-bottom-left-radius: 5px; }
+        .bubble-user { background-color: var(--ios-blue); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
+        .bubble.grouped-top { margin-top: 6px; }
+        .intro-divider {
+            align-self: center;
+            text-align: center;
+            margin: 4px 0 10px;
+            font-size: 11px;
+            color: #8A8A8E;
+            animation: fadeIn 0.3s ease;
+        }
+        .receipt {
+            align-self: flex-end;
+            font-size: 10px;
+            color: #8A8A8E;
+            margin: 0 4px 6px 0;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+        .bubble-bot .sms-link { color: #0a84ff; text-decoration: underline; }
+        .bubble-user .sms-link { color: #fff; text-decoration: underline; }
+
+        /* ---- Quick-reply chips ---- */
+        #quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+            padding: 0 12px 6px;
+        }
+        .qr-chip {
+            border: 1.5px solid var(--ios-blue);
+            color: var(--ios-blue);
+            background: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 13px;
+            border-radius: 999px;
+            cursor: pointer;
+            max-width: 90%;
+            text-align: right;
+            transition: all 0.15s;
+            line-height: 1.3;
+        }
+        .qr-chip:hover { background: var(--ios-blue); color: #fff; }
+
+        .ios-input-container {
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 9px 12px 30px 12px;
+            z-index: 40;
+        }
+        .ios-bar { display: flex; align-items: center; gap: 12px; }
+        .ios-field {
+            flex-grow: 1;
+            background: white;
+            border: 1px solid #D1D5DB;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 15px;
+            color: #111827;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+        .ios-icon { color: #9CA3AF; font-size: 20px; cursor: pointer; transition: all 0.2s; }
+        .ios-icon-ready { color: var(--ios-blue) !important; animation: pulse-camera 2s infinite ease-in-out; }
+        @keyframes pulse-camera {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.18); opacity: 0.75; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .ios-send-btn { width: 30px; height: 30px; background-color: #E5E7EB; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: background-color 0.2s; }
+        .ios-send-btn.active { background-color: var(--ios-blue); }
+
+        @keyframes popIn { from { opacity: 0; transform: scale(0.92) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .status-bar { position: absolute; top: 14px; left: 30px; right: 30px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; z-index: 50; }
+        .home-bar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background-color: #1F2937; border-radius: 10px; z-index: 50; }
+
+        #open-config-btn { position: fixed; top: 20px; left: 20px; z-index: 300; display: none; cursor: pointer; }
+        body.sidebar-hidden #open-config-btn { display: flex; }
+        .typing-bubble { align-self: flex-start; }
+    </style>
+</head>
+<body id="main-body">
+
+    <!-- ============ SIDEBAR ============ -->
+    <div id="config-panel">
+        <div class="px-5 py-4 border-b border-slate-200 bg-white flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white" style="background:var(--brand)">
+                    <i class="fa-solid fa-comment-medical"></i>
+                </div>
+                <div>
+                    <h1 class="text-[15px] font-extrabold text-slate-800 leading-tight">CipherOutreach</h1>
+                    <p class="text-[11px] text-slate-500 font-medium">SMS Demo Builder</p>
+                </div>
+            </div>
+            <button onclick="toggleConfig()" title="Present mode (hide panel)" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <!-- Template library selector -->
+        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
+            <label class="input-label">Active Template</label>
+            <div class="flex gap-2">
+                <select id="template-select" onchange="switchTemplate(this.value)" class="txt-input flex-1 font-semibold"></select>
+                <button onclick="document.getElementById('file-import').click()" title="Import a new template (.xlsx / .csv)" class="mini-btn text-white flex items-center gap-1" style="background:var(--brand)">
+                    <i class="fa-solid fa-file-import"></i> Import
+                </button>
+                <input type="file" id="file-import" class="hidden" accept=".xlsx,.xls,.csv" onchange="importFile(this)">
+            </div>
+            <div class="flex gap-2 mt-2">
+                <button onclick="renameTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-i-cursor mr-1"></i>Rename</button>
+                <button onclick="duplicateTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-regular fa-copy mr-1"></i>Duplicate</button>
+                <button onclick="downloadTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-download mr-1"></i>Export</button>
+                <button onclick="deleteTemplate()" class="mini-btn bg-red-50 text-red-500 hover:bg-red-100" title="Delete this template"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="px-4 pt-3 pb-1 bg-white">
+            <div class="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                <div class="tab-btn active" data-tab="editor" onclick="switchTab('editor')"><i class="fa-solid fa-pen mr-1"></i> Script Editor</div>
+                <div class="tab-btn" data-tab="settings" onclick="switchTab('settings')"><i class="fa-solid fa-sliders mr-1"></i> Settings</div>
+            </div>
+        </div>
+
+        <div class="scroll-area">
+            <!-- EDITOR TAB -->
+            <div class="tab-pane active" id="pane-editor">
+                <div id="editor-list"></div>
+                <button onclick="addStep()" class="w-full border-2 border-dashed border-slate-200 text-slate-400 hover:text-slate-600 hover:border-slate-300 rounded-xl py-2.5 text-xs font-bold mb-3">
+                    <i class="fa-solid fa-plus"></i> Add Step
+                </button>
+                <button onclick="applyAndRestart()" class="w-full text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue)">
+                    <i class="fa-solid fa-play"></i> Apply &amp; Restart Thread
+                </button>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div class="tab-pane" id="pane-settings">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Patient First Name</label>
+                        <input type="text" id="set-patient" class="txt-input" oninput="updateSetting('patient', this.value)">
+                    </div>
+                    <div>
+                        <label class="input-label">Hospital / Health System (SMS sender name)</label>
+                        <input type="text" id="set-hospital" class="txt-input" oninput="updateSetting('hospital', this.value)">
+                    </div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed">
+                        <i class="fa-solid fa-circle-info mr-1"></i>
+                        Use the tokens
+                        <code class="bg-white px-1 rounded">{patient}</code> and
+                        <code class="bg-white px-1 rounded">{hospital}</code>
+                        anywhere in your script and they'll be replaced live in the preview. The hospital name also
+                        appears as the message sender at the top of the thread.
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] text-slate-600 leading-relaxed">
+                        <p class="font-bold text-slate-700 mb-1"><i class="fa-solid fa-table-list mr-1"></i> Template format</p>
+                        Import a spreadsheet (<code class="bg-white px-1 rounded">.xlsx</code> or <code class="bg-white px-1 rounded">.csv</code>) with these columns:
+                        <div class="mt-1 font-mono text-[10px] bg-white border border-slate-200 rounded p-2">Step ID · Bot Message · Choice Text · Choice Next</div>
+                        Rows sharing a <b>Step ID</b> are grouped: each <b>Bot Message</b> becomes a texted bubble; the
+                        <b>Choice Text</b> is the patient's scripted reply, and <b>Choice Next</b> is the Step ID it advances to.
+                    </div>
+                    <button onclick="resetDefaults()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl transition-all">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset to TCM Sample Template
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Persistent presenter control bar -->
+        <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] flex gap-2">
+            <button onclick="stepAdvance()" class="flex-1 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue);box-shadow:0 8px 18px -6px rgba(0,122,255,0.5)">
+                <i class="fa-solid fa-forward-step"></i> Advance
+            </button>
+            <button onclick="restartThread()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all" title="Restart from beginning">
+                <i class="fa-solid fa-backward-fast"></i>
+            </button>
+            <button onclick="toggleConfig()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all" title="Present mode">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ============ PREVIEW AREA ============ -->
+    <div id="preview-area">
+        <button id="open-config-btn" onclick="toggleConfig()" class="bg-white p-3 rounded-full shadow-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-2 pr-4 group">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background:var(--brand)"><i class="fa-solid fa-sliders text-sm"></i></div>
+            <span class="text-xs font-bold text-slate-700">Show Panel</span>
+        </button>
+
+        <div class="viewport-container">
+            <div class="iphone-frame" id="iphone-frame">
+                <div class="notch"></div>
+                <div class="status-bar"><span id="current-time">9:41</span><div class="flex gap-1.5"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div></div>
+
+                <div class="absolute top-0 left-0 right-0 h-[86px] bg-white/95 backdrop-blur-md border-b border-slate-200 z-30 flex flex-col justify-end pb-2 px-4 shadow-sm">
+                    <div class="flex items-center gap-2.5">
+                        <div id="header-logo" class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs" style="background:var(--brand)">CH</div>
+                        <div class="flex flex-col">
+                            <span id="header-name" class="text-[15px] font-bold text-slate-800 leading-tight">Central Hospital</span>
+                            <span class="text-[11px] text-slate-400 leading-tight">Text Message · SMS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-container" id="chat-feed"></div>
+
+                <div id="typing-container" class="px-4 mb-2 hidden">
+                    <div class="flex gap-1 bg-[#E9E9EB] w-fit px-3 py-3 rounded-2xl typing-bubble">
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full" style="animation:pulse-camera 1.2s infinite"></div>
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full" style="animation:pulse-camera 1.2s infinite 0.2s"></div>
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full" style="animation:pulse-camera 1.2s infinite 0.4s"></div>
+                    </div>
+                </div>
+
+                <div id="quick-replies"></div>
+
+                <div class="ios-input-container">
+                    <div class="ios-bar">
+                        <i id="camera-trigger" onclick="stepAdvance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
+                        <div class="ios-field">
+                            <span id="ios-text-placeholder" class="text-slate-300">Text Message</span>
+                            <span id="ios-actual-text" class="hidden"></span>
+                        </div>
+                        <div id="ios-send-btn" class="ios-send-btn"><i class="fa-solid fa-arrow-up"></i></div>
+                    </div>
+                </div>
+                <div class="home-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* =====================================================================
+       CipherOutreach · SMS Demo Builder
+       A lightweight, template-driven SMS thread simulator. Import a
+       spreadsheet (Step ID / Bot Message / Choice Text / Choice Next),
+       swap between saved templates, and edit the script inline.
+       ===================================================================== */
+
+    /* ---- Bundled sample: TCM (Transitional Care Management) outreach ---- */
+    const TCM_TEMPLATE = {
+        id: 'tcm-sample',
+        name: 'TCM Outreach (Sample)',
+        steps: [
+            { id: '0.0', messages: [
+                "Hello, this is {hospital}. We are contacting you to see how you're recovering at home after your recent hospital stay and wanted to check in on how you are recovering at home and have a few questions we would like to ask you.",
+                "Are we speaking with the patient, a caregiver, or do we have the wrong number?"
+            ], choices: [{ text: "I am the patient", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Great, let's get started! How are you feeling now compared to when you left the hospital?"
+            ], choices: [{ text: "I have been having consistent headaches since I left the hospital and I have been really tired", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Ok thanks for letting us know, we will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue please contact your doctor's office or go to the nearest emergency department.",
+                "When leaving the hospital you were given discharge instructions to help you stay healthy at home. Do you understand all of your hospital discharge instructions?"
+            ], choices: [{ text: "Yes I understood", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Ok, we will have someone on our care team call you back shortly.",
+                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
+            ], choices: [{ text: "Yes, I do have my medication", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Do you have any questions about any of your medications?"
+            ], choices: [{ text: "Yes I have a question about the lisinopril", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Ok, we will have someone on our care team call you back shortly to discuss your medication.",
+                "It is important to schedule a follow up appointment within 7 to 14 days after leaving the hospital. Have you scheduled your appointment with your doctor's office?"
+            ], choices: [{ text: "No, I have not been able to schedule a follow-up appointment yet", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "Ok, thanks for letting us know. Would you like help scheduling a follow-up appointment?"
+            ], choices: [{ text: "Yes, I would appreciate some help scheduling it", next: "7.0" }] },
+            { id: '7.0', messages: [
+                "Ok we will have someone on our care team call you to help schedule an appointment.",
+                "Thank you for participating in this brief conversation.",
+                "Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+            ], choices: [] }
+        ]
+    };
+
+    const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
+
+    /* ---------------- Persistence ---------------- */
+    const STORE_KEY = 'do_state_v1';
+    function load() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
+    }
+    function persist() { localStorage.setItem(STORE_KEY, JSON.stringify({ templates, activeId, settings })); }
+
+    let templates, activeId, settings;
+    (function init() {
+        const s = load();
+        if (s && Array.isArray(s.templates) && s.templates.length) {
+            templates = s.templates;
+            activeId = s.activeId;
+            settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
+            if (!templates.find(t => t.id === activeId)) activeId = templates[0].id;
+        } else {
+            templates = [JSON.parse(JSON.stringify(TCM_TEMPLATE))];
+            activeId = TCM_TEMPLATE.id;
+            settings = Object.assign({}, DEFAULT_SETTINGS);
+        }
+    })();
+
+    function active() { return templates.find(t => t.id === activeId) || templates[0]; }
+    function steps() { return active().steps; }
+
+    /* ---------------- Playback state ---------------- */
+    let currentStep = -1;      // index of last revealed step
+    let awaitingReply = false; // current step has a pending scripted reply
+    let replied = {};          // index -> chosen choice index
+    let isProcessing = false;
+
+    function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    /* ---------------- Tokens & text ---------------- */
+    function token(str) {
+        if (str == null) return "";
+        return String(str)
+            .replace(/{patient}/gi, settings.patient || DEFAULT_SETTINGS.patient)
+            .replace(/{hospital}/gi, settings.hospital || DEFAULT_SETTINGS.hospital);
+    }
+    function escapeHtml(s) { const d = document.createElement('div'); d.innerText = s == null ? '' : s; return d.innerHTML; }
+    function escapeAttr(s) { return (s == null ? '' : String(s)).replace(/"/g, '&quot;'); }
+    function renderText(raw) {
+        let safe = token(raw).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="sms-link">$1</a>');
+        return safe;
+    }
+
+    /* ---------------- Branding ---------------- */
+    function updateBranding() {
+        const name = settings.hospital || DEFAULT_SETTINGS.hospital;
+        document.getElementById('header-name').innerText = name;
+        const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        document.getElementById('header-logo').innerText = initials || 'CH';
+    }
+
+    /* ---------------- Thread rendering ---------------- */
+    const feed = () => document.getElementById('chat-feed');
+    function scrollToBottom() { const f = feed(); f.scrollTop = f.scrollHeight; }
+
+    function addBubble(text, type) {
+        const div = document.createElement('div');
+        div.className = `bubble bubble-${type}`;
+        div.innerHTML = renderText(text);
+        feed().appendChild(div);
+        scrollToBottom();
+        return div;
+    }
+    function updateReceipt() {
+        feed().querySelectorAll('.receipt').forEach(r => r.remove());
+        const users = feed().querySelectorAll('.bubble-user');
+        if (!users.length) return;
+        const last = users[users.length - 1];
+        const rc = document.createElement('div');
+        rc.className = 'receipt';
+        rc.innerText = 'Read';
+        last.insertAdjacentElement('afterend', rc);
+    }
+    async function showTyping() {
+        const tc = document.getElementById('typing-container');
+        tc.classList.remove('hidden'); scrollToBottom();
+        await wait(1050);
+        tc.classList.add('hidden');
+    }
+    async function simulateUserTyping(text) {
+        const field = document.getElementById('ios-actual-text');
+        const place = document.getElementById('ios-text-placeholder');
+        const send = document.getElementById('ios-send-btn');
+        place.classList.add('hidden');
+        field.classList.remove('hidden');
+        field.textContent = '';
+        send.classList.add('active');
+        const t = token(text);
+        for (let ch of t) { field.textContent += ch; await wait(16 + Math.random() * 14); }
+        await wait(280);
+        field.textContent = '';
+        field.classList.add('hidden');
+        place.classList.remove('hidden');
+        send.classList.remove('active');
+        addBubble(text, 'user');
+    }
+
+    /* ---------------- Quick-reply chips ---------------- */
+    function renderQuickReplies() {
+        const box = document.getElementById('quick-replies');
+        box.innerHTML = '';
+        if (!awaitingReply || isProcessing) return;
+        const st = steps()[currentStep];
+        (st.choices || []).forEach((c, idx) => {
+            const chip = document.createElement('div');
+            chip.className = 'qr-chip';
+            chip.innerText = token(c.text);
+            chip.onclick = () => selectChoice(idx);
+            box.appendChild(chip);
+        });
+    }
+
+    /* ---------------- Reveal / navigation ---------------- */
+    function updateCamera() {
+        const cam = document.getElementById('camera-trigger');
+        const atEnd = (currentStep >= steps().length - 1) && !awaitingReply;
+        if (!isProcessing && !atEnd) cam.classList.add('ios-icon-ready');
+        else cam.classList.remove('ios-icon-ready');
+    }
+
+    async function revealStep(i) {
+        const st = steps()[i];
+        if (!st) return;
+        isProcessing = true;
+        currentStep = i;
+        awaitingReply = false;
+        renderQuickReplies();
+        updateCamera();
+        for (const msg of st.messages) {
+            await showTyping();
+            addBubble(msg, 'bot');
+            await wait(430);
+        }
+        if ((st.choices || []).length) awaitingReply = true;
+        isProcessing = false;
+        updateCamera();
+        renderQuickReplies();
+    }
+
+    function indexOfStepId(id) {
+        const arr = steps();
+        const norm = v => String(v == null ? '' : v).trim();
+        let i = arr.findIndex(s => norm(s.id) === norm(id));
+        if (i === -1) {
+            const n = parseFloat(id);
+            if (!isNaN(n)) i = arr.findIndex(s => parseFloat(s.id) === n);
+        }
+        return i;
+    }
+
+    async function selectChoice(idx) {
+        if (isProcessing || !awaitingReply) return;
+        const st = steps()[currentStep];
+        const choice = (st.choices || [])[idx];
+        if (!choice) return;
+        isProcessing = true;
+        awaitingReply = false;
+        document.getElementById('camera-trigger').classList.remove('ios-icon-ready');
+        renderQuickReplies();
+        await simulateUserTyping(choice.text);
+        replied[currentStep] = idx;
+        updateReceipt();
+        isProcessing = false;
+        // advance to the target step (by Choice Next; fallback to the next step in order)
+        let target = choice.next != null && String(choice.next).trim() !== '' ? indexOfStepId(choice.next) : -1;
+        if (target === -1) target = currentStep + 1;
+        if (target < steps().length) await revealStep(target);
+        else { updateCamera(); }
+    }
+
+    async function stepAdvance() {
+        if (isProcessing) return;
+        if (awaitingReply) { await selectChoice(0); return; }
+        if (currentStep < steps().length - 1) await revealStep(currentStep + 1);
+    }
+
+    function restartThread() {
+        replied = {};
+        currentStep = -1;
+        awaitingReply = false;
+        feed().innerHTML = '';
+        const intro = document.createElement('div');
+        intro.className = 'intro-divider';
+        intro.innerText = 'Text Message';
+        feed().appendChild(intro);
+        renderQuickReplies();
+        if (steps().length) revealStep(0);
+    }
+
+    /* ---------------- Settings ---------------- */
+    function fillSettings() {
+        document.getElementById('set-patient').value = settings.patient;
+        document.getElementById('set-hospital').value = settings.hospital;
+    }
+    function updateSetting(key, val) {
+        settings[key] = val;
+        persist();
+        if (key === 'hospital') updateBranding();
+    }
+
+    function applyAndRestart() { persist(); updateBranding(); renderEditor(); restartThread(); }
+    function resetDefaults() {
+        if (!confirm('Reset to the built-in TCM sample template? Your other saved templates are kept.')) return;
+        const existing = templates.findIndex(t => t.id === TCM_TEMPLATE.id);
+        const fresh = JSON.parse(JSON.stringify(TCM_TEMPLATE));
+        if (existing >= 0) templates[existing] = fresh; else templates.push(fresh);
+        activeId = TCM_TEMPLATE.id;
+        settings = Object.assign({}, DEFAULT_SETTINGS);
+        persist();
+        fillSettings(); updateBranding(); renderLibrary(); renderEditor(); restartThread();
+    }
+
+    /* ---------------- Template library ---------------- */
+    function renderLibrary() {
+        const sel = document.getElementById('template-select');
+        sel.innerHTML = '';
+        templates.forEach(t => {
+            const o = document.createElement('option');
+            o.value = t.id; o.textContent = t.name;
+            if (t.id === activeId) o.selected = true;
+            sel.appendChild(o);
+        });
+    }
+    function switchTemplate(id) {
+        activeId = id;
+        persist();
+        renderEditor(); restartThread();
+    }
+    function newId() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function renameTemplate() {
+        const t = active();
+        const name = prompt('Template name:', t.name);
+        if (name && name.trim()) { t.name = name.trim(); persist(); renderLibrary(); }
+    }
+    function duplicateTemplate() {
+        const copy = JSON.parse(JSON.stringify(active()));
+        copy.id = newId();
+        copy.name = active().name + ' (copy)';
+        templates.push(copy);
+        activeId = copy.id;
+        persist(); renderLibrary(); renderEditor(); restartThread();
+    }
+    function deleteTemplate() {
+        if (templates.length <= 1) { alert('You need at least one template.'); return; }
+        if (!confirm(`Delete template "${active().name}"?`)) return;
+        templates = templates.filter(t => t.id !== activeId);
+        activeId = templates[0].id;
+        persist(); renderLibrary(); renderEditor(); restartThread();
+    }
+
+    /* ---------------- Editor ---------------- */
+    function renderEditor() {
+        const list = document.getElementById('editor-list');
+        list.innerHTML = '';
+        steps().forEach((st, sIdx) => {
+            const card = document.createElement('div');
+            card.className = 'step-card';
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="step-badge"><i class="fa-solid fa-hashtag"></i>Step
+                        <input type="text" value="${escapeAttr(st.id)}" oninput="updStepId(${sIdx}, this.value)" class="w-12 bg-transparent border-0 outline-none font-black text-center" style="color:var(--brand)">
+                    </span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="moveStep(${sIdx},-1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="moveStep(${sIdx},1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button onclick="removeStep(${sIdx})" class="text-slate-300 hover:text-red-500 text-lg leading-none px-1" title="Delete step">&times;</button>
+                    </div>
+                </div>
+                <label class="input-label flex justify-between items-center">Bot Messages <button onclick="addMsg(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add message</button></label>
+                ${st.messages.map((m, mIdx) => `<div class="flex gap-1 mb-1.5 items-start"><textarea oninput="updMsg(${sIdx},${mIdx},this.value)" class="txt-input text-xs resize-y h-16">${escapeHtml(m)}</textarea><button onclick="delMsg(${sIdx},${mIdx})" class="text-slate-300 hover:text-red-500 px-1 pt-2">&times;</button></div>`).join('')}
+                <label class="input-label flex justify-between items-center mt-3">Scripted Patient Reply <button onclick="addChoice(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add reply</button></label>
+                ${(st.choices || []).length ? (st.choices || []).map((c, cIdx) => `
+                    <div class="bg-slate-50 p-2 rounded-lg mb-1.5 border border-slate-200">
+                        <textarea oninput="updChoice(${sIdx},${cIdx},'text',this.value)" class="txt-input text-xs resize-y h-14 mb-1.5" placeholder="What the patient replies…">${escapeHtml(c.text)}</textarea>
+                        <div class="flex items-center gap-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase whitespace-nowrap">Advance to step</label>
+                            <input type="text" value="${escapeAttr(c.next == null ? '' : c.next)}" oninput="updChoice(${sIdx},${cIdx},'next',this.value)" class="txt-input text-xs py-1 flex-1" placeholder="(next step)">
+                            <button onclick="delChoice(${sIdx},${cIdx})" class="text-slate-300 hover:text-red-500 text-sm px-1">&times;</button>
+                        </div>
+                    </div>`).join('')
+                : `<p class="text-[11px] text-slate-400 italic px-1 py-1">No reply — this is a closing/terminal step.</p>`}`;
+            list.appendChild(card);
+        });
+    }
+    function updStepId(i, v) { steps()[i].id = v; persist(); }
+    function updMsg(i, j, v) { steps()[i].messages[j] = v; persist(); }
+    function addMsg(i) { steps()[i].messages.push('New message…'); persist(); renderEditor(); }
+    function delMsg(i, j) { steps()[i].messages.splice(j, 1); persist(); renderEditor(); }
+    function addChoice(i) {
+        const st = steps()[i];
+        st.choices = st.choices || [];
+        const nextGuess = steps()[i + 1] ? steps()[i + 1].id : '';
+        st.choices.push({ text: 'Patient reply…', next: nextGuess });
+        persist(); renderEditor();
+    }
+    function updChoice(i, j, k, v) { steps()[i].choices[j][k] = v; persist(); }
+    function delChoice(i, j) { steps()[i].choices.splice(j, 1); persist(); renderEditor(); }
+    function removeStep(i) {
+        if (steps().length <= 1) { alert('A template needs at least one step.'); return; }
+        steps().splice(i, 1); persist(); renderEditor();
+    }
+    function moveStep(i, dir) {
+        const arr = steps();
+        const j = i + dir;
+        if (j < 0 || j >= arr.length) return;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        persist(); renderEditor();
+    }
+    function addStep() {
+        const arr = steps();
+        const last = arr[arr.length - 1];
+        const nextId = last ? (parseFloat(last.id) + 1).toFixed(1) : '0.0';
+        arr.push({ id: isNaN(parseFloat(nextId)) ? String(arr.length) : nextId, messages: ['New message…'], choices: [] });
+        persist(); renderEditor();
+    }
+
+    /* ---------------- Import (XLSX / CSV) ---------------- */
+    function parseRows(rows) {
+        const map = {};
+        const order = [];
+        const find = (r, arr) => {
+            const keys = Object.keys(r);
+            const m = keys.find(k => arr.includes(k.toLowerCase().trim().replace(/[\s_]+/g, '')));
+            return m ? r[m] : undefined;
+        };
+        rows.forEach(r => {
+            const rawId = find(r, ['stepid', 'step', 'id', 'touchpointid']);
+            if (rawId == null || String(rawId).trim() === '') return;
+            const id = String(rawId).trim();
+            if (!map[id]) { map[id] = { id, messages: [], choices: [] }; order.push(id); }
+            const msg = find(r, ['botmessage', 'message', 'text', 'bot']);
+            if (msg != null && String(msg).trim() !== '') map[id].messages.push(String(msg).replace(/\s+$/, ''));
+            const cText = find(r, ['choicetext', 'choice', 'reply', 'response', 'patientreply', 'button']);
+            if (cText != null && String(cText).trim() !== '') {
+                const cNext = find(r, ['choicenext', 'next', 'nextstep', 'target', 'goto']);
+                map[id].choices.push({ text: String(cText).replace(/\s+$/, ''), next: cNext == null ? '' : String(cNext).trim() });
+            }
+        });
+        return order.map(id => map[id]).filter(s => s.messages.length || s.choices.length);
+    }
+
+    function importFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+                const built = parseRows(rows);
+                if (!built.length) { alert('No valid rows found. Expected columns: Step ID, Bot Message, Choice Text, Choice Next.'); input.value = ''; return; }
+                const baseName = file.name.replace(/\.(xlsx|xls|csv)$/i, '');
+                const tpl = { id: newId(), name: baseName || 'Imported template', steps: built };
+                templates.push(tpl);
+                activeId = tpl.id;
+                persist();
+                renderLibrary(); renderEditor(); restartThread();
+            } catch (err) {
+                alert('Import failed: ' + err.message);
+            }
+            input.value = '';
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    /* ---------------- Export current template as .xlsx ---------------- */
+    function downloadTemplate() {
+        const aoa = [['Step ID', 'Bot Message', 'Choice Text', 'Choice Next']];
+        steps().forEach(st => {
+            const rowCount = Math.max(st.messages.length, (st.choices || []).length, 1);
+            for (let k = 0; k < rowCount; k++) {
+                const c = (st.choices || [])[k] || {};
+                aoa.push([st.id, st.messages[k] || '', c.text || '', c.next != null ? c.next : '']);
+            }
+        });
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        ws['!cols'] = [{ wch: 8 }, { wch: 70 }, { wch: 45 }, { wch: 10 }];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'template');
+        const safe = (active().name || 'template').replace(/[^\w.-]+/g, '_');
+        XLSX.writeFile(wb, safe + '.xlsx');
+    }
+
+    /* ---------------- UI plumbing ---------------- */
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + tab));
+    }
+    function toggleConfig() { document.body.classList.toggle('sidebar-hidden'); setTimeout(updateScale, 305); }
+    function updateScale() {
+        const f = document.getElementById('iphone-frame');
+        if (f) f.style.transform = `scale(${Math.min(window.innerWidth / 470, window.innerHeight / 880, 1)})`;
+    }
+    function updateClock() {
+        const n = new Date();
+        let h = n.getHours(); const m = n.getMinutes().toString().padStart(2, '0');
+        const el = document.getElementById('current-time');
+        if (el) el.innerText = `${h}:${m}`;
+    }
+
+    window.onload = () => {
+        fillSettings();
+        updateBranding();
+        renderLibrary();
+        renderEditor();
+        updateScale();
+        updateClock();
+        setInterval(updateClock, 30000);
+        restartThread();
+    };
+    window.onresize = updateScale;
+    </script>
+</body>
+</html>
