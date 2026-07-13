@@ -269,6 +269,13 @@
             </button>
         </div>
 
+        <!-- Organization name (shown at top of the phone) -->
+        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
+            <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i> Hospital / Organization Name</label>
+            <input type="text" id="set-hospital-top" class="txt-input font-semibold" placeholder="e.g. Central Hospital" oninput="updateSetting('hospital', this.value)">
+            <p class="text-[10px] text-slate-400 mt-1">Displayed as the SMS sender at the top of the phone, and replaces <code class="bg-slate-100 px-1 rounded">{hospital}</code> in the script.</p>
+        </div>
+
         <!-- Template library selector -->
         <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
             <label class="input-label">Active Template</label>
@@ -628,11 +635,19 @@
     function fillSettings() {
         document.getElementById('set-patient').value = settings.patient;
         document.getElementById('set-hospital').value = settings.hospital;
+        document.getElementById('set-hospital-top').value = settings.hospital;
     }
     function updateSetting(key, val) {
         settings[key] = val;
         persist();
-        if (key === 'hospital') updateBranding();
+        if (key === 'hospital') {
+            updateBranding();
+            // keep the top box and the Settings-tab box in sync
+            const top = document.getElementById('set-hospital-top');
+            const inSettings = document.getElementById('set-hospital');
+            if (top.value !== val) top.value = val;
+            if (inSettings.value !== val) inSettings.value = val;
+        }
     }
 
     function applyAndRestart() { persist(); updateBranding(); renderEditor(); restartThread(); }
