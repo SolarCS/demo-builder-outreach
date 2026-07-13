@@ -208,30 +208,6 @@
         .bubble-bot .sms-link { color: #0a84ff; text-decoration: underline; }
         .bubble-user .sms-link { color: #fff; text-decoration: underline; }
 
-        /* ---- Quick-reply chips ---- */
-        #quick-replies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: flex-end;
-            padding: 0 12px 6px;
-        }
-        .qr-chip {
-            border: 1.5px solid var(--ios-blue);
-            color: var(--ios-blue);
-            background: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 6px 13px;
-            border-radius: 999px;
-            cursor: pointer;
-            max-width: 90%;
-            text-align: right;
-            transition: all 0.15s;
-            line-height: 1.3;
-        }
-        .qr-chip:hover { background: var(--ios-blue); color: #fff; }
-
         .ios-input-container {
             background: white;
             border-top: 1px solid #E5E7EB;
@@ -410,8 +386,6 @@
                     </div>
                 </div>
 
-                <div id="quick-replies"></div>
-
                 <div class="ios-input-container">
                     <div class="ios-bar">
                         <i id="camera-trigger" onclick="stepAdvance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
@@ -577,21 +551,6 @@
         addBubble(text, 'user');
     }
 
-    /* ---------------- Quick-reply chips ---------------- */
-    function renderQuickReplies() {
-        const box = document.getElementById('quick-replies');
-        box.innerHTML = '';
-        if (!awaitingReply || isProcessing) return;
-        const st = steps()[currentStep];
-        (st.choices || []).forEach((c, idx) => {
-            const chip = document.createElement('div');
-            chip.className = 'qr-chip';
-            chip.innerText = token(c.text);
-            chip.onclick = () => selectChoice(idx);
-            box.appendChild(chip);
-        });
-    }
-
     /* ---------------- Reveal / navigation ---------------- */
     function updateCamera() {
         const cam = document.getElementById('camera-trigger');
@@ -606,7 +565,6 @@
         isProcessing = true;
         currentStep = i;
         awaitingReply = false;
-        renderQuickReplies();
         updateCamera();
         for (const msg of st.messages) {
             await showTyping();
@@ -616,7 +574,6 @@
         if ((st.choices || []).length) awaitingReply = true;
         isProcessing = false;
         updateCamera();
-        renderQuickReplies();
     }
 
     function indexOfStepId(id) {
@@ -638,7 +595,6 @@
         isProcessing = true;
         awaitingReply = false;
         document.getElementById('camera-trigger').classList.remove('ios-icon-ready');
-        renderQuickReplies();
         await simulateUserTyping(choice.text);
         replied[currentStep] = idx;
         updateReceipt();
@@ -665,7 +621,6 @@
         intro.className = 'intro-divider';
         intro.innerText = 'Text Message';
         feed().appendChild(intro);
-        renderQuickReplies();
         if (steps().length) revealStep(0);
     }
 
