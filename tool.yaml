@@ -1,4 +1,4 @@
-name: demo-builder-outreach
+name: proms-outreach-journey
 runtime: static
-display_name: CipherOutreach SMS Demo Builder
-repo: SolarCS/demo-builder-outreach
+display_name: CipherOutreach PROMs Outreach Journey
+repo: SolarCS/proms-outreach-journey
