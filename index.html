@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v3";
+    const STORE_KEY = "proms_journey_v6";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -449,8 +449,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op HOOS, JR. survey (6 questions). Answer based on how your hip has felt over the last week. Reply STOP anytime to opt out.",
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911."
+              "This is your pre-op HOOS, JR. survey (6 questions). Answer based on how your hip has felt over the last week. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -485,14 +484,6 @@
               ],
               "alert": false
             }
-          },
-          {
-            "id": "sec_func",
-            "kind": "system",
-            "messages": [
-              "Next: Function, daily living."
-            ],
-            "reply": null
           },
           {
             "id": "fn_rising",
@@ -563,7 +554,8 @@
             "kind": "system",
             "messages": [
               "Thank you. Your pre-op HOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your hip improves.",
-              "Take care and have a great day. Reply STOP at any time to unsubscribe."
+              "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -635,9 +627,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll check in again in a few months. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -709,9 +701,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll check in again around the six-month mark. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -783,9 +775,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll reach out again before your one-year survey. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -828,7 +820,8 @@
             "kind": "system",
             "messages": [
               "We appreciate you staying engaged with us throughout the year.",
-              "Take care! Reply STOP at any time to unsubscribe."
+              "Take care! Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -899,14 +892,6 @@
             }
           },
           {
-            "id": "sec_func_post",
-            "kind": "system",
-            "messages": [
-              "Next: Function, daily living."
-            ],
-            "reply": null
-          },
-          {
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
@@ -975,7 +960,8 @@
             "kind": "system",
             "messages": [
               "Thank you. Your one-year HOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
-              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
+              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1034,8 +1020,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op KOOS, JR. survey (7 questions). Answer based on how your knee has felt over the last week. Reply STOP anytime to opt out.",
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911."
+              "This is your pre-op KOOS, JR. survey (7 questions). Answer based on how your knee has felt over the last week. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1062,14 +1047,6 @@
               ],
               "alert": false
             }
-          },
-          {
-            "id": "sec_pain",
-            "kind": "system",
-            "messages": [
-              "Next: Pain."
-            ],
-            "reply": null
           },
           {
             "id": "pain_twist",
@@ -1136,14 +1113,6 @@
             }
           },
           {
-            "id": "sec_func",
-            "kind": "system",
-            "messages": [
-              "Next: Function, daily living."
-            ],
-            "reply": null
-          },
-          {
             "id": "fn_rising",
             "kind": "q",
             "messages": [
@@ -1180,7 +1149,8 @@
             "kind": "system",
             "messages": [
               "Thank you. Your pre-op KOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your knee improves.",
-              "Take care and have a great day. Reply STOP at any time to unsubscribe."
+              "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1252,9 +1222,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll check in again in a few months. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1326,9 +1296,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll check in again around the six-month mark. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1400,9 +1370,9 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
               "We'll reach out again before your one-year survey. Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1445,7 +1415,8 @@
             "kind": "system",
             "messages": [
               "We appreciate you staying engaged with us throughout the year.",
-              "Take care! Reply STOP at any time to unsubscribe."
+              "Take care! Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1506,14 +1477,6 @@
               ],
               "alert": false
             }
-          },
-          {
-            "id": "sec_pain_post",
-            "kind": "system",
-            "messages": [
-              "Next: Pain."
-            ],
-            "reply": null
           },
           {
             "id": "pain_twist_post",
@@ -1580,14 +1543,6 @@
             }
           },
           {
-            "id": "sec_func_post",
-            "kind": "system",
-            "messages": [
-              "Next: Function, daily living."
-            ],
-            "reply": null
-          },
-          {
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
@@ -1624,7 +1579,8 @@
             "kind": "system",
             "messages": [
               "Thank you. Your one-year KOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
-              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
+              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1677,7 +1633,8 @@
             "kind": "system",
             "messages": [
               "Take care!",
-              "Reply STOP at any time to unsubscribe."
+              "Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1697,14 +1654,6 @@
             "messages": [
               "Hi {patient}, this is {hospital}. You are receiving this survey because you recently had a procedure at {hospital}. Either before or after your operation you should have been given information about what to do during your recovery. We would like to know if this information was easy to follow.",
               "This survey is anonymous. Your individual answers will not be linked back to you. It should take about 5 minutes. Reply STOP anytime to opt out."
-            ],
-            "reply": null
-          },
-          {
-            "id": "domain_needs",
-            "kind": "system",
-            "messages": [
-              "First: whether the information took into account your needs."
             ],
             "reply": null
           },
@@ -1739,14 +1688,6 @@
               ],
               "alert": false
             }
-          },
-          {
-            "id": "domain_meds",
-            "kind": "system",
-            "messages": [
-              "Next: how clear was the following information about your recovery for medications."
-            ],
-            "reply": null
           },
           {
             "id": "q3",
@@ -1795,14 +1736,6 @@
               ],
               "alert": false
             }
-          },
-          {
-            "id": "domain_act",
-            "kind": "system",
-            "messages": [
-              "Last section: how clear was the following information about your recovery for daily activities."
-            ],
-            "reply": null
           },
           {
             "id": "q6",
@@ -1873,7 +1806,8 @@
             "kind": "system",
             "messages": [
               "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients.",
-              "Survey completion and data collection recorded. Have a great day. Reply STOP at any time to unsubscribe."
+              "Survey completion and data collection recorded. Have a great day. Reply STOP at any time to unsubscribe.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
