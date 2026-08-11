@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v1";
+    const STORE_KEY = "proms_journey_v3";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -403,8 +403,8 @@
     "name": "HOOS, JR. (THA)",
     "shortName": "HOOS, JR.",
     "joint": "hip",
-    "meta": "6 touches \u00b7 pre-op \u2192 Day 300+",
-    "blurb": "Patients reply in plain language \u2014 our conversational AI maps each reply to a CMS HOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 6 HOOS, JR. items; mid-year touches keep patients engaged for matched-pair completion.",
+    "meta": "6 touches · pre-op → Day 300+",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS HOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 6 HOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
     "journey": [
       {
         "day": "Pre-op",
@@ -412,14 +412,14 @@
         "title": "Pre-Op HOOS, JR. Survey",
         "questions": 6,
         "kind": "survey",
-        "summary": "CMS baseline \u00b7 90\u20130 days before surgery \u00b7 full HOOS, JR..",
+        "summary": "CMS baseline. 90 to 0 days before surgery. Full HOOS, JR.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect your baseline HOOS, JR. health survey. It only takes a few minutes and helps us track your recovery.",
-              "To continue in English, just reply here. Para continuar en espa\u00f1ol, responda ESPA\u00d1OL."
+              "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
               "text": "English is fine",
@@ -458,11 +458,11 @@
             "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced the last week during the following activity?\nGoing up or down stairs",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of hip pain have you experienced in the last week going up or down stairs?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Going up and down stairs hurts quite a bit \u2014 I'd say moderate to severe",
+              "text": "Stairs have been pretty rough. I'd say moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -474,11 +474,11 @@
             "id": "pain_uneven",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced the last week during the following activity?\nWalking on an uneven surface",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Uneven ground is tough, definitely severe pain in my hip",
+              "text": "Uneven ground really bothers it. Severe for sure.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -498,11 +498,11 @@
             "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nRising from sitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Getting up from a chair is hard \u2014 moderate difficulty because of my hip",
+              "text": "Getting up from a chair is hard. Moderate difficulty.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -514,11 +514,11 @@
             "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nBending to floor/pick up an object",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Bending to pick something up is severe for me right now",
+              "text": "Bending to pick something up is tough. Severe.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -530,11 +530,11 @@
             "id": "fn_bed",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nLying in bed (turning over, maintaining hip position)",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Turning over in bed is moderate to severe \u2014 I have to be careful",
+              "text": "Turning over in bed is uncomfortable. Moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -546,11 +546,11 @@
             "id": "fn_sitting",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nSitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Sitting for a while gets uncomfortable \u2014 mild to moderate",
+              "text": "Sitting for a while gets uncomfortable. Mild.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -562,7 +562,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you \u2014 your pre-op HOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your hip improves.",
+              "Thank you. Your pre-op HOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your hip improves.",
               "Take care and have a great day. Reply STOP at any time to unsubscribe."
             ],
             "reply": null
@@ -575,14 +575,14 @@
         "title": "Early Recovery Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "One month post-hip surgery \u2014 pain and early function.",
+        "summary": "One month after hip surgery. Pain and early function.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total hip replacement.",
-              "This is a short recovery check-in (3 questions) \u2014 not your full survey. Reply STOP anytime to opt out."
+              "This is a short recovery check-in (3 questions), not your full survey. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -593,10 +593,10 @@
               "How has the pain in your hip been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Still sore, but better than those first days \u2014 maybe moderate most of the time",
-              "intent": "Pain improving \u00b7 Moderate",
+              "text": "Still sore, but better than those first days. Mostly moderate.",
+              "intent": "Pain improving. Moderate",
               "ack": [
-                "Thanks for sharing \u2014 that's helpful to know."
+                "Thanks for sharing. That is helpful to know."
               ],
               "alert": false
             }
@@ -608,10 +608,10 @@
               "How easy is it for you to get around at home on your new hip?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker, still careful on stairs",
+              "text": "I can get around the house okay with my walker. Still careful on stairs.",
               "intent": "Limited household mobility",
               "ack": [
-                "Got it \u2014 keep following the activity plan from your care team."
+                "Got it. Keep following the activity plan from your care team."
               ],
               "alert": false
             }
@@ -623,7 +623,7 @@
               "Have you been able to keep up with your physical therapy or home exercises?"
             ],
             "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises",
+              "text": "Yes I've been going to PT twice a week and doing the home exercises.",
               "intent": "Adherent to PT",
               "ack": [
                 "That's great to hear."
@@ -649,13 +649,13 @@
         "title": "Function Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "\u22484 months \u2014 ADLs tied to survey function domains.",
+        "summary": "About 4 months. ADLs tied to survey function domains.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. It's been about four months since your total hip replacement \u2014 quick check on how you're moving day to day.",
+              "Hi {patient}, this is {hospital}. It's been about four months since your total hip replacement. Quick check on how you're moving day to day.",
               "3 short questions. Reply STOP anytime to opt out."
             ],
             "reply": null
@@ -667,10 +667,10 @@
               "How much difficulty do you have rising from a chair because of your hip?"
             ],
             "reply": {
-              "text": "Mostly mild now \u2014 I get up without thinking about it most of the time",
-              "intent": "Rising \u00b7 Mild difficulty",
+              "text": "Mostly mild now. I get up without thinking about it most of the time.",
+              "intent": "Rising. Mild difficulty",
               "ack": [
-                "Nice progress \u2014 thank you."
+                "Nice progress. Thank you."
               ],
               "alert": false
             }
@@ -679,11 +679,11 @@
             "id": "stairs",
             "kind": "q",
             "messages": [
-              "What about going up or down stairs \u2014 any hip pain or difficulty?"
+              "What about going up or down stairs. Any hip pain or difficulty?"
             ],
             "reply": {
-              "text": "Stairs are better. Mild pain if I do a lot of them in a row",
-              "intent": "Stairs \u00b7 Mild",
+              "text": "Stairs are better. Mild pain if I do a lot of them in a row.",
+              "intent": "Stairs. Mild",
               "ack": [
                 "Thanks for letting us know."
               ],
@@ -697,8 +697,8 @@
               "How about bending to the floor to pick something up?"
             ],
             "reply": {
-              "text": "I can do it with mild to moderate difficulty \u2014 still a bit stiff",
-              "intent": "Bending \u00b7 Mild\u2013Moderate",
+              "text": "I can do it with mild difficulty. Still a bit stiff.",
+              "intent": "Bending. Mild",
               "ack": [
                 "Appreciate the update."
               ],
@@ -723,7 +723,7 @@
         "title": "Mid-Year Wellness Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "6 months \u2014 pain + return to activities.",
+        "summary": "6 months. Pain and return to activities.",
         "steps": [
           {
             "id": "intro",
@@ -741,8 +741,8 @@
               "Overall, how is your hip pain compared to before surgery?"
             ],
             "reply": {
-              "text": "Way better \u2014 usually none, sometimes mild after a long day",
-              "intent": "Pain much improved \u00b7 None\u2013Mild",
+              "text": "Way better. Usually none, sometimes mild after a long day.",
+              "intent": "Pain much improved. None to Mild",
               "ack": [
                 "Wonderful to hear."
               ],
@@ -753,10 +753,10 @@
             "id": "activity",
             "kind": "q",
             "messages": [
-              "Are you back to doing things you enjoy \u2014 like walking, hobbies, or seeing friends?"
+              "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week",
+              "text": "Yes I've been walking more and went out to dinner with friends last week.",
               "intent": "Resumed valued activities",
               "ack": [
                 "That's great progress."
@@ -771,10 +771,10 @@
               "How does your hip feel on uneven ground?"
             ],
             "reply": {
-              "text": "Uneven sidewalks are mostly fine \u2014 mild if I'm not careful",
+              "text": "Uneven sidewalks are mostly fine. Mild if I'm not careful.",
               "intent": "Mild residual limitation",
               "ack": [
-                "Thanks \u2014 that helps us keep track of your recovery."
+                "Thanks. That helps us keep track of your recovery."
               ],
               "alert": false
             }
@@ -797,14 +797,14 @@
         "title": "One-Year Survey Primer",
         "questions": 1,
         "kind": "primer",
-        "summary": "\u22489 months \u2014 prepare patient for Day 300+ survey.",
+        "summary": "About 9 months. Prepare patient for Day 300+ survey.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. You're almost at one year since your total hip replacement!",
-              "Soon we'll send your official one-year health form \u2014 the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
+              "Soon we'll send your official one-year health form. It will be the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
             ],
             "reply": null
           },
@@ -815,10 +815,10 @@
               "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
             ],
             "reply": {
-              "text": "This number is fine, I'll watch for it",
-              "intent": "Confirmed contact \u00b7 Ready for survey",
+              "text": "This number is fine. I'll watch for it.",
+              "intent": "Confirmed contact. Ready for survey",
               "ack": [
-                "Perfect \u2014 thank you {patient}."
+                "Perfect. Thank you {patient}."
               ],
               "alert": false
             }
@@ -840,7 +840,7 @@
         "title": "Post-Op HOOS, JR. Survey",
         "questions": 6,
         "kind": "survey",
-        "summary": "CMS matched pair \u00b7 300\u2013425 days post-op \u00b7 full HOOS, JR..",
+        "summary": "CMS matched pair. 300 to 425 days post-op. Full HOOS, JR.",
         "steps": [
           {
             "id": "intro",
@@ -855,7 +855,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Just to confirm \u2014 are we still speaking with {patient}?"
+              "Just to confirm, are we still speaking with {patient}?"
             ],
             "reply": {
               "text": "Yes it's me",
@@ -870,11 +870,11 @@
             "id": "pain_stairs_post",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced the last week during the following activity?\nGoing up or down stairs",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of hip pain have you experienced in the last week going up or down stairs?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs are so much easier now \u2014 almost no hip pain, maybe just mild if I rush",
+              "text": "Stairs are much better now. It's been mild if anything.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -886,11 +886,11 @@
             "id": "pain_uneven_post",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced the last week during the following activity?\nWalking on an uneven surface",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Uneven sidewalks are fine now \u2014 none to mild at most",
+              "text": "Uneven sidewalks are fine. I'd say none.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -910,11 +910,11 @@
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nRising from sitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Rising from a chair is easy again, no real difficulty",
+              "text": "Rising from a chair is easy again. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -926,11 +926,11 @@
             "id": "fn_bending_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nBending to floor/pick up an object",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "I can bend to the floor with only mild difficulty",
+              "text": "I can bend to the floor okay. Only mild difficulty.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -942,11 +942,11 @@
             "id": "fn_bed_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nLying in bed (turning over, maintaining hip position)",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Sleeping and turning in bed feel normal again \u2014 none",
+              "text": "Sleeping and turning in bed feel normal. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -958,11 +958,11 @@
             "id": "fn_sitting_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your hip.\nSitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Sitting is totally fine now",
+              "text": "Sitting is totally fine now. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -974,8 +974,8 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you \u2014 your one-year HOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
-              "Survey completion & data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
+              "Thank you. Your one-year HOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
             ],
             "reply": null
           }
@@ -988,8 +988,8 @@
     "name": "KOOS, JR. (TKA)",
     "shortName": "KOOS, JR.",
     "joint": "knee",
-    "meta": "6 touches \u00b7 pre-op \u2192 Day 300+",
-    "blurb": "Patients reply in plain language \u2014 our conversational AI maps each reply to a CMS KOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 7 KOOS, JR. items; mid-year touches keep patients engaged for matched-pair completion.",
+    "meta": "6 touches · pre-op → Day 300+",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS KOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 7 KOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
     "journey": [
       {
         "day": "Pre-op",
@@ -997,14 +997,14 @@
         "title": "Pre-Op KOOS, JR. Survey",
         "questions": 7,
         "kind": "survey",
-        "summary": "CMS baseline \u00b7 90\u20130 days before surgery \u00b7 full KOOS, JR..",
+        "summary": "CMS baseline. 90 to 0 days before surgery. Full KOOS, JR.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect your baseline KOOS, JR. health survey. It only takes a few minutes and helps us track your recovery.",
-              "To continue in English, just reply here. Para continuar en espa\u00f1ol, responda ESPA\u00d1OL."
+              "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
               "text": "English is fine",
@@ -1052,10 +1052,10 @@
             "kind": "q",
             "messages": [
               "How severe is your knee stiffness after first wakening in the morning?",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Mornings are rough \u2014 severe stiffness until I get moving",
+              "text": "Mornings are rough. Severe stiffness until I get moving.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1064,14 +1064,22 @@
             }
           },
           {
+            "id": "sec_pain",
+            "kind": "system",
+            "messages": [
+              "Next: Pain."
+            ],
+            "reply": null
+          },
+          {
             "id": "pain_twist",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nTwisting/pivoting on your knee",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Twisting hurts a lot \u2014 I'd call it severe",
+              "text": "Twisting hurts a lot. I'd call it severe.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1083,11 +1091,11 @@
             "id": "pain_straight",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nStraightening knee fully",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week straightening your knee fully?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Straightening all the way is moderate pain",
+              "text": "Straightening all the way is moderate pain.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1099,11 +1107,11 @@
             "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nGoing up or down stairs",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week going up or down stairs?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs are hard on this knee \u2014 severe going down especially",
+              "text": "Stairs are hard on this knee. Severe going down especially.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1115,11 +1123,11 @@
             "id": "pain_stand",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nStanding upright",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week standing upright?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Standing too long is moderate pain",
+              "text": "Standing too long is moderate pain.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1139,11 +1147,11 @@
             "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your knee.\nRising from sitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Getting out of a chair takes effort \u2014 moderate difficulty",
+              "text": "Getting out of a chair takes effort. Moderate difficulty.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1155,11 +1163,11 @@
             "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your knee.\nBending to floor/pick up an object",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Bending to the floor is severe right now",
+              "text": "Bending to the floor is really hard. Severe.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1171,7 +1179,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you \u2014 your pre-op KOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your knee improves.",
+              "Thank you. Your pre-op KOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your knee improves.",
               "Take care and have a great day. Reply STOP at any time to unsubscribe."
             ],
             "reply": null
@@ -1184,14 +1192,14 @@
         "title": "Early Recovery Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "One month post-knee surgery \u2014 pain and early function.",
+        "summary": "One month after knee surgery. Pain and early function.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total knee replacement.",
-              "This is a short recovery check-in (3 questions) \u2014 not your full survey. Reply STOP anytime to opt out."
+              "This is a short recovery check-in (3 questions), not your full survey. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1202,10 +1210,10 @@
               "How has the pain in your knee been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Still sore, but better than those first days \u2014 maybe moderate most of the time",
-              "intent": "Pain improving \u00b7 Moderate",
+              "text": "Still sore, but better than those first days. Mostly moderate.",
+              "intent": "Pain improving. Moderate",
               "ack": [
-                "Thanks for sharing \u2014 that's helpful to know."
+                "Thanks for sharing. That is helpful to know."
               ],
               "alert": false
             }
@@ -1217,10 +1225,10 @@
               "How easy is it for you to get around at home on your new knee?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker, still careful on stairs",
+              "text": "I can get around the house okay with my walker. Still careful on stairs.",
               "intent": "Limited household mobility",
               "ack": [
-                "Got it \u2014 keep following the activity plan from your care team."
+                "Got it. Keep following the activity plan from your care team."
               ],
               "alert": false
             }
@@ -1232,7 +1240,7 @@
               "Have you been able to keep up with your physical therapy or home exercises?"
             ],
             "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises",
+              "text": "Yes I've been going to PT twice a week and doing the home exercises.",
               "intent": "Adherent to PT",
               "ack": [
                 "That's great to hear."
@@ -1258,13 +1266,13 @@
         "title": "Function Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "\u22484 months \u2014 ADLs tied to survey function domains.",
+        "summary": "About 4 months. ADLs tied to survey function domains.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. It's been about four months since your total knee replacement \u2014 quick check on how you're moving day to day.",
+              "Hi {patient}, this is {hospital}. It's been about four months since your total knee replacement. Quick check on how you're moving day to day.",
               "3 short questions. Reply STOP anytime to opt out."
             ],
             "reply": null
@@ -1276,10 +1284,10 @@
               "How much difficulty do you have rising from a chair because of your knee?"
             ],
             "reply": {
-              "text": "Mostly mild now \u2014 I get up without thinking about it most of the time",
-              "intent": "Rising \u00b7 Mild difficulty",
+              "text": "Mostly mild now. I get up without thinking about it most of the time.",
+              "intent": "Rising. Mild difficulty",
               "ack": [
-                "Nice progress \u2014 thank you."
+                "Nice progress. Thank you."
               ],
               "alert": false
             }
@@ -1288,11 +1296,11 @@
             "id": "stairs",
             "kind": "q",
             "messages": [
-              "What about going up or down stairs \u2014 any knee pain or difficulty?"
+              "What about going up or down stairs. Any knee pain or difficulty?"
             ],
             "reply": {
-              "text": "Stairs are better. Mild pain if I do a lot of them in a row",
-              "intent": "Stairs \u00b7 Mild",
+              "text": "Stairs are better. Mild pain if I do a lot of them in a row.",
+              "intent": "Stairs. Mild",
               "ack": [
                 "Thanks for letting us know."
               ],
@@ -1306,8 +1314,8 @@
               "How about bending to the floor to pick something up?"
             ],
             "reply": {
-              "text": "I can do it with mild to moderate difficulty \u2014 still a bit stiff",
-              "intent": "Bending \u00b7 Mild\u2013Moderate",
+              "text": "I can do it with mild difficulty. Still a bit stiff.",
+              "intent": "Bending. Mild",
               "ack": [
                 "Appreciate the update."
               ],
@@ -1332,7 +1340,7 @@
         "title": "Mid-Year Wellness Check-In",
         "questions": 3,
         "kind": "checkin",
-        "summary": "6 months \u2014 pain + return to activities.",
+        "summary": "6 months. Pain and return to activities.",
         "steps": [
           {
             "id": "intro",
@@ -1350,8 +1358,8 @@
               "Overall, how is your knee pain compared to before surgery?"
             ],
             "reply": {
-              "text": "Way better \u2014 usually none, sometimes mild after a long day",
-              "intent": "Pain much improved \u00b7 None\u2013Mild",
+              "text": "Way better. Usually none, sometimes mild after a long day.",
+              "intent": "Pain much improved. None to Mild",
               "ack": [
                 "Wonderful to hear."
               ],
@@ -1362,10 +1370,10 @@
             "id": "activity",
             "kind": "q",
             "messages": [
-              "Are you back to doing things you enjoy \u2014 like walking, hobbies, or seeing friends?"
+              "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week",
+              "text": "Yes I've been walking more and went out to dinner with friends last week.",
               "intent": "Resumed valued activities",
               "ack": [
                 "That's great progress."
@@ -1380,10 +1388,10 @@
               "How does twisting or pivoting on your knee feel these days?"
             ],
             "reply": {
-              "text": "Twisting is much better \u2014 only mild discomfort now",
+              "text": "Twisting is much better. Only mild discomfort now.",
               "intent": "Mild residual limitation",
               "ack": [
-                "Thanks \u2014 that helps us keep track of your recovery."
+                "Thanks. That helps us keep track of your recovery."
               ],
               "alert": false
             }
@@ -1406,14 +1414,14 @@
         "title": "One-Year Survey Primer",
         "questions": 1,
         "kind": "primer",
-        "summary": "\u22489 months \u2014 prepare patient for Day 300+ survey.",
+        "summary": "About 9 months. Prepare patient for Day 300+ survey.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. You're almost at one year since your total knee replacement!",
-              "Soon we'll send your official one-year health form \u2014 the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
+              "Soon we'll send your official one-year health form. It will be the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
             ],
             "reply": null
           },
@@ -1424,10 +1432,10 @@
               "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
             ],
             "reply": {
-              "text": "This number is fine, I'll watch for it",
-              "intent": "Confirmed contact \u00b7 Ready for survey",
+              "text": "This number is fine. I'll watch for it.",
+              "intent": "Confirmed contact. Ready for survey",
               "ack": [
-                "Perfect \u2014 thank you {patient}."
+                "Perfect. Thank you {patient}."
               ],
               "alert": false
             }
@@ -1449,7 +1457,7 @@
         "title": "Post-Op KOOS, JR. Survey",
         "questions": 7,
         "kind": "survey",
-        "summary": "CMS matched pair \u00b7 300\u2013425 days post-op \u00b7 full KOOS, JR..",
+        "summary": "CMS matched pair. 300 to 425 days post-op. Full KOOS, JR.",
         "steps": [
           {
             "id": "intro",
@@ -1464,7 +1472,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Just to confirm \u2014 are we still speaking with {patient}?"
+              "Just to confirm, are we still speaking with {patient}?"
             ],
             "reply": {
               "text": "Yes it's me",
@@ -1488,10 +1496,10 @@
             "kind": "q",
             "messages": [
               "How severe is your knee stiffness after first wakening in the morning?",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Morning stiffness is basically gone \u2014 none",
+              "text": "Morning stiffness is basically gone. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1500,14 +1508,22 @@
             }
           },
           {
+            "id": "sec_pain_post",
+            "kind": "system",
+            "messages": [
+              "Next: Pain."
+            ],
+            "reply": null
+          },
+          {
             "id": "pain_twist_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nTwisting/pivoting on your knee",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Twisting is fine, maybe mild if I push it",
+              "text": "Twisting is fine now. Maybe mild if I push it.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1519,11 +1535,11 @@
             "id": "pain_straight_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nStraightening knee fully",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week straightening your knee fully?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "I can straighten fully with no pain",
+              "text": "I can straighten fully with no pain. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1535,11 +1551,11 @@
             "id": "pain_stairs_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nGoing up or down stairs",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week going up or down stairs?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs are easy now \u2014 none to mild",
+              "text": "Stairs are easy now. It's been mild at most.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1551,11 +1567,11 @@
             "id": "pain_stand_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week during the following activity?\nStanding upright",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What amount of knee pain have you experienced in the last week standing upright?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Standing upright is no problem",
+              "text": "Standing upright is no problem. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1575,11 +1591,11 @@
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your knee.\nRising from sitting",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Rising from sitting is easy",
+              "text": "Rising from sitting is easy. None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1591,11 +1607,11 @@
             "id": "fn_bending_post",
             "kind": "q",
             "messages": [
-              "Please indicate the degree of difficulty you have experienced in the last week due to your knee.\nBending to floor/pick up an object",
-              "You can answer in your own words \u2014 for example none, mild, moderate, severe, or extreme."
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
+              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Bending to pick things up is only mild difficulty",
+              "text": "Bending to pick things up is only mild difficulty.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1607,8 +1623,8 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you \u2014 your one-year KOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
-              "Survey completion & data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
+              "Thank you. Your one-year KOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Survey completion and data collection recorded. Have a wonderful day. Reply STOP at any time to unsubscribe."
             ],
             "reply": null
           }
@@ -1621,8 +1637,8 @@
     "name": "Information Transfer PRO-PM (9Q)",
     "shortName": "9Q PRO-PM",
     "joint": "",
-    "meta": "2 touches \u00b7 Day 2\u20133 (within 2\u20137 day window)",
-    "blurb": "Patients reply in plain language \u2014 our conversational AI maps each reply to the CMS Information Transfer response sets (Yes / Somewhat / No or Very clear / Somewhat clear / Not clear / Does not apply). Administered anonymously 2\u20137 days after an outpatient procedure.",
+    "meta": "2 touches · Day 2 to 3 (within 2 to 7 day window)",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to the CMS Information Transfer response sets (Yes / Somewhat / No or Very clear / Somewhat clear / Not clear / Does not apply). Administered anonymously 2 to 7 days after an outpatient procedure.",
     "journey": [
       {
         "day": "Day 2",
@@ -1651,7 +1667,7 @@
               "text": "Yes this number is good",
               "intent": "Confirmed contact",
               "ack": [
-                "Perfect \u2014 watch for it tomorrow. Reply STOP anytime to opt out."
+                "Perfect. Watch for it tomorrow. Reply STOP anytime to opt out."
               ],
               "alert": false
             }
@@ -1673,14 +1689,14 @@
         "title": "Information Transfer PRO-PM (9Q)",
         "questions": 9,
         "kind": "survey",
-        "summary": "CMS Information Transfer survey \u00b7 2\u20137 days post-op \u00b7 anonymous.",
+        "summary": "CMS Information Transfer survey. 2 to 7 days post-op. Anonymous.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. You are receiving this survey because you recently had a procedure at {hospital}. Either before or after your operation you should have been given information about what to do during your recovery. We would like to know if this information was easy-to-follow.",
-              "This survey is anonymous \u2014 your individual answers will not be linked back to you. It should take about 5 minutes. Reply STOP anytime to opt out."
+              "Hi {patient}, this is {hospital}. You are receiving this survey because you recently had a procedure at {hospital}. Either before or after your operation you should have been given information about what to do during your recovery. We would like to know if this information was easy to follow.",
+              "This survey is anonymous. Your individual answers will not be linked back to you. It should take about 5 minutes. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1696,11 +1712,11 @@
             "id": "q1",
             "kind": "q",
             "messages": [
-              "The information you got about your recovery considered your health needs (for example: medical conditions, pain management, treatment preferences, etc.).",
-              "You can answer in your own words \u2014 for example Yes, Somewhat, or No."
+              "Did the information you got about your recovery consider your health needs, for example medical conditions, pain management, and treatment preferences?",
+              "Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
-              "text": "Yes, they talked through my pain plan and other conditions",
+              "text": "Yes they talked through my pain plan and other conditions.",
               "intent": "Yes",
               "ack": [
                 "Thank you."
@@ -1712,11 +1728,11 @@
             "id": "q2",
             "kind": "q",
             "messages": [
-              "The information you got about your recovery considered your personal situation (for example: transportation needs, insurance coverage, financial status, etc.).",
-              "You can answer in your own words \u2014 for example Yes, Somewhat, or No."
+              "Did the information you got about your recovery consider your personal situation, for example transportation needs, insurance coverage, and financial status?",
+              "Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
-              "text": "Somewhat \u2014 they covered transportation but not much about costs",
+              "text": "Somewhat. They covered transportation but not much about costs.",
               "intent": "Somewhat",
               "ack": [
                 "Thank you."
@@ -1728,7 +1744,7 @@
             "id": "domain_meds",
             "kind": "system",
             "messages": [
-              "Next: how clear was the following information about your recovery \u2014 medications."
+              "Next: how clear was the following information about your recovery for medications."
             ],
             "reply": null
           },
@@ -1737,10 +1753,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about why you should take any new medications?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear \u2014 they explained what each new pill was for",
+              "text": "Very clear. They explained what each new pill was for.",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1753,10 +1769,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about possible side effects of new medications?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear \u2014 they mentioned a few side effects but I still had questions",
+              "text": "Somewhat clear. They mentioned a few side effects but I still had questions.",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1769,10 +1785,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about when to stop any medications?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on when to stop the pain meds",
+              "text": "Very clear on when to stop the pain meds.",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1784,7 +1800,7 @@
             "id": "domain_act",
             "kind": "system",
             "messages": [
-              "Last section: how clear was the following information about your recovery \u2014 daily activities."
+              "Last section: how clear was the following information about your recovery for daily activities."
             ],
             "reply": null
           },
@@ -1793,10 +1809,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about changes to your diet?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Does not apply \u2014 they said no diet changes for my procedure",
+              "text": "Does not apply. They said no diet changes for my procedure.",
               "intent": "Does not apply",
               "ack": [
                 "Thank you."
@@ -1809,10 +1825,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about changes to physical activities, including exercise?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on what I could and couldn't do",
+              "text": "Very clear on what I could and couldn't do.",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1825,10 +1841,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about when you could return to work?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear \u2014 they gave a range but said to check with my surgeon",
+              "text": "Somewhat clear. They gave a range but said to check with my surgeon.",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1841,10 +1857,10 @@
             "kind": "q",
             "messages": [
               "How clear was the information about when you could drive?",
-              "You can answer in your own words \u2014 for example Very clear, Somewhat clear, Not clear, or Does not apply."
+              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear \u2014 no driving until off narcotics and cleared",
+              "text": "Very clear. No driving until off narcotics and cleared.",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1857,7 +1873,7 @@
             "kind": "system",
             "messages": [
               "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients.",
-              "Survey completion & data collection recorded. Have a great day. Reply STOP at any time to unsubscribe."
+              "Survey completion and data collection recorded. Have a great day. Reply STOP at any time to unsubscribe."
             ],
             "reply": null
           }
@@ -1991,14 +2007,6 @@
         rc.innerText = "Delivered";
         last.insertAdjacentElement("afterend", rc);
     }
-    function addAiChip(intent) {
-        if (!intent) return;
-        const chip = document.createElement("div");
-        chip.className = "ai-chip";
-        chip.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> AI mapped · <span class="ai-intent">${escapeHtml(intent)}</span>`;
-        feed().appendChild(chip);
-        scrollToBottom();
-    }
     async function showTyping() {
         const tc = document.getElementById("typing-container");
         tc.classList.remove("hidden"); scrollToBottom();
@@ -2063,7 +2071,6 @@
 
         await simulateUserTyping(st.reply.text);
         updateReceipt();
-        addAiChip(st.reply.intent);
         await wait(400);
 
         for (const msg of (st.reply.ack || [])) {
