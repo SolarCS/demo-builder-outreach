@@ -73,6 +73,12 @@ paas deploy
 
 3. Share the PaaS URL returned by `paas deploy`. Local `index.html` / `python3 -m http.server` still works for offline demos.
 
+### Live demo
+
+- **Private URL (SSO):** https://proms-outreach-journey.tools.cipherhealth.dev  
+- App: `proms-outreach-journey` (static runtime on Cipher PaaS)  
+- Sign in with your `@cipherhealth.com` Google account (IAP).
+
 ## Repo note
 
 This demo is intended to live at **`SolarCS/proms-outreach-journey`** (private).
