@@ -57,22 +57,36 @@ Or open `index.html` directly in a browser.
 ### Private shareable URL (Cipher PaaS)
 
 Do **not** use GitHub Pages (always public). Deploy with Cipher PaaS for a private,
-linkable URL:
+linkable URL that teammates can open without making the site public:
+
+1. Open https://console.tools.cipherhealth.dev/install and copy your personal install command.
+2. Run it non-interactively (do not paste the tokenized URL into chat or commit it):
 
 ```bash
-# Install CLI from https://console.tools.cipherhealth.dev/install (use your token)
-CIPHER_ASSUME_YES=1 bash -c "$(curl -fsSL <install-url>)"
+CIPHER_ASSUME_YES=1 bash -c "$(curl -fsSL <install-url-from-console>)"
 paas doctor
 paas login
-paas init          # if not already initialized
+paas whoami
+paas init          # first time in this repo; accepts tool.yaml static runtime
 paas deploy
 ```
+
+3. Share the PaaS URL returned by `paas deploy`. Local `index.html` / `python3 -m http.server` still works for offline demos.
 
 ## Repo note
 
 This demo is intended to live at **`SolarCS/proms-outreach-journey`** (private).
-If you are viewing it on another repo (e.g. during bootstrap), create that private
-repo under SolarCS and push this branch there as `main`.
+
+If this code is currently on another repo (e.g. `demo-builder-outreach` bootstrap):
+
+```bash
+gh repo create SolarCS/proms-outreach-journey --private \
+  --description "CipherOutreach PROMs outreach journey demo (HOOS/KOOS JR + Information Transfer PRO-PM)"
+git remote set-url origin https://github.com/SolarCS/proms-outreach-journey.git
+git push -u origin HEAD:main
+```
+
+Then run the PaaS steps above from that repo.
 
 ## Customizing
 
