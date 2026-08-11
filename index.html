@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v7";
+    const STORE_KEY = "proms_journey_v8";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -553,8 +553,8 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your pre-op HOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your hip improves.",
-              "Take care and have a great day.",
+              "Thank you. This completes your pre-op HOOS, JR. survey.",
+              "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day!",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
               "Reply STOP at any time to unsubscribe."
             ],
@@ -1151,8 +1151,8 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your pre-op KOOS, JR. responses are saved. We'll stay in touch after surgery and again around one year so we can compare how your knee improves.",
-              "Take care and have a great day.",
+              "Thank you. This completes your pre-op KOOS, JR. survey.",
+              "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your knee improvement. Thank you for participating in this survey. Have a great day!",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
               "Reply STOP at any time to unsubscribe."
             ],
@@ -2038,11 +2038,6 @@
             persist();
             renderTimeline();
             renderPresentSwitcher();
-            const banner = document.createElement("div");
-            banner.className = "complete-banner";
-            banner.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Touchpoint complete';
-            feed().appendChild(banner);
-            scrollToBottom();
         }
     }
 
