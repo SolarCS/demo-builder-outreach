@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v9";
+    const STORE_KEY = "proms_journey_v11";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -555,8 +555,7 @@
             "messages": [
               "Thank you. This completes your pre-op HOOS, JR. survey.",
               "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -575,7 +574,7 @@
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total hip replacement.",
-              "This is a short recovery check-in (3 questions), not your full survey. Reply STOP anytime to opt out."
+              "This is a short recovery check-in (3 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -629,8 +628,7 @@
             "kind": "system",
             "messages": [
               "We'll check in again in a few months. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -703,8 +701,7 @@
             "kind": "system",
             "messages": [
               "We'll check in again around the six-month mark. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -777,8 +774,7 @@
             "kind": "system",
             "messages": [
               "We'll reach out again before your one-year survey. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -822,8 +818,7 @@
             "messages": [
               "We appreciate you staying engaged with us throughout the year.",
               "Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -963,8 +958,7 @@
             "messages": [
               "Thank you. Your one-year HOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1153,8 +1147,7 @@
             "messages": [
               "Thank you. This completes your pre-op KOOS, JR. survey.",
               "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your knee improvement. Thank you for participating in this survey. Have a great day!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1173,7 +1166,7 @@
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total knee replacement.",
-              "This is a short recovery check-in (3 questions), not your full survey. Reply STOP anytime to opt out."
+              "This is a short recovery check-in (3 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1227,8 +1220,7 @@
             "kind": "system",
             "messages": [
               "We'll check in again in a few months. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1301,8 +1293,7 @@
             "kind": "system",
             "messages": [
               "We'll check in again around the six-month mark. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1375,8 +1366,7 @@
             "kind": "system",
             "messages": [
               "We'll reach out again before your one-year survey. Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1420,8 +1410,7 @@
             "messages": [
               "We appreciate you staying engaged with us throughout the year.",
               "Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1585,8 +1574,7 @@
             "messages": [
               "Thank you. Your one-year KOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1639,8 +1627,7 @@
             "kind": "system",
             "messages": [
               "Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
@@ -1813,8 +1800,7 @@
             "messages": [
               "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients.",
               "Survey completion and data collection recorded. Have a great day.",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
-              "Reply STOP at any time to unsubscribe."
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
