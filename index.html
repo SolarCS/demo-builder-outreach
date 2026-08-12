@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v22";
+    const STORE_KEY = "proms_journey_v23";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -1675,7 +1675,7 @@
               "How clear was the information about possible side effects of new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear, they mentioned a few side effects but, I still had questions",
+              "text": "Somewhat clear, they mentioned a few side effects but I still had questions",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1720,7 +1720,7 @@
               "How clear was the information about changes to physical activities, including exercise? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on what, I could and couldn't do",
+              "text": "Very clear on what I could and couldn't do",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
