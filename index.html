@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v19";
+    const STORE_KEY = "proms_journey_v20";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -407,12 +407,12 @@
     "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS HOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 6 HOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
     "journey": [
       {
-        "day": "Pre-op",
-        "offset": -14,
+        "day": "30 days Pre-op",
+        "offset": -30,
         "title": "Pre-Op HOOS, JR. Survey",
         "questions": 6,
         "kind": "survey",
-        "summary": "CMS baseline. 90 to 0 days before surgery. Full HOOS, JR.",
+        "summary": "CMS baseline. About 30 days before surgery. Full HOOS, JR.",
         "steps": [
           {
             "id": "intro",
@@ -963,12 +963,12 @@
     "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS KOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 7 KOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
     "journey": [
       {
-        "day": "Pre-op",
-        "offset": -14,
+        "day": "30 days Pre-op",
+        "offset": -30,
         "title": "Pre-Op KOOS, JR. Survey",
         "questions": 7,
         "kind": "survey",
-        "summary": "CMS baseline. 90 to 0 days before surgery. Full KOOS, JR.",
+        "summary": "CMS baseline. About 30 days before surgery. Full KOOS, JR.",
         "steps": [
           {
             "id": "intro",
@@ -1924,7 +1924,7 @@
     }
 
     function nodeLabel(t) {
-        if (t.offset < 0) return { top: "PRE", num: String(t.offset) };
+        if (t.offset < 0) return { top: "PRE", num: String(Math.abs(t.offset)) };
         if (String(t.day).includes("+")) return { top: "DAY", num: String(t.offset) + "+" };
         return { top: "DAY", num: String(t.offset) };
     }
