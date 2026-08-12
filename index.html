@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v20";
+    const STORE_KEY = "proms_journey_v21";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -419,10 +419,10 @@
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. It only takes a few minutes and helps us track your recovery.",
-              "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
+              "Would you like to continue in English or Spanish?"
             ],
             "reply": {
-              "text": "English is fine",
+              "text": "English",
               "intent": "Language: English",
               "ack": [
                 "Great, thank you!"
@@ -975,10 +975,10 @@
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect a short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. It only takes a few minutes and helps us track your recovery.",
-              "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
+              "Would you like to continue in English or Spanish?"
             ],
             "reply": {
-              "text": "English is fine",
+              "text": "English",
               "intent": "Language: English",
               "ack": [
                 "Great, thank you!"
