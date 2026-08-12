@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v13";
+    const STORE_KEY = "proms_journey_v14";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -418,7 +418,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect your short baseline survey about your hip pain and how your hip affects daily activities. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. It only takes a few minutes and helps us track your recovery.",
               "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
@@ -956,7 +956,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your one-year hip survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Thank you. Your one-year hip survey is complete. Comparing this with your answers from before surgery helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
@@ -986,7 +986,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect your short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect a short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. It only takes a few minutes and helps us track your recovery.",
               "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
@@ -1572,7 +1572,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your one-year knee survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Thank you. Your one-year knee survey is complete. Comparing this with your answers from before surgery helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
