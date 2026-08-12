@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v27";
+    const STORE_KEY = "proms_journey_v28";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -462,9 +462,7 @@
             "reply": {
               "text": "I'd say moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -477,9 +475,7 @@
             "reply": {
               "text": "Uneven ground really bothers it so I would say severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -492,9 +488,7 @@
             "reply": {
               "text": "Moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -507,9 +501,7 @@
             "reply": {
               "text": "Bending to pick something up is tough, so I would say severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -522,9 +514,7 @@
             "reply": {
               "text": "Moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -537,9 +527,7 @@
             "reply": {
               "text": "Sitting for a while gets uncomfortable, so I would say mild",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -797,7 +785,7 @@
               "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
-              "text": "Yes it's me",
+              "text": "Yes this is {patient}",
               "intent": "Confirmed: Patient",
               "ack": [
                 "Thank you!"
@@ -814,9 +802,7 @@
             "reply": {
               "text": "It's been mild if anything",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -829,9 +815,7 @@
             "reply": {
               "text": "None",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -844,9 +828,7 @@
             "reply": {
               "text": "Rising from a chair is easy again, so I would say none",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -859,9 +841,7 @@
             "reply": {
               "text": "Mild",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -874,9 +854,7 @@
             "reply": {
               "text": "Sleeping and turning in bed feel normal, so I would say none",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -889,9 +867,7 @@
             "reply": {
               "text": "None",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -981,9 +957,7 @@
             "reply": {
               "text": "Severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -996,9 +970,7 @@
             "reply": {
               "text": "Twisting hurts a lot, so I would say severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1011,9 +983,7 @@
             "reply": {
               "text": "Moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1026,9 +996,7 @@
             "reply": {
               "text": "Stairs are hard on this knee especially going down, so I would say severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1041,9 +1009,7 @@
             "reply": {
               "text": "Moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1056,9 +1022,7 @@
             "reply": {
               "text": "Getting out of a chair takes effort, so I would say moderate",
               "intent": "Moderate",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1071,9 +1035,7 @@
             "reply": {
               "text": "Severe",
               "intent": "Severe",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1331,7 +1293,7 @@
               "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
-              "text": "Yes it's me",
+              "text": "Yes this is {patient}",
               "intent": "Confirmed: Patient",
               "ack": [
                 "Thank you!"
@@ -1356,9 +1318,7 @@
             "reply": {
               "text": "None",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1371,9 +1331,7 @@
             "reply": {
               "text": "Twisting is fine now, maybe mild if I push it",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1386,9 +1344,7 @@
             "reply": {
               "text": "None",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1401,9 +1357,7 @@
             "reply": {
               "text": "It's been mild at most",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1416,9 +1370,7 @@
             "reply": {
               "text": "Standing upright is no problem, so I would say none",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1431,9 +1383,7 @@
             "reply": {
               "text": "None",
               "intent": "None",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
@@ -1446,9 +1396,7 @@
             "reply": {
               "text": "Bending to pick things up is only mild difficulty",
               "intent": "Mild",
-              "ack": [
-                "Thank you, we've recorded that."
-              ],
+              "ack": [],
               "alert": false
             }
           },
