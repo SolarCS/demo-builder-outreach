@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v16";
+    const STORE_KEY = "proms_journey_v17";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -449,7 +449,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op survey. The survey will help us keep track about how you feel regarding your hip and overall health and help us to track the success of your upcoming hip surgery. There are a total of 6 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+              "This is your pre-op survey. The survey will help us understand how you feel regarding your hip and overall health and also help us to track the success of your upcoming hip surgery. There are a total of 6 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1017,7 +1017,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op survey. The survey will help us keep track about how you feel regarding your knee and overall health and help us to track the success of your upcoming knee surgery. There are a total of 7 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+              "This is your pre-op survey. The survey will help us understand how you feel regarding your knee and overall health and also help us to track the success of your upcoming knee surgery. There are a total of 7 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
