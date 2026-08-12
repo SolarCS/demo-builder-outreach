@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v21";
+    const STORE_KEY = "proms_journey_v22";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -1600,8 +1600,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Take care!",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+              "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients. Have a great day!"
             ],
             "reply": null
           }
@@ -1676,7 +1675,7 @@
               "How clear was the information about possible side effects of new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear, they mentioned a few side effects but, i still had questions",
+              "text": "Somewhat clear, they mentioned a few side effects but, I still had questions",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1721,7 +1720,7 @@
               "How clear was the information about changes to physical activities, including exercise? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on what, i could and couldn't do",
+              "text": "Very clear on what, I could and couldn't do",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1763,9 +1762,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients.",
-              "Survey completion and data collection recorded. Have a great day.",
-              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+              "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients. Have a great day!"
             ],
             "reply": null
           }
