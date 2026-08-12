@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v24";
+    const STORE_KEY = "proms_journey_v25";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -418,7 +418,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. The survey should only take a few minutes and will help us track your recovery.",
               "Would you like to continue in English or Spanish?"
             ],
             "reply": {
@@ -974,7 +974,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect a short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect a short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. The survey should only take a few minutes and will help us track your recovery.",
               "Would you like to continue in English or Spanish?"
             ],
             "reply": {
