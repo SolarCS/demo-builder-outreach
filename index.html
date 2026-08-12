@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v17";
+    const STORE_KEY = "proms_journey_v18";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -457,8 +457,7 @@
             "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "I'd say moderate",
@@ -473,8 +472,7 @@
             "id": "pain_uneven",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Uneven ground really bothers it, severe for sure",
@@ -489,8 +487,7 @@
             "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Moderate",
@@ -505,8 +502,7 @@
             "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Bending to pick something up is tough, severe",
@@ -521,8 +517,7 @@
             "id": "fn_bed",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Moderate",
@@ -537,8 +532,7 @@
             "id": "fn_sitting",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Sitting for a while gets uncomfortable, mild",
@@ -860,8 +854,7 @@
             "id": "pain_stairs_post",
             "kind": "q",
             "messages": [
-              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "It's been mild if anything",
@@ -876,8 +869,7 @@
             "id": "pain_uneven_post",
             "kind": "q",
             "messages": [
-              "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "None",
@@ -892,8 +884,7 @@
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Rising from a chair is easy again, none",
@@ -908,8 +899,7 @@
             "id": "fn_bending_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Mild",
@@ -924,8 +914,7 @@
             "id": "fn_bed_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Sleeping and turning in bed feel normal, none",
@@ -940,8 +929,7 @@
             "id": "fn_sitting_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "None",
@@ -1033,8 +1021,7 @@
             "id": "stiff_am",
             "kind": "q",
             "messages": [
-              "Let's get started. How severe is your knee stiffness after first wakening in the morning?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "Let's get started. How severe is your knee stiffness after first wakening in the morning? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Severe",
@@ -1049,8 +1036,7 @@
             "id": "pain_twist",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Twisting hurts a lot, I'd call it severe",
@@ -1065,8 +1051,7 @@
             "id": "pain_straight",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week straightening your knee fully?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week straightening your knee fully? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Moderate",
@@ -1081,8 +1066,7 @@
             "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week going up or down stairs?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Stairs are hard on this knee, severe going down especially",
@@ -1097,8 +1081,7 @@
             "id": "pain_stand",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week standing upright?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week standing upright? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Moderate",
@@ -1113,8 +1096,7 @@
             "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Getting out of a chair takes effort, moderate difficulty",
@@ -1129,8 +1111,7 @@
             "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Severe",
@@ -1460,8 +1441,7 @@
             "id": "stiff_am_post",
             "kind": "q",
             "messages": [
-              "Let's get started. How severe is your knee stiffness after first wakening in the morning?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "Let's get started. How severe is your knee stiffness after first wakening in the morning? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "None",
@@ -1476,8 +1456,7 @@
             "id": "pain_twist_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Twisting is fine now, maybe mild if, i push it",
@@ -1492,8 +1471,7 @@
             "id": "pain_straight_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week straightening your knee fully?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week straightening your knee fully? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "None",
@@ -1508,8 +1486,7 @@
             "id": "pain_stairs_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week going up or down stairs?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "It's been mild at most",
@@ -1524,8 +1501,7 @@
             "id": "pain_stand_post",
             "kind": "q",
             "messages": [
-              "What amount of knee pain have you experienced in the last week standing upright?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What amount of knee pain have you experienced in the last week standing upright? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Standing upright is no problem, none",
@@ -1540,8 +1516,7 @@
             "id": "fn_rising_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "None",
@@ -1556,8 +1531,7 @@
             "id": "fn_bending_post",
             "kind": "q",
             "messages": [
-              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
-              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
               "text": "Bending to pick things up is only mild difficulty",
@@ -1654,8 +1628,7 @@
             "id": "q1",
             "kind": "q",
             "messages": [
-              "Did the information you got about your recovery consider your health needs, for example medical conditions, pain management, and treatment preferences?",
-              "Please respond with one of the following: Yes, Somewhat, or No."
+              "Did the information you got about your recovery consider your health needs, for example medical conditions, pain management, and treatment preferences? Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
               "text": "Yes they talked through my pain plan and other conditions",
@@ -1670,8 +1643,7 @@
             "id": "q2",
             "kind": "q",
             "messages": [
-              "Did the information you got about your recovery consider your personal situation, for example transportation needs, insurance coverage, and financial status?",
-              "Please respond with one of the following: Yes, Somewhat, or No."
+              "Did the information you got about your recovery consider your personal situation, for example transportation needs, insurance coverage, and financial status? Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
               "text": "Somewhat, they covered transportation but not much about costs",
@@ -1686,8 +1658,7 @@
             "id": "q3",
             "kind": "q",
             "messages": [
-              "How clear was the information about why you should take any new medications?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about why you should take any new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Very clear, they explained what each new pill was for",
@@ -1702,8 +1673,7 @@
             "id": "q4",
             "kind": "q",
             "messages": [
-              "How clear was the information about possible side effects of new medications?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about possible side effects of new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Somewhat clear, they mentioned a few side effects but, i still had questions",
@@ -1718,8 +1688,7 @@
             "id": "q5",
             "kind": "q",
             "messages": [
-              "How clear was the information about when to stop any medications?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about when to stop any medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Very clear on when to stop the pain meds",
@@ -1734,8 +1703,7 @@
             "id": "q6",
             "kind": "q",
             "messages": [
-              "How clear was the information about changes to your diet?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about changes to your diet? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Does not apply, they said no diet changes for my procedure",
@@ -1750,8 +1718,7 @@
             "id": "q7",
             "kind": "q",
             "messages": [
-              "How clear was the information about changes to physical activities, including exercise?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about changes to physical activities, including exercise? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Very clear on what, i could and couldn't do",
@@ -1766,8 +1733,7 @@
             "id": "q8",
             "kind": "q",
             "messages": [
-              "How clear was the information about when you could return to work?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about when you could return to work? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Somewhat clear, they gave a range but said to check with my surgeon",
@@ -1782,8 +1748,7 @@
             "id": "q9",
             "kind": "q",
             "messages": [
-              "How clear was the information about when you could drive?",
-              "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+              "How clear was the information about when you could drive? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
               "text": "Very clear, no driving until off narcotics and cleared",
