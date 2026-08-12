@@ -2,7 +2,7 @@
 
 An interactive, presenter-friendly demo that simulates the **patient SMS experience**
 for CipherOutreach **PROMs (Patient-Reported Outcome Measures)** programs. Switch
-between three built-in journeys from a dropdown and walk a patient through
+between four built-in journeys from a dropdown and walk a patient through
 pre-op / longitudinal check-ins / post-op survey collection using CipherOutreach's
 **conversational AI** pattern — patients reply in plain language; the AI maps each
 reply to a CMS-aligned intent and fires the approved response.
@@ -17,6 +17,7 @@ reply to a CMS-aligned intent and fires the approved response.
 | **HOOS, JR. (THA)** | Total hip arthroplasty PRO-PM | Pre-op (−14) → Days 30 / 120 / 180 / 270 → Day 300+ |
 | **KOOS, JR. (TKA)** | Total knee arthroplasty PRO-PM | Same longitudinal arc |
 | **Information Transfer PRO-PM (9Q)** | Post-op transition understanding | Day 2 primer → Day 3 full 9-question survey |
+| **PROMIS-10 Global Health** | Overall physical, mental, and social health | Outreach 1 · full 10-item PROMIS Scale v1.2 |
 
 Pre-op and Day 300+ touches for HOOS/KOOS use the **exact CMS HOOS, JR. / KOOS, JR. items**
 and the **None / Mild / Moderate / Severe / Extreme** response scale. Mid-year
@@ -27,9 +28,13 @@ matched-pair post-op survey).
 The 9-question program uses the published CMS/Yale Information Transfer PRO-PM
 items and response sets, with anonymity called out in the intro.
 
+PROMIS-10 uses the exact **PROMIS Scale v1.2 – Global Health** items and response
+sets (Excellent→Poor, Completely→Not at all, Never→Always, None→Very severe, and
+0–10 pain).
+
 ## What it does
 
-- **Program dropdown.** Switch HOOS / KOOS / 9Q without reloading — each keeps its own
+- **Program dropdown.** Switch HOOS / KOOS / 9Q / PROMIS-10 without reloading — each keeps its own
   editable script and completion state in the browser.
 - **Clickable journey timeline.** Jump between touchpoints; camera icon / **Advance**
   plays the natural-language patient replies.

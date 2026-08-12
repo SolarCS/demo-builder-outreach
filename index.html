@@ -390,11 +390,11 @@
 
     /* =====================================================================
        CipherOutreach · PROMs Outreach Journey
-       Multi-program conversational-AI SMS demo (HOOS / KOOS / 9Q PRO-PM).
+       Multi-program conversational-AI SMS demo (HOOS / KOOS / 9Q PRO-PM / PROMIS-10).
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v29";
+    const STORE_KEY = "proms_journey_v30";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -1603,6 +1603,205 @@
             "kind": "system",
             "messages": [
               "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients. Have a great day!"
+            ],
+            "reply": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "promis10",
+    "name": "PROMIS-10 Global Health",
+    "shortName": "PROMIS-10",
+    "joint": "",
+    "meta": "1 touch \u00b7 10-item Global Health survey",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to the PROMIS Scale v1.2 Global Health response sets (Excellent to Poor, Completely to Not at all, Never to Always, None to Very severe, and 0 to 10 pain). Uses the exact PROMIS Global Health items.",
+    "journey": [
+      {
+        "day": "Outreach 1",
+        "offset": 0,
+        "title": "PROMIS-10 Global Health Survey",
+        "questions": 10,
+        "kind": "survey",
+        "summary": "PROMIS Scale v1.2 Global Health. 10 items covering overall, physical, mental, and social health.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. We are reaching out to collect a short survey about your overall health and well-being. The survey should only take a few minutes and will help us understand how you are doing.",
+              "Would you like to continue in English or Spanish?"
+            ],
+            "reply": {
+              "text": "English",
+              "intent": "Language: English",
+              "ack": [
+                "Great, thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Perfect, thanks {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "instructions",
+            "kind": "system",
+            "messages": [
+              "There are a total of 10 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "global01",
+            "kind": "q",
+            "messages": [
+              "Let's get started. In general, would you say your health is: excellent, very good, good, fair, or poor?"
+            ],
+            "reply": {
+              "text": "I'd say good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global02",
+            "kind": "q",
+            "messages": [
+              "In general, would you say your quality of life is: excellent, very good, good, fair, or poor?"
+            ],
+            "reply": {
+              "text": "Very good overall",
+              "intent": "Very good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global03",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your physical health? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "Physical health is fair so I would say fair",
+              "intent": "Fair",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global04",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your mental health, including your mood and your ability to think? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "Good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global05",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your satisfaction with your social activities and relationships? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "I'm pretty happy with that so I would say very good",
+              "intent": "Very good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global09r",
+            "kind": "q",
+            "messages": [
+              "In general, please rate how well you carry out your usual social activities and roles. This includes activities at home, at work and in your community, and responsibilities as a parent, child, spouse, employee, friend, etc. Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "I keep up with most things so I would say good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global06",
+            "kind": "q",
+            "messages": [
+              "To what extent are you able to carry out your everyday physical activities such as walking, climbing stairs, carrying groceries, or moving a chair? Please respond using the following scale: completely, mostly, moderately, a little, or not at all"
+            ],
+            "reply": {
+              "text": "I can do most of it so I would say mostly",
+              "intent": "Mostly",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global10r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how often have you been bothered by emotional problems such as feeling anxious, depressed or irritable? Please respond using the following scale: never, rarely, sometimes, often, or always"
+            ],
+            "reply": {
+              "text": "Sometimes",
+              "intent": "Sometimes",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global08r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how would you rate your fatigue on average? Please respond using the following scale: none, mild, moderate, severe, or very severe"
+            ],
+            "reply": {
+              "text": "Mild most days",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global07r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how would you rate your pain on average? Please respond with a number from 0 to 10, where 0 is no pain and 10 is the worst pain imaginable"
+            ],
+            "reply": {
+              "text": "About a 3",
+              "intent": "3",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you for completing this health survey. Your answers help {hospital} understand how patients like you are doing.",
+              "Have a great day!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
             "reply": null
           }
