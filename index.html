@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v12";
+    const STORE_KEY = "proms_journey_v13";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -418,7 +418,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect your baseline HOOS, JR. health survey. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect your short baseline survey about your hip pain and how your hip affects daily activities. It only takes a few minutes and helps us track your recovery.",
               "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
@@ -449,7 +449,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op HOOS, JR. survey (6 questions). Answer based on how your hip has felt over the last week. Reply STOP anytime to opt out."
+              "This is your pre-surgery hip survey (6 questions). Answer based on how your hip has felt over the last week. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -553,7 +553,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. This completes your pre-op HOOS, JR. survey.",
+              "Thank you. This completes your pre-surgery hip survey.",
               "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day!",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
@@ -836,8 +836,8 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. It is time for your one-year HOOS, JR. check-up form. It only takes a few minutes and helps us measure how your hip has improved since surgery.",
-              "This is the same CMS HOOS, JR. survey you completed before surgery (6 questions). Reply STOP anytime to opt out."
+              "Hi {patient}, this is {hospital}. It is time for your one-year hip check-up survey. It only takes a few minutes and helps us measure how your hip has improved since surgery.",
+              "This is the same hip survey you completed before surgery (6 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -956,7 +956,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your one-year HOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Thank you. Your one-year hip survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
@@ -986,7 +986,7 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect your baseline KOOS, JR. health survey. It only takes a few minutes and helps us track your recovery.",
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect your short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. It only takes a few minutes and helps us track your recovery.",
               "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
             ],
             "reply": {
@@ -1017,7 +1017,7 @@
             "id": "instructions",
             "kind": "system",
             "messages": [
-              "This is your pre-op KOOS, JR. survey (7 questions). Answer based on how your knee has felt over the last week. Reply STOP anytime to opt out."
+              "This is your pre-surgery knee survey (7 questions). Answer based on how your knee has felt over the last week. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1145,7 +1145,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. This completes your pre-op KOOS, JR. survey.",
+              "Thank you. This completes your pre-surgery knee survey.",
               "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your knee improvement. Thank you for participating in this survey. Have a great day!",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
@@ -1428,8 +1428,8 @@
             "id": "intro",
             "kind": "system",
             "messages": [
-              "Hi {patient}, this is {hospital}. It is time for your one-year KOOS, JR. check-up form. It only takes a few minutes and helps us measure how your knee has improved since surgery.",
-              "This is the same CMS KOOS, JR. survey you completed before surgery (7 questions). Reply STOP anytime to opt out."
+              "Hi {patient}, this is {hospital}. It is time for your one-year knee check-up survey. It only takes a few minutes and helps us measure how your knee has improved since surgery.",
+              "This is the same knee survey you completed before surgery (7 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
@@ -1572,7 +1572,7 @@
             "id": "close",
             "kind": "system",
             "messages": [
-              "Thank you. Your one-year KOOS, JR. survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
+              "Thank you. Your one-year knee survey is complete. Comparing this with your pre-op answers helps {hospital} track meaningful improvement for patients like you.",
               "Survey completion and data collection recorded. Have a wonderful day.",
               "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
             ],
