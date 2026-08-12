@@ -1,0 +1,290 @@
+HOOS, JR. Pre-Op Survey - Outreach 1
+Questions
+Language
+Language: English
+Transition Text:
+Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. The survey should only take a few minutes and will help us track your recovery.
+Question Text:
+Would you like to continue in English or Spanish?
+SMS Question:
+Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. The survey should only take a few minutes and will help us track your recovery. Would you like to continue in English or Spanish?
+Responses:
+1. English
+Voice Response: Great, thank you!
+SMS Response: Great, thank you!
+Issue Panel: None
+Alert: None
+Next Question: Who Answered
+2. Spanish
+Voice Response: Great, thank you!
+SMS Response: Great, thank you!
+Issue Panel: None
+Alert: None
+Next Question: Who Answered
+
+Who Answered
+Language: English
+Question Text:
+Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?
+SMS Question:
+Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?
+Responses:
+1. Patient
+Voice Response: Perfect, thanks {patient}.
+SMS Response: Perfect, thanks {patient}.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Stairs
+2. Caregiver
+Voice Response: Perfect, thanks. Please complete this survey for the patient.
+SMS Response: Perfect, thanks. Please complete this survey for the patient.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Stairs
+3. Wrong Number
+Voice Response: Ok, we're sorry to have bothered you. Goodbye.
+SMS Response: Ok, we're sorry to have bothered you. Goodbye.
+Issue Panel: None
+Alert: None
+Next Question: 
+
+Hip Pain Stairs
+Language: English
+Transition Text:
+This is your pre-op survey. The survey will help us understand how you feel regarding your hip and overall health and also help us to track the success of your upcoming hip surgery. There are a total of 6 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out.
+Question Text:
+Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs?
+SMS Question:
+Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Uneven Surface
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Uneven Surface
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Uneven Surface
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Uneven Surface
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Hip Pain Uneven Surface
+
+Hip Pain Uneven Surface
+Language: English
+Question Text:
+What amount of hip pain have you experienced in the last week walking on an uneven surface?
+SMS Question:
+What amount of hip pain have you experienced in the last week walking on an uneven surface? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Rising from Sitting
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Rising from Sitting
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Rising from Sitting
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Rising from Sitting
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Rising from Sitting
+
+Function Rising from Sitting
+Language: English
+Question Text:
+What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?
+SMS Question:
+What degree of difficulty have you experienced in the last week due to your hip when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Bending to Floor
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Bending to Floor
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Bending to Floor
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Bending to Floor
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Bending to Floor
+
+Function Bending to Floor
+Language: English
+Question Text:
+What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?
+SMS Question:
+What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Lying in Bed
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Lying in Bed
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Lying in Bed
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Lying in Bed
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Lying in Bed
+
+Function Lying in Bed
+Language: English
+Question Text:
+What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?
+SMS Question:
+What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Sitting
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Sitting
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Sitting
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Sitting
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Function Sitting
+
+Function Sitting
+Language: English
+Question Text:
+What degree of difficulty have you experienced in the last week due to your hip when sitting?
+SMS Question:
+What degree of difficulty have you experienced in the last week due to your hip when sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme
+Responses:
+1. None
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Clinical Disclaimer/Goodbye
+2. Mild
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Clinical Disclaimer/Goodbye
+3. Moderate
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Clinical Disclaimer/Goodbye
+4. Severe
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Clinical Disclaimer/Goodbye
+5. Extreme
+Voice Response: Thank you, we've recorded that.
+SMS Response: Thank you, we've recorded that.
+Issue Panel: None
+Alert: None
+Next Question: Clinical Disclaimer/Goodbye
+
+Clinical Disclaimer/Goodbye
+Language: English
+Transition Text:
+Thank you. This completes your pre-surgery hip survey. We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day!
+Question Text:
+Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.
+SMS Question:
+Thank you. This completes your pre-surgery hip survey. We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day! Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.
+
+Free Input Questions
