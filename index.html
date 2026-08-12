@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v26";
+    const STORE_KEY = "proms_journey_v27";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -559,28 +559,28 @@
         "day": "Day 30",
         "offset": 30,
         "title": "Early Recovery Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "One month after hip surgery. Pain and early function.",
+        "summary": "One month after hip surgery. Stairs pain and rising from sitting.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total hip replacement.",
-              "This is a short recovery check-in (3 questions). Reply STOP anytime to opt out."
+              "This is a short recovery check-in (2 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "pain",
+            "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "How has the pain in your hip been over the past week compared to right after surgery?"
+              "Over the past week, how much hip pain have you had going up or down stairs? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Mostly moderate",
-              "intent": "Pain improving. Moderate",
+              "text": "Stairs are still pretty tough so I would say moderate",
+              "intent": "Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
               ],
@@ -588,31 +588,16 @@
             }
           },
           {
-            "id": "mobility",
+            "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "How easy is it for you to get around at home on your new hip?"
+              "How much difficulty have you had rising from sitting because of your hip? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker, still careful on stairs",
-              "intent": "Limited household mobility",
+              "text": "Getting out of a chair takes some effort so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Got it. Keep following the activity plan from your care team."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "pt",
-            "kind": "q",
-            "messages": [
-              "Have you been able to keep up with your physical therapy or home exercises?"
-            ],
-            "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises",
-              "intent": "Adherent to PT",
-              "ack": [
-                "That's great to hear."
               ],
               "alert": false
             }
@@ -632,28 +617,28 @@
         "day": "Day 120",
         "offset": 120,
         "title": "Function Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "About 4 months. ADLs tied to survey function domains.",
+        "summary": "About 4 months. Uneven surface pain and bending to the floor.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. It's been about four months since your total hip replacement. Quick check on how you're moving day to day.",
-              "3 short questions. Reply STOP anytime to opt out."
+              "2 short questions. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "rising",
+            "id": "pain_uneven",
             "kind": "q",
             "messages": [
-              "How much difficulty do you have rising from a chair because of your hip?"
+              "Over the past week, how much hip pain have you had walking on an uneven surface? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Mild",
-              "intent": "Rising. Mild difficulty",
+              "text": "Uneven sidewalks bother it a bit so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Nice progress. Thank you."
               ],
@@ -661,29 +646,14 @@
             }
           },
           {
-            "id": "stairs",
+            "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "What about going up or down stairs. Any hip pain or difficulty?"
+              "How much difficulty have you had bending to the floor to pick something up because of your hip? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Stairs are better, mild pain if I do a lot of them in a row",
-              "intent": "Stairs. Mild",
-              "ack": [
-                "Thanks for letting us know."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "bend",
-            "kind": "q",
-            "messages": [
-              "How about bending to the floor to pick something up?"
-            ],
-            "reply": {
-              "text": "I can do it with mild difficulty, still a bit stiff",
-              "intent": "Bending. Mild",
+              "text": "I can do it but it is still stiff so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Appreciate the update."
               ],
@@ -705,28 +675,28 @@
         "day": "Day 180",
         "offset": 180,
         "title": "Mid-Year Wellness Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "6 months. Pain and return to activities.",
+        "summary": "6 months. Lying in bed and sitting difficulty.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. It's been 6 months since your total hip replacement!",
-              "Quick mid-year check-in (3 questions). Reply STOP anytime to opt out."
+              "Quick mid-year check-in (2 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "pain",
+            "id": "fn_bed",
             "kind": "q",
             "messages": [
-              "Overall, how is your hip pain compared to before surgery?"
+              "How much difficulty have you had lying in bed because of your hip, like turning over or keeping your hip in position? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Way better, usually none sometimes mild after a long day",
-              "intent": "Pain much improved. None to Mild",
+              "text": "Turning over is mostly fine so I would say none",
+              "intent": "None",
               "ack": [
                 "Wonderful to hear."
               ],
@@ -734,29 +704,14 @@
             }
           },
           {
-            "id": "activity",
+            "id": "fn_sitting",
             "kind": "q",
             "messages": [
-              "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
+              "How much difficulty have you had sitting because of your hip? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week",
-              "intent": "Resumed valued activities",
-              "ack": [
-                "That's great progress."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "uneven",
-            "kind": "q",
-            "messages": [
-              "How does your hip feel on uneven ground?"
-            ],
-            "reply": {
-              "text": "Uneven sidewalks are mostly fine, mild if I'm not careful",
-              "intent": "Mild residual limitation",
+              "text": "Sitting for a long time gets a little uncomfortable so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Thanks. That helps us keep track of your recovery."
               ],
@@ -1138,28 +1093,28 @@
         "day": "Day 30",
         "offset": 30,
         "title": "Early Recovery Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "One month after knee surgery. Pain and early function.",
+        "summary": "One month after knee surgery. Stairs pain and rising from sitting.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital} checking in about a month after your total knee replacement.",
-              "This is a short recovery check-in (3 questions). Reply STOP anytime to opt out."
+              "This is a short recovery check-in (2 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "pain",
+            "id": "pain_stairs",
             "kind": "q",
             "messages": [
-              "How has the pain in your knee been over the past week compared to right after surgery?"
+              "Over the past week, how much knee pain have you had going up or down stairs? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Mostly moderate",
-              "intent": "Pain improving. Moderate",
+              "text": "Stairs are still pretty tough especially going down so I would say moderate",
+              "intent": "Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
               ],
@@ -1167,31 +1122,16 @@
             }
           },
           {
-            "id": "mobility",
+            "id": "fn_rising",
             "kind": "q",
             "messages": [
-              "How easy is it for you to get around at home on your new knee?"
+              "How much difficulty have you had rising from sitting because of your knee? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker, still careful on stairs",
-              "intent": "Limited household mobility",
+              "text": "Getting out of a chair takes some effort so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Got it. Keep following the activity plan from your care team."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "pt",
-            "kind": "q",
-            "messages": [
-              "Have you been able to keep up with your physical therapy or home exercises?"
-            ],
-            "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises",
-              "intent": "Adherent to PT",
-              "ack": [
-                "That's great to hear."
               ],
               "alert": false
             }
@@ -1211,28 +1151,28 @@
         "day": "Day 120",
         "offset": 120,
         "title": "Function Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "About 4 months. ADLs tied to survey function domains.",
+        "summary": "About 4 months. Twisting pain and bending to the floor.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. It's been about four months since your total knee replacement. Quick check on how you're moving day to day.",
-              "3 short questions. Reply STOP anytime to opt out."
+              "2 short questions. Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "rising",
+            "id": "pain_twist",
             "kind": "q",
             "messages": [
-              "How much difficulty do you have rising from a chair because of your knee?"
+              "Over the past week, how much knee pain have you had twisting or pivoting on your knee? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Mild",
-              "intent": "Rising. Mild difficulty",
+              "text": "Twisting is better but still bothers me so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Nice progress. Thank you."
               ],
@@ -1240,29 +1180,14 @@
             }
           },
           {
-            "id": "stairs",
+            "id": "fn_bending",
             "kind": "q",
             "messages": [
-              "What about going up or down stairs. Any knee pain or difficulty?"
+              "How much difficulty have you had bending to the floor to pick something up because of your knee? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Stairs are better, mild pain if I do a lot of them in a row",
-              "intent": "Stairs. Mild",
-              "ack": [
-                "Thanks for letting us know."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "bend",
-            "kind": "q",
-            "messages": [
-              "How about bending to the floor to pick something up?"
-            ],
-            "reply": {
-              "text": "I can do it with mild difficulty, still a bit stiff",
-              "intent": "Bending. Mild",
+              "text": "I can do it but it is still stiff so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Appreciate the update."
               ],
@@ -1284,28 +1209,28 @@
         "day": "Day 180",
         "offset": 180,
         "title": "Mid-Year Wellness Check-In",
-        "questions": 3,
+        "questions": 2,
         "kind": "checkin",
-        "summary": "6 months. Pain and return to activities.",
+        "summary": "6 months. Standing pain and straightening the knee.",
         "steps": [
           {
             "id": "intro",
             "kind": "system",
             "messages": [
               "Hi {patient}, this is {hospital}. It's been 6 months since your total knee replacement!",
-              "Quick mid-year check-in (3 questions). Reply STOP anytime to opt out."
+              "Quick mid-year check-in (2 questions). Reply STOP anytime to opt out."
             ],
             "reply": null
           },
           {
-            "id": "pain",
+            "id": "pain_stand",
             "kind": "q",
             "messages": [
-              "Overall, how is your knee pain compared to before surgery?"
+              "Over the past week, how much knee pain have you had standing upright? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Way better, usually none sometimes mild after a long day",
-              "intent": "Pain much improved. None to Mild",
+              "text": "Standing is mostly fine so I would say none",
+              "intent": "None",
               "ack": [
                 "Wonderful to hear."
               ],
@@ -1313,29 +1238,14 @@
             }
           },
           {
-            "id": "activity",
+            "id": "pain_straight",
             "kind": "q",
             "messages": [
-              "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
+              "How much knee pain have you had straightening your knee fully? Would you say none, mild, moderate, severe, or extreme?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week",
-              "intent": "Resumed valued activities",
-              "ack": [
-                "That's great progress."
-              ],
-              "alert": false
-            }
-          },
-          {
-            "id": "twist",
-            "kind": "q",
-            "messages": [
-              "How does twisting or pivoting on your knee feel these days?"
-            ],
-            "reply": {
-              "text": "Twisting is much better, only mild discomfort now",
-              "intent": "Mild residual limitation",
+              "text": "Straightening all the way can still twinge so I would say mild",
+              "intent": "Mild",
               "ack": [
                 "Thanks. That helps us keep track of your recovery."
               ],
