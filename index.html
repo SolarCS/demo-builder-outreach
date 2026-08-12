@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v15";
+    const STORE_KEY = "proms_journey_v16";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -458,10 +458,10 @@
             "kind": "q",
             "messages": [
               "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "I'd say moderate.",
+              "text": "I'd say moderate",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -474,10 +474,10 @@
             "kind": "q",
             "messages": [
               "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Uneven ground really bothers it. Severe for sure.",
+              "text": "Uneven ground really bothers it, severe for sure",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -490,10 +490,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Moderate.",
+              "text": "Moderate",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -506,10 +506,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Bending to pick something up is tough. Severe.",
+              "text": "Bending to pick something up is tough, severe",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -522,10 +522,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Moderate.",
+              "text": "Moderate",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -538,10 +538,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Sitting for a while gets uncomfortable. Mild.",
+              "text": "Sitting for a while gets uncomfortable, mild",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -585,7 +585,7 @@
               "How has the pain in your hip been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Mostly moderate.",
+              "text": "Mostly moderate",
               "intent": "Pain improving. Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
@@ -600,7 +600,7 @@
               "How easy is it for you to get around at home on your new hip?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker. Still careful on stairs.",
+              "text": "I can get around the house okay with my walker, still careful on stairs",
               "intent": "Limited household mobility",
               "ack": [
                 "Got it. Keep following the activity plan from your care team."
@@ -615,7 +615,7 @@
               "Have you been able to keep up with your physical therapy or home exercises?"
             ],
             "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises.",
+              "text": "Yes, i've been going to, pT twice a week and doing the home exercises",
               "intent": "Adherent to PT",
               "ack": [
                 "That's great to hear."
@@ -658,7 +658,7 @@
               "How much difficulty do you have rising from a chair because of your hip?"
             ],
             "reply": {
-              "text": "Mild.",
+              "text": "Mild",
               "intent": "Rising. Mild difficulty",
               "ack": [
                 "Nice progress. Thank you."
@@ -673,7 +673,7 @@
               "What about going up or down stairs. Any hip pain or difficulty?"
             ],
             "reply": {
-              "text": "Stairs are better. Mild pain if I do a lot of them in a row.",
+              "text": "Stairs are better, mild pain if, i do a lot of them in a row",
               "intent": "Stairs. Mild",
               "ack": [
                 "Thanks for letting us know."
@@ -688,7 +688,7 @@
               "How about bending to the floor to pick something up?"
             ],
             "reply": {
-              "text": "I can do it with mild difficulty. Still a bit stiff.",
+              "text": "I can do it with mild difficulty, still a bit stiff",
               "intent": "Bending. Mild",
               "ack": [
                 "Appreciate the update."
@@ -731,7 +731,7 @@
               "Overall, how is your hip pain compared to before surgery?"
             ],
             "reply": {
-              "text": "Way better. Usually none, sometimes mild after a long day.",
+              "text": "Way better, usually none sometimes mild after a long day",
               "intent": "Pain much improved. None to Mild",
               "ack": [
                 "Wonderful to hear."
@@ -746,7 +746,7 @@
               "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week.",
+              "text": "Yes, i've been walking more and went out to dinner with friends last week",
               "intent": "Resumed valued activities",
               "ack": [
                 "That's great progress."
@@ -761,7 +761,7 @@
               "How does your hip feel on uneven ground?"
             ],
             "reply": {
-              "text": "Uneven sidewalks are mostly fine. Mild if I'm not careful.",
+              "text": "Uneven sidewalks are mostly fine, mild if, i'm not careful",
               "intent": "Mild residual limitation",
               "ack": [
                 "Thanks. That helps us keep track of your recovery."
@@ -804,7 +804,7 @@
               "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
             ],
             "reply": {
-              "text": "This number is fine. I'll watch for it.",
+              "text": "This number is fine, i'll watch for it",
               "intent": "Confirmed contact. Ready for survey",
               "ack": [
                 "Perfect. Thank you {patient}."
@@ -861,10 +861,10 @@
             "kind": "q",
             "messages": [
               "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "It's been mild if anything.",
+              "text": "It's been mild if anything",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -877,10 +877,10 @@
             "kind": "q",
             "messages": [
               "What amount of hip pain have you experienced in the last week walking on an uneven surface?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "None.",
+              "text": "None",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -893,10 +893,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Rising from a chair is easy again. None.",
+              "text": "Rising from a chair is easy again, none",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -909,10 +909,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Mild.",
+              "text": "Mild",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -925,10 +925,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Sleeping and turning in bed feel normal. None.",
+              "text": "Sleeping and turning in bed feel normal, none",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -941,10 +941,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your hip when sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "None.",
+              "text": "None",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1034,10 +1034,10 @@
             "kind": "q",
             "messages": [
               "Let's get started. How severe is your knee stiffness after first wakening in the morning?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Severe.",
+              "text": "Severe",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1050,10 +1050,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Twisting hurts a lot. I'd call it severe.",
+              "text": "Twisting hurts a lot, I'd call it severe",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1066,10 +1066,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week straightening your knee fully?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Moderate.",
+              "text": "Moderate",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1082,10 +1082,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week going up or down stairs?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Stairs are hard on this knee. Severe going down especially.",
+              "text": "Stairs are hard on this knee, severe going down especially",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1098,10 +1098,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week standing upright?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Moderate.",
+              "text": "Moderate",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1114,10 +1114,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Getting out of a chair takes effort. Moderate difficulty.",
+              "text": "Getting out of a chair takes effort, moderate difficulty",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1130,10 +1130,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Severe.",
+              "text": "Severe",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1177,7 +1177,7 @@
               "How has the pain in your knee been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Mostly moderate.",
+              "text": "Mostly moderate",
               "intent": "Pain improving. Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
@@ -1192,7 +1192,7 @@
               "How easy is it for you to get around at home on your new knee?"
             ],
             "reply": {
-              "text": "I can get around the house okay with my walker. Still careful on stairs.",
+              "text": "I can get around the house okay with my walker, still careful on stairs",
               "intent": "Limited household mobility",
               "ack": [
                 "Got it. Keep following the activity plan from your care team."
@@ -1207,7 +1207,7 @@
               "Have you been able to keep up with your physical therapy or home exercises?"
             ],
             "reply": {
-              "text": "Yes I've been going to PT twice a week and doing the home exercises.",
+              "text": "Yes, i've been going to, pT twice a week and doing the home exercises",
               "intent": "Adherent to PT",
               "ack": [
                 "That's great to hear."
@@ -1250,7 +1250,7 @@
               "How much difficulty do you have rising from a chair because of your knee?"
             ],
             "reply": {
-              "text": "Mild.",
+              "text": "Mild",
               "intent": "Rising. Mild difficulty",
               "ack": [
                 "Nice progress. Thank you."
@@ -1265,7 +1265,7 @@
               "What about going up or down stairs. Any knee pain or difficulty?"
             ],
             "reply": {
-              "text": "Stairs are better. Mild pain if I do a lot of them in a row.",
+              "text": "Stairs are better, mild pain if, i do a lot of them in a row",
               "intent": "Stairs. Mild",
               "ack": [
                 "Thanks for letting us know."
@@ -1280,7 +1280,7 @@
               "How about bending to the floor to pick something up?"
             ],
             "reply": {
-              "text": "I can do it with mild difficulty. Still a bit stiff.",
+              "text": "I can do it with mild difficulty, still a bit stiff",
               "intent": "Bending. Mild",
               "ack": [
                 "Appreciate the update."
@@ -1323,7 +1323,7 @@
               "Overall, how is your knee pain compared to before surgery?"
             ],
             "reply": {
-              "text": "Way better. Usually none, sometimes mild after a long day.",
+              "text": "Way better, usually none sometimes mild after a long day",
               "intent": "Pain much improved. None to Mild",
               "ack": [
                 "Wonderful to hear."
@@ -1338,7 +1338,7 @@
               "Are you back to doing things you enjoy, like walking, hobbies, or seeing friends?"
             ],
             "reply": {
-              "text": "Yes I've been walking more and went out to dinner with friends last week.",
+              "text": "Yes, i've been walking more and went out to dinner with friends last week",
               "intent": "Resumed valued activities",
               "ack": [
                 "That's great progress."
@@ -1353,7 +1353,7 @@
               "How does twisting or pivoting on your knee feel these days?"
             ],
             "reply": {
-              "text": "Twisting is much better. Only mild discomfort now.",
+              "text": "Twisting is much better, only mild discomfort now",
               "intent": "Mild residual limitation",
               "ack": [
                 "Thanks. That helps us keep track of your recovery."
@@ -1396,7 +1396,7 @@
               "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
             ],
             "reply": {
-              "text": "This number is fine. I'll watch for it.",
+              "text": "This number is fine, i'll watch for it",
               "intent": "Confirmed contact. Ready for survey",
               "ack": [
                 "Perfect. Thank you {patient}."
@@ -1461,10 +1461,10 @@
             "kind": "q",
             "messages": [
               "Let's get started. How severe is your knee stiffness after first wakening in the morning?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "None.",
+              "text": "None",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1477,10 +1477,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Twisting is fine now. Maybe mild if I push it.",
+              "text": "Twisting is fine now, maybe mild if, i push it",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1493,10 +1493,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week straightening your knee fully?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "None.",
+              "text": "None",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1509,10 +1509,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week going up or down stairs?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "It's been mild at most.",
+              "text": "It's been mild at most",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1525,10 +1525,10 @@
             "kind": "q",
             "messages": [
               "What amount of knee pain have you experienced in the last week standing upright?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Standing upright is no problem. None.",
+              "text": "Standing upright is no problem, none",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1541,10 +1541,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "None.",
+              "text": "None",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1557,10 +1557,10 @@
             "kind": "q",
             "messages": [
               "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object?",
-              "Please respond with one of the following: none, mild, moderate, severe, or extreme."
+              "Please respond using the following scale: none, mild, moderate, severe, or extreme"
             ],
             "reply": {
-              "text": "Bending to pick things up is only mild difficulty.",
+              "text": "Bending to pick things up is only mild difficulty",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1658,7 +1658,7 @@
               "Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
-              "text": "Yes they talked through my pain plan and other conditions.",
+              "text": "Yes they talked through my pain plan and other conditions",
               "intent": "Yes",
               "ack": [
                 "Thank you."
@@ -1674,7 +1674,7 @@
               "Please respond with one of the following: Yes, Somewhat, or No."
             ],
             "reply": {
-              "text": "Somewhat. They covered transportation but not much about costs.",
+              "text": "Somewhat, they covered transportation but not much about costs",
               "intent": "Somewhat",
               "ack": [
                 "Thank you."
@@ -1690,7 +1690,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear. They explained what each new pill was for.",
+              "text": "Very clear, they explained what each new pill was for",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1706,7 +1706,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear. They mentioned a few side effects but I still had questions.",
+              "text": "Somewhat clear, they mentioned a few side effects but, i still had questions",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1722,7 +1722,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on when to stop the pain meds.",
+              "text": "Very clear on when to stop the pain meds",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1738,7 +1738,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Does not apply. They said no diet changes for my procedure.",
+              "text": "Does not apply, they said no diet changes for my procedure",
               "intent": "Does not apply",
               "ack": [
                 "Thank you."
@@ -1754,7 +1754,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear on what I could and couldn't do.",
+              "text": "Very clear on what, i could and couldn't do",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
@@ -1770,7 +1770,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Somewhat clear. They gave a range but said to check with my surgeon.",
+              "text": "Somewhat clear, they gave a range but said to check with my surgeon",
               "intent": "Somewhat clear",
               "ack": [
                 "Thank you."
@@ -1786,7 +1786,7 @@
               "Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
             ],
             "reply": {
-              "text": "Very clear. No driving until off narcotics and cleared.",
+              "text": "Very clear, no driving until off narcotics and cleared",
               "intent": "Very clear",
               "ack": [
                 "Thank you."
