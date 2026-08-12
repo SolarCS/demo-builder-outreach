@@ -394,7 +394,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "proms_journey_v11";
+    const STORE_KEY = "proms_journey_v12";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     const DEFAULT_PROGRAMS = [
@@ -434,7 +434,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
               "text": "Yes this is {patient}",
@@ -461,7 +461,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs have been pretty rough. I'd say moderate.",
+              "text": "I'd say moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -493,7 +493,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Getting up from a chair is hard. Moderate difficulty.",
+              "text": "Moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -525,7 +525,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Turning over in bed is uncomfortable. Moderate.",
+              "text": "Moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -585,7 +585,7 @@
               "How has the pain in your hip been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Still sore, but better than those first days. Mostly moderate.",
+              "text": "Mostly moderate.",
               "intent": "Pain improving. Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
@@ -658,7 +658,7 @@
               "How much difficulty do you have rising from a chair because of your hip?"
             ],
             "reply": {
-              "text": "Mostly mild now. I get up without thinking about it most of the time.",
+              "text": "Mild.",
               "intent": "Rising. Mild difficulty",
               "ack": [
                 "Nice progress. Thank you."
@@ -845,7 +845,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Just to confirm, are we still speaking with {patient}?"
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
               "text": "Yes it's me",
@@ -864,7 +864,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs are much better now. It's been mild if anything.",
+              "text": "It's been mild if anything.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -880,7 +880,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Uneven sidewalks are fine. I'd say none.",
+              "text": "None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -912,7 +912,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "I can bend to the floor okay. Only mild difficulty.",
+              "text": "Mild.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -944,7 +944,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Sitting is totally fine now. None.",
+              "text": "None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1002,7 +1002,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
               "text": "Yes this is {patient}",
@@ -1037,7 +1037,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Mornings are rough. Severe stiffness until I get moving.",
+              "text": "Severe.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1069,7 +1069,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Straightening all the way is moderate pain.",
+              "text": "Moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1101,7 +1101,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Standing too long is moderate pain.",
+              "text": "Moderate.",
               "intent": "Moderate",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1133,7 +1133,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Bending to the floor is really hard. Severe.",
+              "text": "Severe.",
               "intent": "Severe",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1177,7 +1177,7 @@
               "How has the pain in your knee been over the past week compared to right after surgery?"
             ],
             "reply": {
-              "text": "Still sore, but better than those first days. Mostly moderate.",
+              "text": "Mostly moderate.",
               "intent": "Pain improving. Moderate",
               "ack": [
                 "Thanks for sharing. That is helpful to know."
@@ -1250,7 +1250,7 @@
               "How much difficulty do you have rising from a chair because of your knee?"
             ],
             "reply": {
-              "text": "Mostly mild now. I get up without thinking about it most of the time.",
+              "text": "Mild.",
               "intent": "Rising. Mild difficulty",
               "ack": [
                 "Nice progress. Thank you."
@@ -1437,7 +1437,7 @@
             "id": "who",
             "kind": "system",
             "messages": [
-              "Just to confirm, are we still speaking with {patient}?"
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
             ],
             "reply": {
               "text": "Yes it's me",
@@ -1464,7 +1464,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Morning stiffness is basically gone. None.",
+              "text": "None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1496,7 +1496,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "I can straighten fully with no pain. None.",
+              "text": "None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1512,7 +1512,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Stairs are easy now. It's been mild at most.",
+              "text": "It's been mild at most.",
               "intent": "Mild",
               "ack": [
                 "Thank you, we've recorded that."
@@ -1544,7 +1544,7 @@
               "Please respond with one of the following: none, mild, moderate, severe, or extreme."
             ],
             "reply": {
-              "text": "Rising from sitting is easy. None.",
+              "text": "None.",
               "intent": "None",
               "ack": [
                 "Thank you, we've recorded that."
