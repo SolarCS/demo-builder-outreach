@@ -259,9 +259,26 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.10);
         }
         body.sidebar-hidden #present-switcher { display: flex; }
-        .ps-pill { font-size: 12px; font-weight: 700; color: #64748b; padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: all 0.15s; }
+        .ps-pill {
+            font-size: 12px; font-weight: 700; color: #64748b;
+            padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: all 0.15s;
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            line-height: 1.15; gap: 2px;
+        }
         .ps-pill.active { background: var(--brand); color: #fff; }
         .ps-pill.done:not(.active) { color: #16a34a; }
+        .ps-pill .ps-day { display: block; }
+        .ps-pill .ps-sub {
+            display: block;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #ea580c;
+            line-height: 1;
+        }
+        .ps-pill.active .ps-sub { color: #fdba74; }
+        .ps-pill.done:not(.active) .ps-sub { color: #ea580c; }
     </style>
 </head>
 <body id="main-body">
@@ -2087,10 +2104,16 @@
         wrap.innerHTML = "";
         const c = completed();
         const at = activeTouch();
+        const showSurveyTag = prog().id === "hoos" || prog().id === "koos";
         journey().forEach((t, i) => {
             const pill = document.createElement("div");
-            pill.className = "ps-pill" + (i === at ? " active" : "") + (c[i] ? " done" : "");
-            pill.textContent = t.day;
+            const isSurvey = showSurveyTag && t.kind === "survey";
+            pill.className = "ps-pill" + (i === at ? " active" : "") + (c[i] ? " done" : "") + (isSurvey ? " survey" : "");
+            if (isSurvey) {
+                pill.innerHTML = `<span class="ps-day">${escapeHtml(t.day)}</span><span class="ps-sub">survey</span>`;
+            } else {
+                pill.textContent = t.day;
+            }
             pill.onclick = () => selectTouch(i);
             wrap.appendChild(pill);
         });
