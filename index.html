@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CipherOutreach · SMS Demo Builder</title>
+    <title>CipherOutreach · PROMs Outreach Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Spreadsheet parsing / export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --iphone-width: 375px;
             --iphone-height: 812px;
-            --sidebar-width: 420px;
+            --sidebar-width: 430px;
             --ios-blue: #007AFF;
             --ios-grey: #E9E9EB;
             --brand: #005A8C;
+            --brand-light: #0a84ff;
+            --ai: #7c3aed;
         }
         * { box-sizing: border-box; }
         body {
@@ -27,8 +27,6 @@
             height: 100vh;
             overflow: hidden;
         }
-
-        /* ============ SIDEBAR ============ */
         #config-panel {
             width: var(--sidebar-width);
             min-width: var(--sidebar-width);
@@ -71,71 +69,93 @@
             font-family: inherit;
         }
         .txt-input:focus { border-color: var(--ios-blue); box-shadow: 0 0 0 3px rgba(0,122,255,0.12); }
-
-        /* ---- Tabs ---- */
+        textarea.txt-input { line-height: 1.4; min-height: 42px; }
         .tab-btn {
-            flex: 1;
-            padding: 9px 6px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #64748b;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-align: center;
+            flex: 1; padding: 9px 6px; font-size: 12px; font-weight: 700;
+            color: #64748b; border-radius: 8px; cursor: pointer;
+            transition: all 0.15s; text-align: center;
         }
         .tab-btn.active { background: #fff; color: var(--brand); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
-
-        /* ---- Editor cards ---- */
+        .ed-pills { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .ed-pill { font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.15s; }
+        .ed-pill:hover { background: #e2e8f0; }
+        .ed-pill.active { background: var(--brand); color: #fff; }
         .step-card {
-            background: white;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 14px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            background: white; border: 1px solid #E2E8F0; border-radius: 12px;
+            padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
         .step-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--brand);
-            background: #EFF6FF;
-            border: 1px solid #DBEAFE;
-            padding: 3px 9px;
-            border-radius: 999px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
         }
-        .mini-btn {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 5px 9px;
-            border-radius: 8px;
+        .badge-q { color: var(--brand); background: #EFF6FF; border: 1px solid #DBEAFE; }
+        .badge-s { color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; }
+        .badge-c { color: #16a34a; background: #f0fdf4; border: 1px solid #bbf7d0; }
+        .reply-field { background: #f0f7ff; border-color: #cfe4ff; }
+        .touch-card {
+            position: relative;
+            display: flex;
+            gap: 14px;
+            padding: 14px 14px 14px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            background: #fff;
             cursor: pointer;
             transition: all 0.15s;
+            margin-bottom: 12px;
+            z-index: 1;
         }
-
-        /* ============ PREVIEW / PHONE ============ */
+        .touch-card:hover { border-color: #cbd5e1; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .touch-card.active { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(0,90,140,0.12); background: #f6fbff; }
+        .touch-node {
+            flex: none;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-weight: 800;
+            background: #EFF6FF;
+            color: var(--brand);
+            border: 2px solid #DBEAFE;
+            line-height: 1;
+        }
+        .touch-card.active .touch-node { background: var(--brand); color: #fff; border-color: var(--brand); }
+        .touch-card.done .touch-node { background: #16a34a; color: #fff; border-color: #16a34a; }
+        .touch-node .tn-day { font-size: 8px; font-weight: 700; opacity: 0.85; letter-spacing: 0.02em; }
+        .touch-node .tn-num { font-size: 13px; margin-top: 1px; }
+        .touch-meta h4 { font-size: 13.5px; font-weight: 800; color: #1e293b; margin: 0 0 2px; }
+        .touch-meta p { font-size: 11.5px; color: #64748b; margin: 0; line-height: 1.35; }
+        .touch-pills { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+        .touch-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f1f5f9; color: #475569; }
+        .touch-pill.q { background: #eef2ff; color: #4338ca; }
+        .touch-pill.survey { background: #fef3c7; color: #92400e; }
+        .touch-check { position: absolute; top: 12px; right: 12px; font-size: 13px; color: #16a34a; display: none; }
+        .touch-card.done .touch-check { display: block; }
+        .timeline { position: relative; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 34px; top: 22px; bottom: 22px;
+            width: 2px;
+            background: linear-gradient(#DBEAFE, #E2E8F0);
+            z-index: 0;
+        }
         #preview-area {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            background: radial-gradient(circle at 50% 30%, #F1F5F9 0%, #E2E8F0 100%);
+            background: radial-gradient(circle at 50% 25%, #eef4f9 0%, #dde6ef 100%);
             transition: all 0.3s ease;
             z-index: 10;
         }
         .viewport-container {
             width: var(--iphone-width);
             height: var(--iphone-height);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            display: flex; justify-content: center; align-items: center; position: relative;
         }
         .iphone-frame {
             width: var(--iphone-width);
@@ -150,31 +170,25 @@
             transform-origin: center center;
         }
         .notch {
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 150px; height: 30px;
-            background-color: #1F2937;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            z-index: 50;
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 150px; height: 30px; background-color: #1F2937;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 50;
         }
         .chat-container {
             flex-grow: 1;
-            padding: 20px 14px;
+            padding: 20px 14px 12px;
             padding-top: 98px;
-            padding-bottom: 12px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             scrollbar-width: none;
             scroll-behavior: smooth;
             background: #fff;
         }
         .chat-container::-webkit-scrollbar { display: none; }
         .bubble {
-            max-width: 76%;
+            max-width: 78%;
             padding: 9px 14px;
             border-radius: 20px;
             font-size: 15px;
@@ -188,80 +202,96 @@
         }
         .bubble-bot { background-color: var(--ios-grey); color: black; align-self: flex-start; border-bottom-left-radius: 5px; }
         .bubble-user { background-color: var(--ios-blue); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
-        .bubble.grouped-top { margin-top: 6px; }
         .intro-divider {
-            align-self: center;
-            text-align: center;
-            margin: 4px 0 10px;
-            font-size: 11px;
-            color: #8A8A8E;
-            animation: fadeIn 0.3s ease;
+            align-self: center; text-align: center; margin: 6px 0 12px;
+            font-size: 11px; color: #8A8A8E; animation: fadeIn 0.3s ease; line-height: 1.5;
         }
         .receipt {
-            align-self: flex-end;
-            font-size: 10px;
-            color: #8A8A8E;
-            margin: 0 4px 6px 0;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease;
+            align-self: flex-end; font-size: 10px; color: #8A8A8E;
+            margin: 0 4px 6px 0; font-weight: 500; animation: fadeIn 0.3s ease;
         }
         .bubble-bot .sms-link { color: #0a84ff; text-decoration: underline; }
         .bubble-user .sms-link { color: #fff; text-decoration: underline; }
-
-        .ios-input-container {
-            background: white;
-            border-top: 1px solid #E5E7EB;
-            padding: 9px 12px 30px 12px;
-            z-index: 40;
+        .ai-chip {
+            align-self: flex-end;
+            display: inline-flex; align-items: center; gap: 6px;
+            max-width: 80%;
+            font-size: 10.5px; font-weight: 600;
+            color: var(--ai);
+            background: linear-gradient(90deg, rgba(124,58,237,0.10), rgba(124,58,237,0.05));
+            border: 1px solid rgba(124,58,237,0.25);
+            padding: 4px 10px; border-radius: 999px;
+            margin: 1px 2px 7px 0;
+            animation: fadeIn 0.35s ease;
         }
+        .ai-chip i { font-size: 10px; }
+        .ai-chip .ai-intent { color: #5b21b6; font-weight: 800; }
+        .complete-banner {
+            align-self: center; text-align: center; margin: 12px 0 4px;
+            font-size: 12px; font-weight: 700; color: #16a34a;
+            background: #f0fdf4; border: 1px solid #bbf7d0;
+            padding: 8px 16px; border-radius: 12px; animation: fadeIn 0.4s ease;
+        }
+        .ios-input-container { background: white; border-top: 1px solid #E5E7EB; padding: 9px 12px 30px; z-index: 40; }
         .ios-bar { display: flex; align-items: center; gap: 12px; }
         .ios-field {
-            flex-grow: 1;
-            background: white;
-            border: 1px solid #D1D5DB;
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 15px;
-            color: #111827;
-            min-height: 34px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            white-space: pre-wrap;
+            flex-grow: 1; background: white; border: 1px solid #D1D5DB; border-radius: 20px;
+            padding: 6px 14px; font-size: 15px; color: #111827; min-height: 34px;
+            display: flex; align-items: center; overflow: hidden; white-space: pre-wrap;
         }
         .ios-icon { color: #9CA3AF; font-size: 20px; cursor: pointer; transition: all 0.2s; }
         .ios-icon-ready { color: var(--ios-blue) !important; animation: pulse-camera 2s infinite ease-in-out; }
-        @keyframes pulse-camera {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.18); opacity: 0.75; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes pulse-camera { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.18); opacity: 0.75; } 100% { transform: scale(1); opacity: 1; } }
         .ios-send-btn { width: 30px; height: 30px; background-color: #E5E7EB; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: background-color 0.2s; }
         .ios-send-btn.active { background-color: var(--ios-blue); }
-
         @keyframes popIn { from { opacity: 0; transform: scale(0.92) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .status-bar { position: absolute; top: 14px; left: 30px; right: 30px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; z-index: 50; }
         .home-bar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background-color: #1F2937; border-radius: 10px; z-index: 50; }
-
         #open-config-btn { position: fixed; top: 20px; left: 20px; z-index: 300; display: none; cursor: pointer; }
         body.sidebar-hidden #open-config-btn { display: flex; }
         .typing-bubble { align-self: flex-start; }
+        #present-switcher {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 300; display: none; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 90vw;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+            border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+        }
+        body.sidebar-hidden #present-switcher { display: flex; }
+        .ps-pill {
+            font-size: 12px; font-weight: 700; color: #64748b;
+            padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: all 0.15s;
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            line-height: 1.15; gap: 2px;
+        }
+        .ps-pill.active { background: var(--brand); color: #fff; }
+        .ps-pill.done:not(.active) { color: #16a34a; }
+        .ps-pill .ps-day { display: block; }
+        .ps-pill .ps-sub {
+            display: block;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #ea580c;
+            line-height: 1;
+        }
+        .ps-pill.active .ps-sub { color: #fdba74; }
+        .ps-pill.done:not(.active) .ps-sub { color: #ea580c; }
     </style>
 </head>
 <body id="main-body">
 
-    <!-- ============ SIDEBAR ============ -->
     <div id="config-panel">
         <div class="px-5 py-4 border-b border-slate-200 bg-white flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white" style="background:var(--brand)">
-                    <i class="fa-solid fa-comment-medical"></i>
+                    <i class="fa-solid fa-clipboard-list"></i>
                 </div>
                 <div>
                     <h1 class="text-[15px] font-extrabold text-slate-800 leading-tight">CipherOutreach</h1>
-                    <p class="text-[11px] text-slate-500 font-medium">SMS Demo Builder</p>
+                    <p class="text-[11px] text-slate-500 font-medium" id="header-subtitle">PROMs Outreach Journey</p>
                 </div>
             </div>
             <button onclick="toggleConfig()" title="Present mode (hide panel)" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
@@ -269,90 +299,54 @@
             </button>
         </div>
 
-        <!-- Organization name (shown at top of the phone) -->
-        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
-            <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i> Hospital / Organization Name</label>
-            <input type="text" id="set-hospital-top" class="txt-input font-semibold" placeholder="e.g. Central Hospital" oninput="updateSetting('hospital', this.value)">
-            <p class="text-[10px] text-slate-400 mt-1">Displayed as the SMS sender at the top of the phone, and replaces <code class="bg-slate-100 px-1 rounded">{hospital}</code> in the script.</p>
-        </div>
-
-        <!-- Template library selector -->
-        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
-            <label class="input-label">Active Template</label>
-            <div class="flex gap-2">
-                <select id="template-select" onchange="switchTemplate(this.value)" class="txt-input flex-1 font-semibold"></select>
-                <button onclick="document.getElementById('file-import').click()" title="Import a new template (.xlsx / .csv)" class="mini-btn text-white flex items-center gap-1" style="background:var(--brand)">
-                    <i class="fa-solid fa-file-import"></i> Import
-                </button>
-                <input type="file" id="file-import" class="hidden" accept=".xlsx,.xls,.csv" onchange="importFile(this)">
-            </div>
-            <div class="flex gap-2 mt-2">
-                <button onclick="renameTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-i-cursor mr-1"></i>Rename</button>
-                <button onclick="duplicateTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-regular fa-copy mr-1"></i>Duplicate</button>
-                <button onclick="downloadTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-download mr-1"></i>Export</button>
-                <button onclick="deleteTemplate()" class="mini-btn bg-red-50 text-red-500 hover:bg-red-100" title="Delete this template"><i class="fa-solid fa-trash"></i></button>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="px-4 pt-3 pb-1 bg-white">
-            <div class="flex gap-1 bg-slate-100 p-1 rounded-xl">
-                <div class="tab-btn active" data-tab="editor" onclick="switchTab('editor')"><i class="fa-solid fa-pen mr-1"></i> Script Editor</div>
-                <div class="tab-btn" data-tab="settings" onclick="switchTab('settings')"><i class="fa-solid fa-sliders mr-1"></i> Settings</div>
-            </div>
-        </div>
-
         <div class="scroll-area">
-            <!-- EDITOR TAB -->
-            <div class="tab-pane active" id="pane-editor">
-                <div id="editor-list"></div>
-                <button onclick="addStep()" class="w-full border-2 border-dashed border-slate-200 text-slate-400 hover:text-slate-600 hover:border-slate-300 rounded-xl py-2.5 text-xs font-bold mb-3">
-                    <i class="fa-solid fa-plus"></i> Add Step
-                </button>
-                <button onclick="applyAndRestart()" class="w-full text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue)">
-                    <i class="fa-solid fa-play"></i> Apply &amp; Restart Thread
-                </button>
-            </div>
-
-            <!-- SETTINGS TAB -->
-            <div class="tab-pane" id="pane-settings">
-                <div class="space-y-4">
+            <div class="bg-white border border-slate-200 rounded-xl p-3 mb-4">
+                <label class="input-label"><i class="fa-solid fa-layer-group mr-1"></i>Program</label>
+                <select id="set-program" class="txt-input font-semibold mb-3" onchange="switchProgram(this.value)"></select>
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="input-label">Patient First Name</label>
-                        <input type="text" id="set-patient" class="txt-input" oninput="updateSetting('patient', this.value)">
+                        <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i>Hospital</label>
+                        <input type="text" id="set-hospital" class="txt-input font-semibold" oninput="updateSetting('hospital', this.value)">
                     </div>
                     <div>
-                        <label class="input-label">Hospital / Health System (SMS sender name)</label>
-                        <input type="text" id="set-hospital" class="txt-input" oninput="updateSetting('hospital', this.value)">
+                        <label class="input-label"><i class="fa-solid fa-user mr-1"></i>Patient</label>
+                        <input type="text" id="set-patient" class="txt-input font-semibold" oninput="updateSetting('patient', this.value)">
                     </div>
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed">
-                        <i class="fa-solid fa-circle-info mr-1"></i>
-                        Use the tokens
-                        <code class="bg-white px-1 rounded">{patient}</code> and
-                        <code class="bg-white px-1 rounded">{hospital}</code>
-                        anywhere in your script and they'll be replaced live in the preview. The hospital name also
-                        appears as the message sender at the top of the thread.
-                    </div>
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] text-slate-600 leading-relaxed">
-                        <p class="font-bold text-slate-700 mb-1"><i class="fa-solid fa-table-list mr-1"></i> Template format</p>
-                        Import a spreadsheet (<code class="bg-white px-1 rounded">.xlsx</code> or <code class="bg-white px-1 rounded">.csv</code>) with these columns:
-                        <div class="mt-1 font-mono text-[10px] bg-white border border-slate-200 rounded p-2">Step ID · Bot Message · Choice Text · Choice Next</div>
-                        Rows sharing a <b>Step ID</b> are grouped: each <b>Bot Message</b> becomes a texted bubble; the
-                        <b>Choice Text</b> is the patient's scripted reply, and <b>Choice Next</b> is the Step ID it advances to.
-                    </div>
-                    <button onclick="resetDefaults()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl transition-all">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset to TCM Sample Template
-                    </button>
                 </div>
             </div>
+
+            <div class="flex gap-1 bg-slate-100 p-1 rounded-xl mb-4">
+                <div class="tab-btn active" data-tab="journey" onclick="switchTab('journey')"><i class="fa-solid fa-timeline mr-1"></i> Journey</div>
+                <div class="tab-btn" data-tab="editor" onclick="switchTab('editor')"><i class="fa-solid fa-pen mr-1"></i> Edit Script</div>
+            </div>
+
+            <div class="tab-pane active" id="pane-journey">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-[12px] font-extrabold uppercase tracking-wide text-slate-500">Outreach Journey</h3>
+                    <span class="text-[11px] font-semibold text-slate-400" id="journey-meta"></span>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Click a touchpoint to load that SMS conversation. Then use the camera icon on the phone (or <b>Advance</b>) to play the patient's natural-language responses.</p>
+                <div class="timeline" id="timeline"></div>
+                <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed mt-5" id="journey-blurb"></div>
+            </div>
+
+            <div class="tab-pane" id="pane-editor">
+                <div class="ed-pills" id="editor-touch-pills"></div>
+                <div id="editor-list"></div>
+                <button id="apply-refresh-btn" onclick="applyAndRefresh()" class="w-full text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 mt-1" style="background:var(--ios-blue)">
+                    <i class="fa-solid fa-rotate"></i> Apply &amp; Refresh
+                </button>
+                <button onclick="resetScript()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold py-2.5 rounded-xl transition-all mt-2 text-xs">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset to default for this program
+                </button>
+            </div>
         </div>
 
-        <!-- Persistent presenter control bar -->
         <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] flex gap-2">
-            <button onclick="stepAdvance()" class="flex-1 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue);box-shadow:0 8px 18px -6px rgba(0,122,255,0.5)">
+            <button onclick="advance()" class="flex-1 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue);box-shadow:0 8px 18px -6px rgba(0,122,255,0.5)">
                 <i class="fa-solid fa-forward-step"></i> Advance
             </button>
-            <button onclick="restartThread()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all" title="Restart from beginning">
+            <button onclick="restartTouch()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all" title="Restart this touchpoint">
                 <i class="fa-solid fa-backward-fast"></i>
             </button>
             <button onclick="toggleConfig()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all" title="Present mode">
@@ -361,12 +355,13 @@
         </div>
     </div>
 
-    <!-- ============ PREVIEW AREA ============ -->
     <div id="preview-area">
         <button id="open-config-btn" onclick="toggleConfig()" class="bg-white p-3 rounded-full shadow-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-2 pr-4 group">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background:var(--brand)"><i class="fa-solid fa-sliders text-sm"></i></div>
             <span class="text-xs font-bold text-slate-700">Show Panel</span>
         </button>
+
+        <div id="present-switcher"></div>
 
         <div class="viewport-container">
             <div class="iphone-frame" id="iphone-frame">
@@ -395,7 +390,7 @@
 
                 <div class="ios-input-container">
                     <div class="ios-bar">
-                        <i id="camera-trigger" onclick="stepAdvance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
+                        <i id="camera-trigger" onclick="advance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
                         <div class="ios-field">
                             <span id="ios-text-placeholder" class="text-slate-300">Text Message</span>
                             <span id="ios-actual-text" class="hidden"></span>
@@ -408,116 +403,1539 @@
         </div>
     </div>
 
-    <script>
+<script>
+
     /* =====================================================================
-       CipherOutreach · SMS Demo Builder
-       A lightweight, template-driven SMS thread simulator. Import a
-       spreadsheet (Step ID / Bot Message / Choice Text / Choice Next),
-       swap between saved templates, and edit the script inline.
+       CipherOutreach · PROMs Outreach Journey
+       Multi-program conversational-AI SMS demo (HOOS / KOOS / 9Q PRO-PM / PROMIS-10).
        ===================================================================== */
 
-    /* ---- Bundled sample: TCM (Transitional Care Management) outreach ---- */
-    const TCM_TEMPLATE = {
-        id: 'tcm-sample',
-        name: 'TCM Outreach (Sample)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hello, this is {hospital}. We are contacting you to see how you're recovering at home after your recent hospital stay and wanted to check in on how you are recovering at home and have a few questions we would like to ask you.",
-                "Are we speaking with the patient, a caregiver, or do we have the wrong number?"
-            ], choices: [{ text: "I am the patient", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, let's get started! How are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "I have been having consistent headaches since I left the hospital and I have been really tired", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Ok thanks for letting us know, we will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue please contact your doctor's office or go to the nearest emergency department.",
-                "When leaving the hospital you were given discharge instructions to help you stay healthy at home. Do you understand all of your hospital discharge instructions?"
-            ], choices: [{ text: "Yes I understood", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, we will have someone on our care team call you back shortly.",
-                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
-            ], choices: [{ text: "Yes, I do have my medication", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Do you have any questions about any of your medications?"
-            ], choices: [{ text: "Yes I have a question about the lisinopril", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Ok, we will have someone on our care team call you back shortly to discuss your medication.",
-                "It is important to schedule a follow up appointment within 7 to 14 days after leaving the hospital. Have you scheduled your appointment with your doctor's office?"
-            ], choices: [{ text: "No, I have not been able to schedule a follow-up appointment yet", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "Ok, thanks for letting us know. Would you like help scheduling a follow-up appointment?"
-            ], choices: [{ text: "Yes, I would appreciate some help scheduling it", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "Ok we will have someone on our care team call you to help schedule an appointment.",
-                "Thank you for participating in this brief conversation.",
-                "Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
+    const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
+    const STORE_KEY = "proms_journey_v31";
+    const deepClone = (o) => JSON.parse(JSON.stringify(o));
+
+    const DEFAULT_PROGRAMS = [
+  {
+    "id": "hoos",
+    "name": "HOOS, JR. (THA)",
+    "shortName": "HOOS, JR.",
+    "joint": "hip",
+    "meta": "6 touches · pre-op → Day 300+",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS HOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 6 HOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
+    "journey": [
+      {
+        "day": "30 days Pre-op",
+        "offset": -30,
+        "title": "Pre-Op HOOS, JR. Survey",
+        "questions": 6,
+        "kind": "survey",
+        "summary": "CMS baseline. About 30 days before surgery. Full HOOS, JR.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total hip replacement, we need to collect a short baseline survey about your hip pain and how your hip affects daily activities. The survey should only take a few minutes and will help us track your recovery.",
+              "Would you like to continue in English or Spanish?"
+            ],
+            "reply": {
+              "text": "English",
+              "intent": "Language: English",
+              "ack": [
+                "Great, thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Perfect, thanks {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "instructions",
+            "kind": "system",
+            "messages": [
+              "This survey has a total of 6 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_stairs",
+            "kind": "q",
+            "messages": [
+              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "I'd say moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_uneven",
+            "kind": "q",
+            "messages": [
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Uneven ground really bothers it so I would say severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Bending to pick something up is tough, so I would say severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bed",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_sitting",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Sitting for a while gets uncomfortable, so I would say mild",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you. This completes your pre-surgery hip survey.",
+              "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your hip improvement. Thank you for participating in this survey. Have a great day!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
         ]
-    };
+      },
+      {
+        "day": "Day 30",
+        "offset": 30,
+        "title": "Early Recovery Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "One month after hip surgery. Stairs pain and rising from sitting.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital} checking in about a month after your total hip replacement.",
+              "This is a short recovery check-in (2 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_stairs",
+            "kind": "q",
+            "messages": [
+              "Over the past week, how much hip pain have you had going up or down stairs? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Stairs are still pretty tough so I would say moderate",
+              "intent": "Moderate",
+              "ack": [
+                "Thanks for sharing. That is helpful to know."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had rising from sitting because of your hip? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Getting out of a chair takes some effort so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Got it. Keep following the activity plan from your care team."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll check in again in a few months. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 120",
+        "offset": 120,
+        "title": "Function Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "About 4 months. Uneven surface pain and bending to the floor.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It's been about four months since your total hip replacement. Quick check on how you're moving day to day.",
+              "2 short questions. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_uneven",
+            "kind": "q",
+            "messages": [
+              "Over the past week, how much hip pain have you had walking on an uneven surface? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Uneven sidewalks bother it a bit so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Nice progress. Thank you."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had bending to the floor to pick something up because of your hip? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "I can do it but it is still stiff so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Appreciate the update."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll check in again around the six-month mark. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 180",
+        "offset": 180,
+        "title": "Mid-Year Wellness Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "6 months. Lying in bed and sitting difficulty.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It's been 6 months since your total hip replacement!",
+              "Quick mid-year check-in (2 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "fn_bed",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had lying in bed because of your hip, like turning over or keeping your hip in position? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Turning over is mostly fine so I would say none",
+              "intent": "None",
+              "ack": [
+                "Wonderful to hear."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_sitting",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had sitting because of your hip? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Sitting for a long time gets a little uncomfortable so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Thanks. That helps us keep track of your recovery."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll reach out again before your one-year survey. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 270",
+        "offset": 270,
+        "title": "One-Year Survey Primer",
+        "questions": 1,
+        "kind": "primer",
+        "summary": "About 9 months. Prepare patient for Day 300+ survey.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. You're almost at one year since your total hip replacement!",
+              "Soon we'll send your official one-year health form. It will be the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
+            ],
+            "reply": null
+          },
+          {
+            "id": "ready",
+            "kind": "q",
+            "messages": [
+              "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
+            ],
+            "reply": {
+              "text": "This number is fine I'll watch for it",
+              "intent": "Confirmed contact. Ready for survey",
+              "ack": [
+                "Perfect. Thank you {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We appreciate you staying engaged with us throughout the year.",
+              "Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 300+",
+        "offset": 300,
+        "title": "Post-Op HOOS, JR. Survey",
+        "questions": 6,
+        "kind": "survey",
+        "summary": "CMS matched pair. 300 to 425 days post-op. Full HOOS, JR.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It is time for your one-year hip check-up survey. It only takes a few minutes and helps us measure how your hip has improved since surgery.",
+              "This is the same hip survey you completed before surgery (6 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_stairs_post",
+            "kind": "q",
+            "messages": [
+              "Let's get started. What amount of hip pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "It's been mild if anything",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_uneven_post",
+            "kind": "q",
+            "messages": [
+              "What amount of hip pain have you experienced in the last week walking on an uneven surface? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "None",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Rising from a chair is easy again, so I would say none",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Mild",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bed_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when lying in bed, like turning over or keeping your hip in position? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Sleeping and turning in bed feel normal, so I would say none",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_sitting_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your hip when sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "None",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you. Your one-year hip survey is complete. Comparing this with your answers from before surgery helps {hospital} track meaningful improvement for patients like you.",
+              "Survey completion and data collection recorded. Have a wonderful day.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "koos",
+    "name": "KOOS, JR. (TKA)",
+    "shortName": "KOOS, JR.",
+    "joint": "knee",
+    "meta": "6 touches · pre-op → Day 300+",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to a CMS KOOS, JR. scale value (None / Mild / Moderate / Severe / Extreme) or check-in intent and fires the approved response. Pre-op and Day 300+ use the exact 7 KOOS, JR. items. Mid-year touches keep patients engaged for matched-pair completion.",
+    "journey": [
+      {
+        "day": "30 days Pre-op",
+        "offset": -30,
+        "title": "Pre-Op KOOS, JR. Survey",
+        "questions": 7,
+        "kind": "survey",
+        "summary": "CMS baseline. About 30 days before surgery. Full KOOS, JR.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. Ahead of your upcoming total knee replacement, we need to collect a short baseline survey about your knee pain, stiffness, and how your knee affects daily activities. The survey should only take a few minutes and will help us track your recovery.",
+              "Would you like to continue in English or Spanish?"
+            ],
+            "reply": {
+              "text": "English",
+              "intent": "Language: English",
+              "ack": [
+                "Great, thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Perfect, thanks {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "instructions",
+            "kind": "system",
+            "messages": [
+              "This survey has a total of 7 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "stiff_intro",
+            "kind": "system",
+            "messages": [
+              "First, a question about stiffness. Stiffness is a sensation of restriction or slowness in the ease with which you move your knee joint."
+            ],
+            "reply": null
+          },
+          {
+            "id": "stiff_am",
+            "kind": "q",
+            "messages": [
+              "Let's get started. How severe is your knee stiffness after first wakening in the morning? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_twist",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Twisting hurts a lot, so I would say severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_straight",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week straightening your knee fully? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_stairs",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Stairs are hard on this knee especially going down, so I would say severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_stand",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week standing upright? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Getting out of a chair takes effort, so I would say moderate",
+              "intent": "Moderate",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Severe",
+              "intent": "Severe",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you. This completes your pre-surgery knee survey.",
+              "We will be reaching out to you again post-surgery up to a year after your surgery to see how you are recovering at home and to monitor your knee improvement. Thank you for participating in this survey. Have a great day!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 30",
+        "offset": 30,
+        "title": "Early Recovery Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "One month after knee surgery. Stairs pain and rising from sitting.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital} checking in about a month after your total knee replacement.",
+              "This is a short recovery check-in (2 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_stairs",
+            "kind": "q",
+            "messages": [
+              "Over the past week, how much knee pain have you had going up or down stairs? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Stairs are still pretty tough especially going down so I would say moderate",
+              "intent": "Moderate",
+              "ack": [
+                "Thanks for sharing. That is helpful to know."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had rising from sitting because of your knee? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Getting out of a chair takes some effort so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Got it. Keep following the activity plan from your care team."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll check in again in a few months. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 120",
+        "offset": 120,
+        "title": "Function Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "About 4 months. Twisting pain and bending to the floor.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It's been about four months since your total knee replacement. Quick check on how you're moving day to day.",
+              "2 short questions. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_twist",
+            "kind": "q",
+            "messages": [
+              "Over the past week, how much knee pain have you had twisting or pivoting on your knee? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Twisting is better but still bothers me so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Nice progress. Thank you."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending",
+            "kind": "q",
+            "messages": [
+              "How much difficulty have you had bending to the floor to pick something up because of your knee? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "I can do it but it is still stiff so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Appreciate the update."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll check in again around the six-month mark. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 180",
+        "offset": 180,
+        "title": "Mid-Year Wellness Check-In",
+        "questions": 2,
+        "kind": "checkin",
+        "summary": "6 months. Standing pain and straightening the knee.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It's been 6 months since your total knee replacement!",
+              "Quick mid-year check-in (2 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "pain_stand",
+            "kind": "q",
+            "messages": [
+              "Over the past week, how much knee pain have you had standing upright? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Standing is mostly fine so I would say none",
+              "intent": "None",
+              "ack": [
+                "Wonderful to hear."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_straight",
+            "kind": "q",
+            "messages": [
+              "How much knee pain have you had straightening your knee fully? Would you say none, mild, moderate, severe, or extreme?"
+            ],
+            "reply": {
+              "text": "Straightening all the way can still twinge so I would say mild",
+              "intent": "Mild",
+              "ack": [
+                "Thanks. That helps us keep track of your recovery."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We'll reach out again before your one-year survey. Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 270",
+        "offset": 270,
+        "title": "One-Year Survey Primer",
+        "questions": 1,
+        "kind": "primer",
+        "summary": "About 9 months. Prepare patient for Day 300+ survey.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. You're almost at one year since your total knee replacement!",
+              "Soon we'll send your official one-year health form. It will be the same type of questions you answered before surgery. Your answers help us take better care of patients like you."
+            ],
+            "reply": null
+          },
+          {
+            "id": "ready",
+            "kind": "q",
+            "messages": [
+              "Please look for that message in the coming weeks. Does this timing work, or should we note a better number to reach you?"
+            ],
+            "reply": {
+              "text": "This number is fine I'll watch for it",
+              "intent": "Confirmed contact. Ready for survey",
+              "ack": [
+                "Perfect. Thank you {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "We appreciate you staying engaged with us throughout the year.",
+              "Take care!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 300+",
+        "offset": 300,
+        "title": "Post-Op KOOS, JR. Survey",
+        "questions": 7,
+        "kind": "survey",
+        "summary": "CMS matched pair. 300 to 425 days post-op. Full KOOS, JR.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. It is time for your one-year knee check-up survey. It only takes a few minutes and helps us measure how your knee has improved since surgery.",
+              "This is the same knee survey you completed before surgery (7 questions). Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "stiff_intro",
+            "kind": "system",
+            "messages": [
+              "First, a question about stiffness. Stiffness is a sensation of restriction or slowness in the ease with which you move your knee joint."
+            ],
+            "reply": null
+          },
+          {
+            "id": "stiff_am_post",
+            "kind": "q",
+            "messages": [
+              "Let's get started. How severe is your knee stiffness after first wakening in the morning? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "None",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_twist_post",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week twisting or pivoting on your knee? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Twisting is fine now, maybe mild if I push it",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_straight_post",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week straightening your knee fully? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "None",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_stairs_post",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week going up or down stairs? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "It's been mild at most",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "pain_stand_post",
+            "kind": "q",
+            "messages": [
+              "What amount of knee pain have you experienced in the last week standing upright? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Standing upright is no problem, so I would say none",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_rising_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your knee when rising from sitting? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "None",
+              "intent": "None",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "fn_bending_post",
+            "kind": "q",
+            "messages": [
+              "What degree of difficulty have you experienced in the last week due to your knee when bending to the floor to pick up an object? Please respond using the following scale: none, mild, moderate, severe, or extreme"
+            ],
+            "reply": {
+              "text": "Bending to pick things up is only mild difficulty",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you. Your one-year knee survey is complete. Comparing this with your answers from before surgery helps {hospital} track meaningful improvement for patients like you.",
+              "Survey completion and data collection recorded. Have a wonderful day.",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "propm",
+    "name": "Information Transfer PRO-PM (9Q)",
+    "shortName": "9Q PRO-PM",
+    "joint": "",
+    "meta": "2 touches · Day 2 to 3 (within 2 to 7 day window)",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to the CMS Information Transfer response sets (Yes / Somewhat / No or Very clear / Somewhat clear / Not clear / Does not apply). Administered anonymously 2 to 7 days after an outpatient procedure.",
+    "journey": [
+      {
+        "day": "Day 2",
+        "offset": 2,
+        "title": "Survey Primer",
+        "questions": 1,
+        "kind": "primer",
+        "summary": "Heads-up for the anonymous transition survey.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. Thank you for choosing us for your recent outpatient procedure.",
+              "In the next day or two we'll send a short anonymous survey about how clear your recovery instructions were. It takes about 5 minutes and helps us improve for every patient."
+            ],
+            "reply": null
+          },
+          {
+            "id": "ok",
+            "kind": "q",
+            "messages": [
+              "Does this number work for that short survey text?"
+            ],
+            "reply": {
+              "text": "Yes this number is good",
+              "intent": "Confirmed contact",
+              "ack": [
+                "Perfect. Watch for it tomorrow. Reply STOP anytime to opt out."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients. Have a great day!"
+            ],
+            "reply": null
+          }
+        ]
+      },
+      {
+        "day": "Day 3",
+        "offset": 3,
+        "title": "Information Transfer PRO-PM (9Q)",
+        "questions": 9,
+        "kind": "survey",
+        "summary": "CMS Information Transfer survey. 2 to 7 days post-op. Anonymous.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. You are receiving this survey because you recently had a procedure at {hospital}. Either before or after your operation you should have been given information about what to do during your recovery. We would like to know if this information was easy to follow.",
+              "This survey is anonymous. Your individual answers will not be linked back to you. It should take about 5 minutes. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "q1",
+            "kind": "q",
+            "messages": [
+              "Did the information you got about your recovery consider your health needs, for example medical conditions, pain management, and treatment preferences? Please respond with one of the following: Yes, Somewhat, or No."
+            ],
+            "reply": {
+              "text": "Yes they talked through my pain plan and other conditions",
+              "intent": "Yes",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q2",
+            "kind": "q",
+            "messages": [
+              "Did the information you got about your recovery consider your personal situation, for example transportation needs, insurance coverage, and financial status? Please respond with one of the following: Yes, Somewhat, or No."
+            ],
+            "reply": {
+              "text": "Somewhat, they covered transportation but not much about costs",
+              "intent": "Somewhat",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q3",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about why you should take any new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Very clear, they explained what each new pill was for",
+              "intent": "Very clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q4",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about possible side effects of new medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Somewhat clear, they mentioned a few side effects but I still had questions",
+              "intent": "Somewhat clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q5",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about when to stop any medications? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Very clear on when to stop the pain meds",
+              "intent": "Very clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q6",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about changes to your diet? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Does not apply, they said no diet changes for my procedure",
+              "intent": "Does not apply",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q7",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about changes to physical activities, including exercise? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Very clear on what I could and couldn't do",
+              "intent": "Very clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q8",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about when you could return to work? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Somewhat clear, they gave a range but said to check with my surgeon",
+              "intent": "Somewhat clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "q9",
+            "kind": "q",
+            "messages": [
+              "How clear was the information about when you could drive? Please respond with one of the following: Very clear, Somewhat clear, Not clear, or Does not apply."
+            ],
+            "reply": {
+              "text": "Very clear, no driving until off narcotics and cleared",
+              "intent": "Very clear",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you for completing this anonymous survey. Your feedback helps {hospital} improve recovery instructions for future patients. Have a great day!"
+            ],
+            "reply": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "promis10",
+    "name": "PROMIS-10 Global Health",
+    "shortName": "PROMIS-10",
+    "joint": "",
+    "meta": "1 touch \u00b7 10-item Global Health survey",
+    "blurb": "Patients reply in plain language. Our conversational AI maps each reply to the PROMIS Scale v1.2 Global Health response sets (Excellent to Poor, Completely to Not at all, Never to Always, None to Very severe, and 0 to 10 pain). Uses the exact PROMIS Global Health items.",
+    "journey": [
+      {
+        "day": "Outreach 1",
+        "offset": 0,
+        "title": "PROMIS-10 Global Health Survey",
+        "questions": 10,
+        "kind": "survey",
+        "summary": "PROMIS Scale v1.2 Global Health. 10 items covering overall, physical, mental, and social health.",
+        "steps": [
+          {
+            "id": "intro",
+            "kind": "system",
+            "messages": [
+              "Hi {patient}, this is {hospital}. We are reaching out to collect a short survey about your overall health and well-being. The survey should only take a few minutes and will help us understand how you are doing.",
+              "Would you like to continue in English or Spanish?"
+            ],
+            "reply": {
+              "text": "English",
+              "intent": "Language: English",
+              "ack": [
+                "Great, thank you!"
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "who",
+            "kind": "system",
+            "messages": [
+              "Before we start, can you please confirm if we are speaking with the patient, {patient}, a caregiver, or did we reach the wrong number?"
+            ],
+            "reply": {
+              "text": "Yes this is {patient}",
+              "intent": "Confirmed: Patient",
+              "ack": [
+                "Perfect, thanks {patient}."
+              ],
+              "alert": false
+            }
+          },
+          {
+            "id": "instructions",
+            "kind": "system",
+            "messages": [
+              "There are a total of 10 questions and it shouldn't take longer than 3-5 minutes. Answer as honestly as you can. Reply STOP anytime to opt out."
+            ],
+            "reply": null
+          },
+          {
+            "id": "global01",
+            "kind": "q",
+            "messages": [
+              "Let's get started. In general, would you say your health is: excellent, very good, good, fair, or poor?"
+            ],
+            "reply": {
+              "text": "I'd say good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global02",
+            "kind": "q",
+            "messages": [
+              "In general, would you say your quality of life is: excellent, very good, good, fair, or poor?"
+            ],
+            "reply": {
+              "text": "Very good overall",
+              "intent": "Very good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global03",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your physical health? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "Physical health is fair so I would say fair",
+              "intent": "Fair",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global04",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your mental health, including your mood and your ability to think? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "Good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global05",
+            "kind": "q",
+            "messages": [
+              "In general, how would you rate your satisfaction with your social activities and relationships? Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "I'm pretty happy with that so I would say very good",
+              "intent": "Very good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global09r",
+            "kind": "q",
+            "messages": [
+              "In general, please rate how well you carry out your usual social activities and roles. This includes activities at home, at work and in your community, and responsibilities as a parent, child, spouse, employee, friend, etc. Please respond using the following scale: excellent, very good, good, fair, or poor"
+            ],
+            "reply": {
+              "text": "I keep up with most things so I would say good",
+              "intent": "Good",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global06",
+            "kind": "q",
+            "messages": [
+              "To what extent are you able to carry out your everyday physical activities such as walking, climbing stairs, carrying groceries, or moving a chair? Please respond using the following scale: completely, mostly, moderately, a little, or not at all"
+            ],
+            "reply": {
+              "text": "I can do most of it so I would say mostly",
+              "intent": "Mostly",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global10r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how often have you been bothered by emotional problems such as feeling anxious, depressed or irritable? Please respond using the following scale: never, rarely, sometimes, often, or always"
+            ],
+            "reply": {
+              "text": "Sometimes",
+              "intent": "Sometimes",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global08r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how would you rate your fatigue on average? Please respond using the following scale: none, mild, moderate, severe, or very severe"
+            ],
+            "reply": {
+              "text": "Mild most days",
+              "intent": "Mild",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "global07r",
+            "kind": "q",
+            "messages": [
+              "In the past 7 days, how would you rate your pain on average? Please respond with a number from 0 to 10, where 0 is no pain and 10 is the worst pain imaginable"
+            ],
+            "reply": {
+              "text": "About a 3",
+              "intent": "3",
+              "ack": [],
+              "alert": false
+            }
+          },
+          {
+            "id": "close",
+            "kind": "system",
+            "messages": [
+              "Thank you for completing this health survey. Your answers help {hospital} understand how patients like you are doing.",
+              "Have a great day!",
+              "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department."
+            ],
+            "reply": null
+          }
+        ]
+      }
+    ]
+  }
+];
 
-    const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
+    /* ---------------- State ---------------- */
+    let settings = Object.assign({}, DEFAULT_SETTINGS);
+    let activeProgramId = "hoos";
+    let programState = {}; // id -> { journey, completed, activeTouch }
+    let currentStep = -1;
+    let awaitingReply = false;
+    let isProcessing = false;
 
-    /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v1';
-    function load() {
-        try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
+    function defaultStateFor(p) {
+        return { journey: deepClone(p.journey), completed: {}, activeTouch: 0 };
     }
-    function persist() { localStorage.setItem(STORE_KEY, JSON.stringify({ templates, activeId, settings })); }
 
-    let templates, activeId, settings;
-    (function init() {
+    function ensureProgramStates() {
+        DEFAULT_PROGRAMS.forEach(p => {
+            if (!programState[p.id]) programState[p.id] = defaultStateFor(p);
+        });
+    }
+
+    function prog() { return DEFAULT_PROGRAMS.find(p => p.id === activeProgramId) || DEFAULT_PROGRAMS[0]; }
+    function state() { return programState[activeProgramId]; }
+    function journey() { return state().journey; }
+    function touch() { return journey()[state().activeTouch]; }
+    function steps() { return touch().steps; }
+    function activeTouch() { return state().activeTouch; }
+    function completed() { return state().completed; }
+
+    function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; } }
+    function persist() {
+        localStorage.setItem(STORE_KEY, JSON.stringify({ settings, activeProgramId, programState }));
+    }
+
+    (function initState() {
+        ensureProgramStates();
         const s = load();
-        if (s && Array.isArray(s.templates) && s.templates.length) {
-            templates = s.templates;
-            activeId = s.activeId;
-            settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
-            if (!templates.find(t => t.id === activeId)) activeId = templates[0].id;
-        } else {
-            templates = [JSON.parse(JSON.stringify(TCM_TEMPLATE))];
-            activeId = TCM_TEMPLATE.id;
-            settings = Object.assign({}, DEFAULT_SETTINGS);
+        if (!s) return;
+        settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
+        if (s.activeProgramId && DEFAULT_PROGRAMS.some(p => p.id === s.activeProgramId)) {
+            activeProgramId = s.activeProgramId;
+        }
+        if (s.programState && typeof s.programState === "object") {
+            DEFAULT_PROGRAMS.forEach(p => {
+                const saved = s.programState[p.id];
+                if (saved && Array.isArray(saved.journey) && saved.journey.length) {
+                    programState[p.id] = {
+                        journey: saved.journey,
+                        completed: saved.completed || {},
+                        activeTouch: typeof saved.activeTouch === "number" ? saved.activeTouch : 0
+                    };
+                }
+            });
         }
     })();
 
-    function active() { return templates.find(t => t.id === activeId) || templates[0]; }
-    function steps() { return active().steps; }
-
-    /* ---------------- Playback state ---------------- */
-    let currentStep = -1;      // index of last revealed step
-    let awaitingReply = false; // current step has a pending scripted reply
-    let replied = {};          // index -> chosen choice index
-    let isProcessing = false;
-
     function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    /* ---------------- Tokens & text ---------------- */
     function token(str) {
         if (str == null) return "";
         return String(str)
             .replace(/{patient}/gi, settings.patient || DEFAULT_SETTINGS.patient)
-            .replace(/{hospital}/gi, settings.hospital || DEFAULT_SETTINGS.hospital);
+            .replace(/{hospital}/gi, settings.hospital || DEFAULT_SETTINGS.hospital)
+            .replace(/{phone}/gi, settings.phone || DEFAULT_SETTINGS.phone);
     }
-    function escapeHtml(s) { const d = document.createElement('div'); d.innerText = s == null ? '' : s; return d.innerHTML; }
-    function escapeAttr(s) { return (s == null ? '' : String(s)).replace(/"/g, '&quot;'); }
     function renderText(raw) {
-        let safe = token(raw).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        let safe = token(raw).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="sms-link">$1</a>');
         return safe;
     }
 
-    /* ---------------- Branding ---------------- */
     function updateBranding() {
         const name = settings.hospital || DEFAULT_SETTINGS.hospital;
-        document.getElementById('header-name').innerText = name;
-        const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        document.getElementById('header-logo').innerText = initials || 'CH';
+        document.getElementById("header-name").innerText = name;
+        const initials = name.split(" ").filter(Boolean).map(n => n[0]).join("").substring(0, 2).toUpperCase();
+        document.getElementById("header-logo").innerText = initials || "CH";
+        document.getElementById("header-subtitle").innerText = prog().name;
+        document.getElementById("journey-meta").innerText = prog().meta;
+        document.getElementById("journey-blurb").innerHTML = '<i class="fa-solid fa-circle-info mr-1"></i>' + prog().blurb;
     }
 
-    /* ---------------- Thread rendering ---------------- */
-    const feed = () => document.getElementById('chat-feed');
+    function fillProgramSelect() {
+        const sel = document.getElementById("set-program");
+        sel.innerHTML = "";
+        DEFAULT_PROGRAMS.forEach(p => {
+            const opt = document.createElement("option");
+            opt.value = p.id;
+            opt.textContent = p.name;
+            if (p.id === activeProgramId) opt.selected = true;
+            sel.appendChild(opt);
+        });
+    }
+
+    function switchProgram(id) {
+        if (!DEFAULT_PROGRAMS.some(p => p.id === id)) return;
+        activeProgramId = id;
+        ensureProgramStates();
+        if (state().activeTouch >= journey().length) state().activeTouch = 0;
+        persist();
+        updateBranding();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
+    const feed = () => document.getElementById("chat-feed");
     function scrollToBottom() { const f = feed(); f.scrollTop = f.scrollHeight; }
 
     function addBubble(text, type) {
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.className = `bubble bubble-${type}`;
         div.innerHTML = renderText(text);
         feed().appendChild(div);
@@ -525,45 +1943,50 @@
         return div;
     }
     function updateReceipt() {
-        feed().querySelectorAll('.receipt').forEach(r => r.remove());
-        const users = feed().querySelectorAll('.bubble-user');
+        feed().querySelectorAll(".receipt").forEach(r => r.remove());
+        const users = feed().querySelectorAll(".bubble-user");
         if (!users.length) return;
         const last = users[users.length - 1];
-        const rc = document.createElement('div');
-        rc.className = 'receipt';
-        rc.innerText = 'Read';
-        last.insertAdjacentElement('afterend', rc);
+        const rc = document.createElement("div");
+        rc.className = "receipt";
+        rc.innerText = "Delivered";
+        last.insertAdjacentElement("afterend", rc);
     }
     async function showTyping() {
-        const tc = document.getElementById('typing-container');
-        tc.classList.remove('hidden'); scrollToBottom();
-        await wait(1050);
-        tc.classList.add('hidden');
+        const tc = document.getElementById("typing-container");
+        tc.classList.remove("hidden"); scrollToBottom();
+        await wait(950);
+        tc.classList.add("hidden");
     }
     async function simulateUserTyping(text) {
-        const field = document.getElementById('ios-actual-text');
-        const place = document.getElementById('ios-text-placeholder');
-        const send = document.getElementById('ios-send-btn');
-        place.classList.add('hidden');
-        field.classList.remove('hidden');
-        field.textContent = '';
-        send.classList.add('active');
+        const field = document.getElementById("ios-actual-text");
+        const place = document.getElementById("ios-text-placeholder");
+        const send = document.getElementById("ios-send-btn");
+        place.classList.add("hidden");
+        field.classList.remove("hidden");
+        field.textContent = "";
+        send.classList.add("active");
         const t = token(text);
-        for (let ch of t) { field.textContent += ch; await wait(16 + Math.random() * 14); }
-        await wait(280);
-        field.textContent = '';
-        field.classList.add('hidden');
-        place.classList.remove('hidden');
-        send.classList.remove('active');
-        addBubble(text, 'user');
+        for (let ch of t) { field.textContent += ch; await wait(14 + Math.random() * 12); }
+        await wait(260);
+        field.textContent = "";
+        field.classList.add("hidden");
+        place.classList.remove("hidden");
+        send.classList.remove("active");
+        addBubble(text, "user");
     }
 
-    /* ---------------- Reveal / navigation ---------------- */
+    function nodeLabel(t) {
+        if (t.offset < 0) return { top: "PRE", num: String(Math.abs(t.offset)) };
+        if (String(t.day).includes("+")) return { top: "DAY", num: String(t.offset) + "+" };
+        return { top: "DAY", num: String(t.offset) };
+    }
+
     function updateCamera() {
-        const cam = document.getElementById('camera-trigger');
+        const cam = document.getElementById("camera-trigger");
         const atEnd = (currentStep >= steps().length - 1) && !awaitingReply;
-        if (!isProcessing && !atEnd) cam.classList.add('ios-icon-ready');
-        else cam.classList.remove('ios-icon-ready');
+        if (!isProcessing && !atEnd) cam.classList.add("ios-icon-ready");
+        else cam.classList.remove("ios-icon-ready");
     }
 
     async function revealStep(i) {
@@ -575,292 +1998,263 @@
         updateCamera();
         for (const msg of st.messages) {
             await showTyping();
-            addBubble(msg, 'bot');
-            await wait(430);
+            addBubble(msg, "bot");
+            await wait(380);
         }
-        if ((st.choices || []).length) awaitingReply = true;
+        if (st.reply) awaitingReply = true;
         isProcessing = false;
+        if (i >= steps().length - 1 && !st.reply) markComplete();
         updateCamera();
     }
 
-    function indexOfStepId(id) {
-        const arr = steps();
-        const norm = v => String(v == null ? '' : v).trim();
-        let i = arr.findIndex(s => norm(s.id) === norm(id));
-        if (i === -1) {
-            const n = parseFloat(id);
-            if (!isNaN(n)) i = arr.findIndex(s => parseFloat(s.id) === n);
-        }
-        return i;
-    }
-
-    async function selectChoice(idx) {
-        if (isProcessing || !awaitingReply) return;
+    async function doReply() {
         const st = steps()[currentStep];
-        const choice = (st.choices || [])[idx];
-        if (!choice) return;
+        if (!st || !st.reply) return;
         isProcessing = true;
         awaitingReply = false;
-        document.getElementById('camera-trigger').classList.remove('ios-icon-ready');
-        await simulateUserTyping(choice.text);
-        replied[currentStep] = idx;
+        document.getElementById("camera-trigger").classList.remove("ios-icon-ready");
+
+        await simulateUserTyping(st.reply.text);
         updateReceipt();
+        await wait(400);
+
+        for (const msg of (st.reply.ack || [])) {
+            await showTyping();
+            addBubble(msg, "bot");
+            await wait(360);
+        }
         isProcessing = false;
-        // advance to the target step (by Choice Next; fallback to the next step in order)
-        let target = choice.next != null && String(choice.next).trim() !== '' ? indexOfStepId(choice.next) : -1;
-        if (target === -1) target = currentStep + 1;
-        if (target < steps().length) await revealStep(target);
-        else { updateCamera(); }
+        if (currentStep < steps().length - 1) await revealStep(currentStep + 1);
+        else { markComplete(); updateCamera(); }
     }
 
-    async function stepAdvance() {
+    async function advance() {
         if (isProcessing) return;
-        if (awaitingReply) { await selectChoice(0); return; }
+        if (awaitingReply) { await doReply(); return; }
         if (currentStep < steps().length - 1) await revealStep(currentStep + 1);
     }
 
-    function restartThread() {
-        replied = {};
+    function markComplete() {
+        const c = completed();
+        const i = activeTouch();
+        if (!c[i]) {
+            c[i] = true;
+            persist();
+            renderTimeline();
+            renderPresentSwitcher();
+        }
+    }
+
+    function restartTouch() {
         currentStep = -1;
         awaitingReply = false;
-        feed().innerHTML = '';
-        const intro = document.createElement('div');
-        intro.className = 'intro-divider';
-        intro.innerText = 'Text Message';
+        isProcessing = false;
+        feed().innerHTML = "";
+        const intro = document.createElement("div");
+        intro.className = "intro-divider";
+        intro.innerText = "Text Message";
         feed().appendChild(intro);
         if (steps().length) revealStep(0);
     }
 
-    /* ---------------- Settings ---------------- */
+    function selectTouch(i) {
+        state().activeTouch = i;
+        persist();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
+    function renderTimeline() {
+        const wrap = document.getElementById("timeline");
+        wrap.innerHTML = "";
+        const c = completed();
+        const at = activeTouch();
+        journey().forEach((t, i) => {
+            const card = document.createElement("div");
+            card.className = "touch-card" + (i === at ? " active" : "") + (c[i] ? " done" : "");
+            card.onclick = () => selectTouch(i);
+            const nl = nodeLabel(t);
+            const kindPill = t.kind === "survey"
+                ? '<span class="touch-pill survey"><i class="fa-solid fa-file-medical mr-1"></i>Full survey</span>'
+                : (t.kind === "primer"
+                    ? '<span class="touch-pill"><i class="fa-solid fa-bell mr-1"></i>Primer</span>'
+                    : `<span class="touch-pill q"><i class="fa-regular fa-circle-question mr-1"></i>${t.questions} questions</span>`);
+            card.innerHTML = `
+                <i class="fa-solid fa-circle-check touch-check"></i>
+                <div class="touch-node">
+                    <span class="tn-day">${nl.top}</span>
+                    <span class="tn-num">${nl.num}</span>
+                </div>
+                <div class="touch-meta">
+                    <h4>Touch ${i + 1} · ${escapeHtml(t.title)}</h4>
+                    <p>${escapeHtml(t.summary)}</p>
+                    <div class="touch-pills">
+                        ${kindPill}
+                        <span class="touch-pill">${c[i] ? "Completed" : (i === at ? "Active" : "Not started")}</span>
+                    </div>
+                </div>`;
+            wrap.appendChild(card);
+        });
+    }
+
+    function renderPresentSwitcher() {
+        const wrap = document.getElementById("present-switcher");
+        wrap.innerHTML = "";
+        const c = completed();
+        const at = activeTouch();
+        const showSurveyTag = prog().id === "hoos" || prog().id === "koos";
+        journey().forEach((t, i) => {
+            const pill = document.createElement("div");
+            const isSurvey = showSurveyTag && t.kind === "survey";
+            pill.className = "ps-pill" + (i === at ? " active" : "") + (c[i] ? " done" : "") + (isSurvey ? " survey" : "");
+            if (isSurvey) {
+                pill.innerHTML = `<span class="ps-day">${escapeHtml(t.day)}</span><span class="ps-sub">survey</span>`;
+            } else {
+                pill.textContent = t.day;
+            }
+            pill.onclick = () => selectTouch(i);
+            wrap.appendChild(pill);
+        });
+    }
+
+    function escapeHtml(s) { const d = document.createElement("div"); d.innerText = s == null ? "" : s; return d.innerHTML; }
+
+    function stepLabel(st) {
+        if (st.reply) return { txt: "Question / Prompt", cls: "q" };
+        if (st.id === "close") return { txt: "Closing message", cls: "c" };
+        return { txt: "Outreach message", cls: "s" };
+    }
+
+    function renderEditorPills() {
+        const wrap = document.getElementById("editor-touch-pills");
+        if (!wrap) return;
+        wrap.innerHTML = "";
+        const at = activeTouch();
+        journey().forEach((t, i) => {
+            const pill = document.createElement("div");
+            pill.className = "ed-pill" + (i === at ? " active" : "");
+            pill.textContent = t.day;
+            pill.onclick = () => selectTouch(i);
+            wrap.appendChild(pill);
+        });
+    }
+
+    function renderEditor() {
+        renderEditorPills();
+        const list = document.getElementById("editor-list");
+        if (!list) return;
+        list.innerHTML = "";
+        const t = touch();
+        const at = activeTouch();
+        const heading = document.createElement("p");
+        heading.className = "text-[11px] text-slate-400 mb-3 leading-relaxed";
+        heading.innerHTML = `Editing <b class="text-slate-600">${escapeHtml(prog().shortName)} · Touch ${at + 1} · ${escapeHtml(t.day)} (${escapeHtml(t.title)})</b>. Edit any message or reply below, then hit <b>Apply &amp; Refresh</b>. Tokens <code class="bg-slate-100 px-1 rounded">{patient}</code> and <code class="bg-slate-100 px-1 rounded">{hospital}</code> are supported.`;
+        list.appendChild(heading);
+
+        t.steps.forEach((st, si) => {
+            const lab = stepLabel(st);
+            const card = document.createElement("div");
+            card.className = "step-card";
+            let html = `<div class="flex justify-between items-center mb-2">
+                    <span class="step-badge badge-${lab.cls}">${lab.txt}</span>
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Step ${si + 1}</span>
+                </div>`;
+            html += `<label class="input-label">Outreach ${st.messages.length > 1 ? "messages" : "message"} (each bubble)</label>`;
+            html += st.messages.map((m, mi) =>
+                `<textarea oninput="updMsg(${si},${mi},this.value)" class="txt-input text-xs resize-y mb-1.5" rows="2">${escapeHtml(m)}</textarea>`
+            ).join("");
+
+            if (st.reply) {
+                html += `<label class="input-label mt-2"><i class="fa-solid fa-comment-dots mr-1"></i>Patient reply (natural language)</label>
+                    <textarea oninput="updReply(${si},'text',this.value)" class="txt-input text-xs resize-y mb-1.5 reply-field" rows="2">${escapeHtml(st.reply.text)}</textarea>`;
+                html += `<label class="input-label"><i class="fa-solid fa-wand-magic-sparkles mr-1" style="color:var(--ai)"></i>Mapped intent (CMS / internal)</label>
+                    <input type="text" oninput="updReply(${si},'intent',this.value)" class="txt-input text-xs mb-1.5" value="${escapeHtml(st.reply.intent || "")}">`;
+                if ((st.reply.ack || []).length) {
+                    html += `<label class="input-label">Outreach response${st.reply.ack.length > 1 ? "s" : ""}</label>`;
+                    html += st.reply.ack.map((a, ai) =>
+                        `<textarea oninput="updAck(${si},${ai},this.value)" class="txt-input text-xs resize-y mb-1.5" rows="2">${escapeHtml(a)}</textarea>`
+                    ).join("");
+                }
+            }
+            card.innerHTML = html;
+            list.appendChild(card);
+        });
+    }
+
+    function updMsg(si, mi, v) { touch().steps[si].messages[mi] = v; persist(); }
+    function updReply(si, key, v) { touch().steps[si].reply[key] = v; persist(); }
+    function updAck(si, ai, v) { touch().steps[si].reply.ack[ai] = v; persist(); }
+
+    function applyAndRefresh() {
+        state().completed = {};
+        persist();
+        updateBranding();
+        renderTimeline();
+        renderPresentSwitcher();
+        restartTouch();
+        const btn = document.getElementById("apply-refresh-btn");
+        if (btn) {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Applied!';
+            setTimeout(() => { btn.innerHTML = orig; }, 1400);
+        }
+    }
+
+    function resetScript() {
+        if (!confirm("Reset this program's script back to the built-in default? This discards edits for " + prog().name + ".")) return;
+        programState[activeProgramId] = defaultStateFor(prog());
+        persist();
+        updateBranding();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
     function fillSettings() {
-        document.getElementById('set-patient').value = settings.patient;
-        document.getElementById('set-hospital').value = settings.hospital;
-        document.getElementById('set-hospital-top').value = settings.hospital;
+        document.getElementById("set-patient").value = settings.patient;
+        document.getElementById("set-hospital").value = settings.hospital;
     }
     function updateSetting(key, val) {
         settings[key] = val;
         persist();
-        if (key === 'hospital') {
-            updateBranding();
-            // keep the top box and the Settings-tab box in sync
-            const top = document.getElementById('set-hospital-top');
-            const inSettings = document.getElementById('set-hospital');
-            if (top.value !== val) top.value = val;
-            if (inSettings.value !== val) inSettings.value = val;
-        }
+        if (key === "hospital") updateBranding();
     }
 
-    function applyAndRestart() { persist(); updateBranding(); renderEditor(); restartThread(); }
-    function resetDefaults() {
-        if (!confirm('Reset to the built-in TCM sample template? Your other saved templates are kept.')) return;
-        const existing = templates.findIndex(t => t.id === TCM_TEMPLATE.id);
-        const fresh = JSON.parse(JSON.stringify(TCM_TEMPLATE));
-        if (existing >= 0) templates[existing] = fresh; else templates.push(fresh);
-        activeId = TCM_TEMPLATE.id;
-        settings = Object.assign({}, DEFAULT_SETTINGS);
-        persist();
-        fillSettings(); updateBranding(); renderLibrary(); renderEditor(); restartThread();
-    }
-
-    /* ---------------- Template library ---------------- */
-    function renderLibrary() {
-        const sel = document.getElementById('template-select');
-        sel.innerHTML = '';
-        templates.forEach(t => {
-            const o = document.createElement('option');
-            o.value = t.id; o.textContent = t.name;
-            if (t.id === activeId) o.selected = true;
-            sel.appendChild(o);
-        });
-    }
-    function switchTemplate(id) {
-        activeId = id;
-        persist();
-        renderEditor(); restartThread();
-    }
-    function newId() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-    function renameTemplate() {
-        const t = active();
-        const name = prompt('Template name:', t.name);
-        if (name && name.trim()) { t.name = name.trim(); persist(); renderLibrary(); }
-    }
-    function duplicateTemplate() {
-        const copy = JSON.parse(JSON.stringify(active()));
-        copy.id = newId();
-        copy.name = active().name + ' (copy)';
-        templates.push(copy);
-        activeId = copy.id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
-    }
-    function deleteTemplate() {
-        if (templates.length <= 1) { alert('You need at least one template.'); return; }
-        if (!confirm(`Delete template "${active().name}"?`)) return;
-        templates = templates.filter(t => t.id !== activeId);
-        activeId = templates[0].id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
-    }
-
-    /* ---------------- Editor ---------------- */
-    function renderEditor() {
-        const list = document.getElementById('editor-list');
-        list.innerHTML = '';
-        steps().forEach((st, sIdx) => {
-            const card = document.createElement('div');
-            card.className = 'step-card';
-            card.innerHTML = `
-                <div class="flex justify-between items-center mb-3">
-                    <span class="step-badge"><i class="fa-solid fa-hashtag"></i>Step
-                        <input type="text" value="${escapeAttr(st.id)}" oninput="updStepId(${sIdx}, this.value)" class="w-12 bg-transparent border-0 outline-none font-black text-center" style="color:var(--brand)">
-                    </span>
-                    <div class="flex items-center gap-1">
-                        <button onclick="moveStep(${sIdx},-1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
-                        <button onclick="moveStep(${sIdx},1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button onclick="removeStep(${sIdx})" class="text-slate-300 hover:text-red-500 text-lg leading-none px-1" title="Delete step">&times;</button>
-                    </div>
-                </div>
-                <label class="input-label flex justify-between items-center">Bot Messages <button onclick="addMsg(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add message</button></label>
-                ${st.messages.map((m, mIdx) => `<div class="flex gap-1 mb-1.5 items-start"><textarea oninput="updMsg(${sIdx},${mIdx},this.value)" class="txt-input text-xs resize-y h-16">${escapeHtml(m)}</textarea><button onclick="delMsg(${sIdx},${mIdx})" class="text-slate-300 hover:text-red-500 px-1 pt-2">&times;</button></div>`).join('')}
-                <label class="input-label flex justify-between items-center mt-3">Scripted Patient Reply <button onclick="addChoice(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add reply</button></label>
-                ${(st.choices || []).length ? (st.choices || []).map((c, cIdx) => `
-                    <div class="bg-slate-50 p-2 rounded-lg mb-1.5 border border-slate-200">
-                        <textarea oninput="updChoice(${sIdx},${cIdx},'text',this.value)" class="txt-input text-xs resize-y h-14 mb-1.5" placeholder="What the patient replies…">${escapeHtml(c.text)}</textarea>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase whitespace-nowrap">Advance to step</label>
-                            <input type="text" value="${escapeAttr(c.next == null ? '' : c.next)}" oninput="updChoice(${sIdx},${cIdx},'next',this.value)" class="txt-input text-xs py-1 flex-1" placeholder="(next step)">
-                            <button onclick="delChoice(${sIdx},${cIdx})" class="text-slate-300 hover:text-red-500 text-sm px-1">&times;</button>
-                        </div>
-                    </div>`).join('')
-                : `<p class="text-[11px] text-slate-400 italic px-1 py-1">No reply — this is a closing/terminal step.</p>`}`;
-            list.appendChild(card);
-        });
-    }
-    function updStepId(i, v) { steps()[i].id = v; persist(); }
-    function updMsg(i, j, v) { steps()[i].messages[j] = v; persist(); }
-    function addMsg(i) { steps()[i].messages.push('New message…'); persist(); renderEditor(); }
-    function delMsg(i, j) { steps()[i].messages.splice(j, 1); persist(); renderEditor(); }
-    function addChoice(i) {
-        const st = steps()[i];
-        st.choices = st.choices || [];
-        const nextGuess = steps()[i + 1] ? steps()[i + 1].id : '';
-        st.choices.push({ text: 'Patient reply…', next: nextGuess });
-        persist(); renderEditor();
-    }
-    function updChoice(i, j, k, v) { steps()[i].choices[j][k] = v; persist(); }
-    function delChoice(i, j) { steps()[i].choices.splice(j, 1); persist(); renderEditor(); }
-    function removeStep(i) {
-        if (steps().length <= 1) { alert('A template needs at least one step.'); return; }
-        steps().splice(i, 1); persist(); renderEditor();
-    }
-    function moveStep(i, dir) {
-        const arr = steps();
-        const j = i + dir;
-        if (j < 0 || j >= arr.length) return;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-        persist(); renderEditor();
-    }
-    function addStep() {
-        const arr = steps();
-        const last = arr[arr.length - 1];
-        const nextId = last ? (parseFloat(last.id) + 1).toFixed(1) : '0.0';
-        arr.push({ id: isNaN(parseFloat(nextId)) ? String(arr.length) : nextId, messages: ['New message…'], choices: [] });
-        persist(); renderEditor();
-    }
-
-    /* ---------------- Import (XLSX / CSV) ---------------- */
-    function parseRows(rows) {
-        const map = {};
-        const order = [];
-        const find = (r, arr) => {
-            const keys = Object.keys(r);
-            const m = keys.find(k => arr.includes(k.toLowerCase().trim().replace(/[\s_]+/g, '')));
-            return m ? r[m] : undefined;
-        };
-        rows.forEach(r => {
-            const rawId = find(r, ['stepid', 'step', 'id', 'touchpointid']);
-            if (rawId == null || String(rawId).trim() === '') return;
-            const id = String(rawId).trim();
-            if (!map[id]) { map[id] = { id, messages: [], choices: [] }; order.push(id); }
-            const msg = find(r, ['botmessage', 'message', 'text', 'bot']);
-            if (msg != null && String(msg).trim() !== '') map[id].messages.push(String(msg).replace(/\s+$/, ''));
-            const cText = find(r, ['choicetext', 'choice', 'reply', 'response', 'patientreply', 'button']);
-            if (cText != null && String(cText).trim() !== '') {
-                const cNext = find(r, ['choicenext', 'next', 'nextstep', 'target', 'goto']);
-                map[id].choices.push({ text: String(cText).replace(/\s+$/, ''), next: cNext == null ? '' : String(cNext).trim() });
-            }
-        });
-        return order.map(id => map[id]).filter(s => s.messages.length || s.choices.length);
-    }
-
-    function importFile(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
-                const built = parseRows(rows);
-                if (!built.length) { alert('No valid rows found. Expected columns: Step ID, Bot Message, Choice Text, Choice Next.'); input.value = ''; return; }
-                const baseName = file.name.replace(/\.(xlsx|xls|csv)$/i, '');
-                const tpl = { id: newId(), name: baseName || 'Imported template', steps: built };
-                templates.push(tpl);
-                activeId = tpl.id;
-                persist();
-                renderLibrary(); renderEditor(); restartThread();
-            } catch (err) {
-                alert('Import failed: ' + err.message);
-            }
-            input.value = '';
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    /* ---------------- Export current template as .xlsx ---------------- */
-    function downloadTemplate() {
-        const aoa = [['Step ID', 'Bot Message', 'Choice Text', 'Choice Next']];
-        steps().forEach(st => {
-            const rowCount = Math.max(st.messages.length, (st.choices || []).length, 1);
-            for (let k = 0; k < rowCount; k++) {
-                const c = (st.choices || [])[k] || {};
-                aoa.push([st.id, st.messages[k] || '', c.text || '', c.next != null ? c.next : '']);
-            }
-        });
-        const ws = XLSX.utils.aoa_to_sheet(aoa);
-        ws['!cols'] = [{ wch: 8 }, { wch: 70 }, { wch: 45 }, { wch: 10 }];
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'template');
-        const safe = (active().name || 'template').replace(/[^\w.-]+/g, '_');
-        XLSX.writeFile(wb, safe + '.xlsx');
-    }
-
-    /* ---------------- UI plumbing ---------------- */
     function switchTab(tab) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-        document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + tab));
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+        document.querySelectorAll(".tab-pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
+        if (tab === "editor") renderEditor();
     }
-    function toggleConfig() { document.body.classList.toggle('sidebar-hidden'); setTimeout(updateScale, 305); }
+
+    function toggleConfig() { document.body.classList.toggle("sidebar-hidden"); setTimeout(updateScale, 305); }
     function updateScale() {
-        const f = document.getElementById('iphone-frame');
+        const f = document.getElementById("iphone-frame");
         if (f) f.style.transform = `scale(${Math.min(window.innerWidth / 470, window.innerHeight / 880, 1)})`;
     }
     function updateClock() {
         const n = new Date();
-        let h = n.getHours(); const m = n.getMinutes().toString().padStart(2, '0');
-        const el = document.getElementById('current-time');
+        let h = n.getHours(); const m = n.getMinutes().toString().padStart(2, "0");
+        const el = document.getElementById("current-time");
         if (el) el.innerText = `${h}:${m}`;
     }
 
     window.onload = () => {
+        ensureProgramStates();
+        fillProgramSelect();
         fillSettings();
         updateBranding();
-        renderLibrary();
+        renderTimeline();
+        renderPresentSwitcher();
         renderEditor();
         updateScale();
         updateClock();
         setInterval(updateClock, 30000);
-        restartThread();
+        restartTouch();
     };
     window.onresize = updateScale;
-    </script>
+</script>
 </body>
 </html>

@@ -1,57 +1,114 @@
-# CipherOutreach · SMS Demo Builder
+# CipherOutreach · PROMs Outreach Journey Demo
 
-A lightweight, single-file web tool for demoing what the **CipherOutreach** SMS patient
-experience looks like on a phone. Upload a script template, swap between templates per use
-case, edit the script live, and present an animated iMessage-style thread.
+An interactive, presenter-friendly demo that simulates the **patient SMS experience**
+for CipherOutreach **PROMs (Patient-Reported Outcome Measures)** programs. Switch
+between four built-in journeys from a dropdown and walk a patient through
+pre-op / longitudinal check-ins / post-op survey collection using CipherOutreach's
+**conversational AI** pattern — patients reply in plain language; the AI maps each
+reply to a CMS-aligned intent and fires the approved response.
 
-> Live demo: enable GitHub Pages for this repo (Settings → Pages → Deploy from branch → `main` / root),
-> then open `https://<your-username>.github.io/demo-builder-outreach/`.
+> Companion to the COPD multi-touch journey demo and the single-conversation
+> [SMS Demo Builder](https://github.com/SolarCS/demo-builder-outreach).
+
+## Programs
+
+| Program | Use case | Timeline |
+|---------|----------|----------|
+| **HOOS, JR. (THA)** | Total hip arthroplasty PRO-PM | Pre-op (−14) → Days 30 / 120 / 180 / 270 → Day 300+ |
+| **KOOS, JR. (TKA)** | Total knee arthroplasty PRO-PM | Same longitudinal arc |
+| **Information Transfer PRO-PM (9Q)** | Post-op transition understanding | Day 2 primer → Day 3 full 9-question survey |
+| **PROMIS-10 Global Health** | Overall physical, mental, and social health | Outreach 1 · full 10-item PROMIS Scale v1.2 |
+
+Pre-op and Day 300+ touches for HOOS/KOOS use the **exact CMS HOOS, JR. / KOOS, JR. items**
+and the **None / Mild / Moderate / Severe / Extreme** response scale. Mid-year
+check-ins sample pain, stiffness, and function themes without administering the
+full instrument (engagement + recovery support so patients complete the
+matched-pair post-op survey).
+
+The 9-question program uses the published CMS/Yale Information Transfer PRO-PM
+items and response sets, with anonymity called out in the intro.
+
+PROMIS-10 uses the exact **PROMIS Scale v1.2 – Global Health** items and response
+sets (Excellent→Poor, Completely→Not at all, Never→Always, None→Very severe, and
+0–10 pain).
 
 ## What it does
 
-- **Realistic iOS SMS preview** — animated typing indicator, message bubbles, read receipts,
-  and tappable scripted patient replies, all inside an iPhone frame you can present full-screen.
-- **Template library** — import as many templates as you like and switch between them from a
-  dropdown. Rename, duplicate, export, and delete them. Everything is saved in your browser.
-- **Inline script editing** — edit bot messages and the patient's scripted reply for every step,
-  reorder or add/remove steps, without touching a spreadsheet.
-- **Tokens** — use `{patient}` and `{hospital}` anywhere in the script; they're replaced live and
-  the hospital name shows as the SMS sender.
+- **Program dropdown.** Switch HOOS / KOOS / 9Q / PROMIS-10 without reloading — each keeps its own
+  editable script and completion state in the browser.
+- **Clickable journey timeline.** Jump between touchpoints; camera icon / **Advance**
+  plays the natural-language patient replies.
+- **Conversational AI demo.** Free-text patient replies map to scripted CMS intents
+  (e.g. `"Moderate"`) — the SMS thread stays clean and realistic.
+- **Live branding tokens.** `{hospital}` and `{patient}` substitute throughout.
+- **Editable script.** Edit any outreach message, patient reply, mapped intent, or
+  response per touch; **Apply & Refresh** or **Reset** to the built-in default for
+  the active program.
+- **Present mode.** Hide the panel for a clean phone-only view; floating day pills
+  switch touches.
 
-## Template format
+## Run it
 
-Import a spreadsheet (`.xlsx` or `.csv`) with these columns:
-
-| Step ID | Bot Message | Choice Text | Choice Next |
-| ------- | ----------- | ----------- | ----------- |
-
-- Rows that share a **Step ID** are grouped into one step.
-- Each non-empty **Bot Message** becomes a texted bubble, sent in order.
-- **Choice Text** is the patient's scripted reply for that step (shown as a tappable chip).
-- **Choice Next** is the Step ID the thread advances to after the reply. Leave it blank to just
-  advance to the next step in order; a step with no Choice Text is treated as a closing message.
-
-A ready-to-edit **TCM (Transitional Care Management) outreach** script ships as the built-in
-sample. Use the **Export** button to download the current template in this exact format as a
-starting point for new ones.
-
-## Presenting
-
-- **Advance** (button, the pulsing camera icon, or tapping a reply chip) steps the thread forward
-  one message/reply at a time.
-- **Restart** replays the thread from the top.
-- **Present mode** (expand icon) hides the editor panel for a clean, phone-only view.
-
-## Running locally
-
-It's a static file — just open `index.html` in a browser, or serve the folder:
+Static single-file app — no build step.
 
 ```bash
+# Local
 python3 -m http.server 8000
-# then open http://localhost:8000
+# open http://localhost:8000
 ```
 
-## Tech
+Or open `index.html` directly in a browser.
 
-Plain HTML/CSS/JS. Tailwind, Font Awesome, and [SheetJS](https://sheetjs.com) (`xlsx`) are loaded
-from CDNs; there is no build step and no backend. All data lives in `localStorage`.
+### Private shareable URL (Cipher PaaS)
+
+Do **not** use GitHub Pages (always public). Deploy with Cipher PaaS for a private,
+linkable URL that teammates can open without making the site public:
+
+1. Open https://console.tools.cipherhealth.dev/install and copy your personal install command.
+2. Run it non-interactively (do not paste the tokenized URL into chat or commit it):
+
+```bash
+CIPHER_ASSUME_YES=1 bash -c "$(curl -fsSL <install-url-from-console>)"
+paas doctor
+paas login
+paas whoami
+paas init          # first time in this repo; accepts tool.yaml static runtime
+paas deploy
+```
+
+3. Share the PaaS URL returned by `paas deploy`. Local `index.html` / `python3 -m http.server` still works for offline demos.
+
+### Live demo
+
+- **Private URL (SSO):** https://proms-outreach-journey.tools.cipherhealth.dev  
+- App: `proms-outreach-journey` (static runtime on Cipher PaaS)  
+- Sign in with your `@cipherhealth.com` Google account (IAP).
+
+## Repo note
+
+This demo is intended to live at **`SolarCS/proms-outreach-journey`** (private).
+
+If this code is currently on another repo (e.g. `demo-builder-outreach` bootstrap):
+
+```bash
+gh repo create SolarCS/proms-outreach-journey --private \
+  --description "CipherOutreach PROMs outreach journey demo (HOOS/KOOS JR + Information Transfer PRO-PM)"
+git remote set-url origin https://github.com/SolarCS/proms-outreach-journey.git
+git push -u origin HEAD:main
+```
+
+Then run the PaaS steps above from that repo.
+
+## Customizing
+
+Most tweaks: **Edit Script** tab (no code). Defaults live in the `PROGRAMS` array
+inside `index.html`. Each program has a `journey` of touches; each step is either:
+
+- a **question** — `{ messages: [...], reply: { text, intent, ack: [...] } }`, or
+- a **system/closing** message — `{ messages: [...], reply: null }`.
+
+---
+
+*Demo/illustrative tool. Not for clinical use. HOOS, JR. and KOOS, JR. items © Hospital
+for Special Surgery. Information Transfer PRO-PM items per CMS/Yale CORE published
+instrument. Survey wording included for outreach-demo purposes only.*
