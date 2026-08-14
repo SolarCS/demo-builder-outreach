@@ -454,6 +454,102 @@
         ]
     };
 
+    /* ---- Bundled: Cedars-Sinai Inpatient Post-Discharge (numeric / touch-tone replies) ---- */
+    const CEDARS_INPATIENT_TEMPLATE = {
+        "id": "cs-inpatient-post-discharge-v2",
+        "name": "Cedars-Sinai Inpatient Post-Discharge",
+        "steps": [
+            {
+                "id": "0.0",
+                "messages": [
+                    "Hello, this is Cedars-Sinai. We're reaching out today because we care about your health and recovery. Please read carefully as we ask you a few questions about how you're recovering at home. Thank you for participating and for choosing Cedars-Sinai.\nPlease call 911 if this is an emergency, or contact your primary care physician if you are unable to wait for a reply from one of our team members.\n\nTo Continue in English, reply 1; \npara continuar en español, responda 2;\nчтобы продолжить на русском языке, нажмите 3,\n한국어로 계속하려면 4번을 누르세요.\nیا برای ادامه به زبان فارسی شماره 5 را فشار دهید."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "1.0"
+                    }
+                ]
+            },
+            {
+                "id": "1.0",
+                "messages": [
+                    "Ok, thanks.",
+                    "If you recently left Cedars-Sinai, Please reply 1;\nIf you are the caregiver of the patient, reply 2;\nIf you would like us to call you back later, reply 3;\nIf we have reached the wrong number, reply 4;\nTo opt out of this outreach, reply 5."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "2.0"
+                    }
+                ]
+            },
+            {
+                "id": "2.0",
+                "messages": [
+                    "Ok, thanks.",
+                    "This short survey will have 6 questions. At any time you can press 0 to repeat the current question or 9 to go back to the previous question and change your answer.\n\nOkay, Let's get started. How are you feeling now compared to when you left the hospital?\n\nReply 1 if you’re feeling better;  \nReply 2 if you’re feeling the same;\nReply 3 if you’re feeling worse."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "3.0"
+                    }
+                ]
+            },
+            {
+                "id": "3.0",
+                "messages": [
+                    "Ok, that is fantastic!",
+                    "When leaving the hospital you were given care instructions to help you stay healthy at home.\n\nDo you understand all of your care instructions?\n\nReply 1 if you understand them; \nReply 2 if you do not understand them; \nReply 3 if you did not receive these care instructions."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "4.0"
+                    }
+                ]
+            },
+            {
+                "id": "4.0",
+                "messages": [
+                    "Ok, that is very good to hear!",
+                    "Another important step in your recovery is taking your medications as directed. \n\nHave you been able to obtain all of your prescribed medications? \n\nReply 1 if you have; \nReply 2 if you have not been able to obtain all of your prescribed medications; \nReply 3 if you were not prescribed any medications."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "5.0"
+                    }
+                ]
+            },
+            {
+                "id": "5.0",
+                "messages": [
+                    "That is great to hear.",
+                    "Do you understand all of your medications? \n\nReply 1 if you understand;\nReply 2 if you have any questions."
+                ],
+                "choices": [
+                    {
+                        "text": "1",
+                        "next": "6.0"
+                    }
+                ]
+            },
+            {
+                "id": "6.0",
+                "messages": [
+                    "Ok, great!",
+                    "Please note if you are having medical problems now or if you experience medical problems after this survey, please consult your physician, go to the nearest emergency room, or call 911.\n \nThank you for participating in this survey. Have a nice day. Goodbye."
+                ],
+                "choices": []
+            }
+        ]
+    };
+
+    const BUNDLED_TEMPLATES = [TCM_TEMPLATE, CEDARS_INPATIENT_TEMPLATE];
+
+
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
 
     /* ---------------- Persistence ---------------- */
@@ -464,15 +560,24 @@
     function persist() { localStorage.setItem(STORE_KEY, JSON.stringify({ templates, activeId, settings })); }
 
     let templates, activeId, settings;
+    function ensureBundledTemplates() {
+        BUNDLED_TEMPLATES.forEach(bundled => {
+            if (!templates.find(t => t.id === bundled.id)) {
+                templates.push(JSON.parse(JSON.stringify(bundled)));
+            }
+        });
+    }
     (function init() {
         const s = load();
         if (s && Array.isArray(s.templates) && s.templates.length) {
             templates = s.templates;
             activeId = s.activeId;
             settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
+            ensureBundledTemplates();
             if (!templates.find(t => t.id === activeId)) activeId = templates[0].id;
+            persist();
         } else {
-            templates = [JSON.parse(JSON.stringify(TCM_TEMPLATE))];
+            templates = BUNDLED_TEMPLATES.map(t => JSON.parse(JSON.stringify(t)));
             activeId = TCM_TEMPLATE.id;
             settings = Object.assign({}, DEFAULT_SETTINGS);
         }
@@ -675,6 +780,11 @@
     }
     function switchTemplate(id) {
         activeId = id;
+        if (id === CEDARS_INPATIENT_TEMPLATE.id) {
+            settings.hospital = 'Cedars-Sinai';
+            fillSettings();
+            updateBranding();
+        }
         persist();
         renderEditor(); restartThread();
     }
