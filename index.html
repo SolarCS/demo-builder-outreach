@@ -456,13 +456,13 @@
 
     /* ---- Bundled: Cedars-Sinai Inpatient Post-Discharge (numeric / touch-tone replies) ---- */
     const CEDARS_INPATIENT_TEMPLATE = {
-        "id": "cs-inpatient-post-discharge-v2",
+        "id": "cs-inpatient-post-discharge-v3",
         "name": "Cedars-Sinai Inpatient Post-Discharge",
         "steps": [
             {
                 "id": "0.0",
                 "messages": [
-                    "Hello, this is Cedars-Sinai. We're reaching out today because we care about your health and recovery. Please read carefully as we ask you a few questions about how you're recovering at home. Thank you for participating and for choosing Cedars-Sinai.\nPlease call 911 if this is an emergency, or contact your primary care physician if you are unable to wait for a reply from one of our team members.\n\nTo Continue in English, reply 1; \npara continuar en español, responda 2;\nчтобы продолжить на русском языке, нажмите 3,\n한국어로 계속하려면 4번을 누르세요.\nیا برای ادامه به زبان فارسی شماره 5 را فشار دهید."
+                    "Hello, this is Cedars-Sinai. We're reaching out today because we care about your health and recovery. Please read carefully as we ask you a few questions about how you're recovering at home. Thank you for participating and for choosing Cedars-Sinai.\n\nTo continue in English, reply 1. Para continuar en español, responda 2."
                 ],
                 "choices": [
                     {
@@ -475,7 +475,7 @@
                 "id": "1.0",
                 "messages": [
                     "Ok, thanks.",
-                    "If you recently left Cedars-Sinai, Please reply 1;\nIf you are the caregiver of the patient, reply 2;\nIf you would like us to call you back later, reply 3;\nIf we have reached the wrong number, reply 4;\nTo opt out of this outreach, reply 5."
+                    "If you recently left Cedars-Sinai, please reply 1. If you are the caregiver of the patient, reply 2. If you would like us to call you back later, reply 3. If we have reached the wrong number, reply 4. To opt out of this outreach, reply 5."
                 ],
                 "choices": [
                     {
@@ -488,7 +488,7 @@
                 "id": "2.0",
                 "messages": [
                     "Ok, thanks.",
-                    "This short survey will have 6 questions. At any time you can press 0 to repeat the current question or 9 to go back to the previous question and change your answer.\n\nOkay, Let's get started. How are you feeling now compared to when you left the hospital?\n\nReply 1 if you’re feeling better;  \nReply 2 if you’re feeling the same;\nReply 3 if you’re feeling worse."
+                    "This short survey will ask a few questions about how you're recovering at home. Okay, let's get started. How are you feeling now compared to when you left the hospital?\n\nReply 1 if you're feeling better, 2 if you're feeling the same, or 3 if you're feeling worse."
                 ],
                 "choices": [
                     {
@@ -501,7 +501,7 @@
                 "id": "3.0",
                 "messages": [
                     "Ok, that is fantastic!",
-                    "When leaving the hospital you were given care instructions to help you stay healthy at home.\n\nDo you understand all of your care instructions?\n\nReply 1 if you understand them; \nReply 2 if you do not understand them; \nReply 3 if you did not receive these care instructions."
+                    "When you left the hospital, you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?\n\nReply 1 if you understand them, 2 if you do not understand them, or 3 if you did not receive these care instructions."
                 ],
                 "choices": [
                     {
@@ -514,7 +514,7 @@
                 "id": "4.0",
                 "messages": [
                     "Ok, that is very good to hear!",
-                    "Another important step in your recovery is taking your medications as directed. \n\nHave you been able to obtain all of your prescribed medications? \n\nReply 1 if you have; \nReply 2 if you have not been able to obtain all of your prescribed medications; \nReply 3 if you were not prescribed any medications."
+                    "Another important step in your recovery is taking your medications as directed. Have you been able to obtain all of your prescribed medications?\n\nReply 1 if you have, 2 if you have not been able to obtain all of your prescribed medications, or 3 if you were not prescribed any medications."
                 ],
                 "choices": [
                     {
@@ -527,7 +527,7 @@
                 "id": "5.0",
                 "messages": [
                     "That is great to hear.",
-                    "Do you understand all of your medications? \n\nReply 1 if you understand;\nReply 2 if you have any questions."
+                    "Do you understand all of your medications?\n\nReply 1 if you understand, or 2 if you have any questions."
                 ],
                 "choices": [
                     {
@@ -540,7 +540,7 @@
                 "id": "6.0",
                 "messages": [
                     "Ok, great!",
-                    "Please note if you are having medical problems now or if you experience medical problems after this survey, please consult your physician, go to the nearest emergency room, or call 911.\n \nThank you for participating in this survey. Have a nice day. Goodbye."
+                    "Please note: if you are having medical problems now or if you experience medical problems after this survey, please consult your physician, go to the nearest emergency room, or call 911.\n\nThank you for participating in this survey. Have a nice day. Goodbye."
                 ],
                 "choices": []
             }
@@ -548,6 +548,7 @@
     };
 
     const BUNDLED_TEMPLATES = [TCM_TEMPLATE, CEDARS_INPATIENT_TEMPLATE];
+
 
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
