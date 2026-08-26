@@ -387,7 +387,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v1";
+    const STORE_KEY = "drg_workflows_v3";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -611,7 +611,7 @@
     function buildChfJourney() {
         const CLOSE_MID = closeMid();
         const CLOSE_FINAL = closeFinal("It has been our pleasure taking care of you during your recovery journey. Thank you for choosing {hospital}.");
-        const CARE_TEAM_CB = "Ok, we will have someone on our care team call you back.";
+        const CARE_TEAM_CB = "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.";
         return [
             /* ---- Touch 1 · Day 2 · 10 questions ---- */
             {
@@ -624,7 +624,7 @@
                         ],
                         reply: { text: "kinda worse honestly more tired and my legs feel heavier",
                             intent: "Feeling worse", alert: true,
-                            ack: ["Ok, we will have someone on our care team call you back. If you feel you're having a serious medical issue, please contact your doctor's office or go to the nearest emergency department."] }
+                            ack: ["Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue, please contact your doctor's office or go to the nearest emergency department."] }
                     },
                     { id: 'weight', kind: 'q', messages: [
                             "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
