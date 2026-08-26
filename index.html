@@ -387,7 +387,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v4";
+    const STORE_KEY = "drg_workflows_v5";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -512,7 +512,7 @@
                     { id: 'sob', kind: 'q', messages: [
                             "Has your shortness of breath improved over the last 7 days?"
                         ],
-                        reply: { text: "Yeah, definitely easier to breathe than it was",
+                        reply: { text: "Definitely easier to breathe than it was",
                             intent: "Shortness of breath improved", alert: false,
                             ack: ["Ok, great."] }
                     },
@@ -562,7 +562,7 @@
                     { id: 'adherence', kind: 'q', messages: [
                             "Have you been taking all of your medications as directed?"
                         ],
-                        reply: { text: "Yep, every day without missing a dose",
+                        reply: { text: "Yes every day without missing a dose",
                             intent: "Taking medications as directed", alert: false,
                             ack: ["Ok, great."] }
                     },
@@ -622,7 +622,7 @@
                     { id: 'general', kind: 'q', messages: [
                             "Let's get started! How are you feeling now compared to when you left the hospital?"
                         ],
-                        reply: { text: "kinda worse honestly more tired and my legs feel heavier",
+                        reply: { text: "a bit worse honestly, more tired and my legs feel heavier",
                             intent: "Feeling worse", alert: true,
                             ack: ["Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue, please contact your doctor's office or go to the nearest emergency department."] }
                     },
@@ -636,7 +636,7 @@
                     { id: 'sob', kind: 'q', messages: [
                             "Have you experienced shortness of breath that limits your daily activities?"
                         ],
-                        reply: { text: "a little yeah walking to the kitchen gets me winded",
+                        reply: { text: "a little, walking to the kitchen gets me winded",
                             intent: "Have experienced shortness of breath", alert: true,
                             ack: [CARE_TEAM_CB] }
                     },
@@ -650,7 +650,7 @@
                     { id: 'diet', kind: 'q', messages: [
                             "Have you been following the low-salt diet recommended by your doctor?"
                         ],
-                        reply: { text: "trying to yeah been reading labels and skipping the chips",
+                        reply: { text: "I've been trying to, reading labels and skipping the chips",
                             intent: "Have been following diet", alert: false,
                             ack: ["That's fantastic. Please keep it up!"] }
                     },
@@ -671,7 +671,7 @@
                     { id: 'discharge', kind: 'q', messages: [
                             "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
                         ],
-                        reply: { text: "pretty much yeah I think I got it",
+                        reply: { text: "pretty much, I think I got it",
                             intent: "Understand instructions", alert: false,
                             ack: ["Thanks for letting us know."] }
                     },
@@ -722,7 +722,7 @@
                     { id: 'diet', kind: 'q', messages: [
                             "Have you been following the low-salt diet recommended by your doctor?"
                         ],
-                        reply: { text: "yep sticking with it",
+                        reply: { text: "yes sticking with it",
                             intent: "Have been following diet", alert: false,
                             ack: ["That's fantastic. Please keep it up!"] }
                     },
@@ -766,7 +766,7 @@
                     { id: 'weight', kind: 'q', messages: [
                             "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
                         ],
-                        reply: { text: "nope weight's been the same",
+                        reply: { text: "no weight's been the same",
                             intent: "Weight has stayed the same", alert: false,
                             ack: ["That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible."] }
                     },
@@ -787,14 +787,14 @@
                     { id: 'diet', kind: 'q', messages: [
                             "Have you been following the low-salt diet recommended by your doctor?"
                         ],
-                        reply: { text: "yeah low salt all the way",
+                        reply: { text: "yes keeping to the low salt diet",
                             intent: "Have been following diet", alert: false,
                             ack: ["That's fantastic. Please keep it up!"] }
                     },
                     { id: 'concerns', kind: 'q', messages: [
                             "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
                         ],
-                        reply: { text: "nope feeling pretty good",
+                        reply: { text: "no I'm feeling pretty good",
                             intent: "Have not experienced any of these symptoms", alert: false,
                             ack: ["Ok, that is great to hear."] }
                     },
@@ -824,7 +824,7 @@
                     { id: 'adherence', kind: 'q', messages: [
                             "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?"
                         ],
-                        reply: { text: "yep still on track with all of them",
+                        reply: { text: "yes still on track with all of them",
                             intent: "Taking all meds as directed", alert: false,
                             ack: ["Ok, great"] }
                     },
