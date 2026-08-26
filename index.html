@@ -387,7 +387,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v3";
+    const STORE_KEY = "drg_workflows_v4";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -629,7 +629,7 @@
                     { id: 'weight', kind: 'q', messages: [
                             "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
                         ],
-                        reply: { text: "yeah my scale said I put on like 3 pounds overnight",
+                        reply: { text: "my scale said that I put on 3 pounds since the last time I weighed myself",
                             intent: "Have gained 2 or more pounds", alert: true,
                             ack: [CARE_TEAM_CB] }
                     },
