@@ -387,7 +387,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v5";
+    const STORE_KEY = "drg_workflows_v6";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -442,22 +442,22 @@
         return [
             {
                 day: "Day 2", offset: 2, title: "Initial Recovery Check-In", questions: 7,
-                summary: "First 48 hours home — surfacing early problems.",
+                summary: "First 48 hours home — mostly on track, with a couple follow-ups.",
                 steps: [
                     ...opening(1, 7, 4),
                     { id: 'general', kind: 'q', messages: [
                             "Let's get started! First, how are you feeling now compared to when you left the hospital?"
                         ],
-                        reply: { text: "Honestly not great, I feel more worn out than when I left and it's harder to catch my breath",
-                            intent: "Feeling worse", alert: true,
-                            ack: ["I'm sorry to hear that. We'll have someone on our care team reach out to you. If you feel you're having a serious medical issue, please contact your doctor's office, go to the nearest emergency department, or call 911."] }
+                        reply: { text: "A little better than when I left, still getting my energy back",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is good to hear."] }
                     },
                     { id: 'discharge', kind: 'q', messages: [
                             "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?"
                         ],
-                        reply: { text: "Mostly, but there were a couple things about my inhaler schedule I wasn't sure about",
-                            intent: "Does not fully understand instructions", alert: true,
-                            ack: ["Thanks for letting us know, we'll have someone on our care team call you back to walk through them with you."] }
+                        reply: { text: "Yes I think I understand them",
+                            intent: "Understands instructions", alert: false,
+                            ack: ["Thanks for letting us know."] }
                     },
                     { id: 'smoking', kind: 'q', messages: [
                             "Do you currently smoke e-cigarettes, cigarettes, or tobacco?"
@@ -483,9 +483,9 @@
                     { id: 'sob', kind: 'q', messages: [
                             "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?"
                         ],
-                        reply: { text: "It's about the same, maybe a little worse in the mornings",
-                            intent: "Shortness of breath not improved", alert: true,
-                            ack: ["Ok, we'll have someone on our care team reach out to you about that."] }
+                        reply: { text: "Yes a little better day by day",
+                            intent: "Shortness of breath improved", alert: false,
+                            ack: ["Ok, that's good to hear."] }
                     },
                     { id: 'followup', kind: 'q', messages: [
                             "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?"
@@ -616,15 +616,15 @@
             /* ---- Touch 1 · Day 2 · 10 questions ---- */
             {
                 day: "Day 2", offset: 2, title: "Initial CHF Recovery Check-In", questions: 10,
-                summary: "First 48 hours home — weight, breathing, meds, and symptoms.",
+                summary: "First 48 hours home — mostly on track, with weight and follow-up needing attention.",
                 steps: [
                     ...opening(1, 10, 5),
                     { id: 'general', kind: 'q', messages: [
                             "Let's get started! How are you feeling now compared to when you left the hospital?"
                         ],
-                        reply: { text: "a bit worse honestly, more tired and my legs feel heavier",
-                            intent: "Feeling worse", alert: true,
-                            ack: ["Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue, please contact your doctor's office or go to the nearest emergency department."] }
+                        reply: { text: "a little better than when I left, still taking it easy",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is good to hear."] }
                     },
                     { id: 'weight', kind: 'q', messages: [
                             "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
@@ -636,9 +636,9 @@
                     { id: 'sob', kind: 'q', messages: [
                             "Have you experienced shortness of breath that limits your daily activities?"
                         ],
-                        reply: { text: "a little, walking to the kitchen gets me winded",
-                            intent: "Have experienced shortness of breath", alert: true,
-                            ack: [CARE_TEAM_CB] }
+                        reply: { text: "no not really, breathing has been ok",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
                     },
                     { id: 'followup', kind: 'q', messages: [
                             "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?"
@@ -664,9 +664,9 @@
                     { id: 'rxq', kind: 'q', messages: [
                             "Do you understand all of your medications?"
                         ],
-                        reply: { text: "mostly but not sure if I take the water pill morning or night",
-                            intent: "Have med questions", alert: true,
-                            ack: [CARE_TEAM_CB] }
+                        reply: { text: "yes I understand them",
+                            intent: "Understand all meds", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
                     },
                     { id: 'discharge', kind: 'q', messages: [
                             "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
@@ -685,9 +685,9 @@
                     { id: 'concerns', kind: 'q', messages: [
                             "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
                         ],
-                        reply: { text: "my ankles are a bit swollen and I've been more tired than usual",
-                            intent: "Have experienced one or more of these symptoms or have another medical concern", alert: true,
-                            ack: [CARE_TEAM_CB] }
+                        reply: { text: "no none of those",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
                     },
                     CLOSE_MID
                 ]

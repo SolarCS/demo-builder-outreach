@@ -42,7 +42,7 @@ the configured, approved messages for the mapped intent.
 
 | Touch | Day | Focus | Patient state |
 |------|-----|-------|---------------|
-| 1 | 2 | Initial check-in (7 questions) | Struggling, with several early issues surfacing |
+| 1 | 2 | Initial check-in (7 questions) | Mostly on track; med question + unscheduled follow-up need outreach |
 | 2 | 9 | Early progress (5 questions) | Turning the corner |
 | 3 | 16 | Continued recovery (3 questions) | Steady improvement |
 | 4 | 23 | Final check-in (3 questions) | Back to normal, program close-out |
