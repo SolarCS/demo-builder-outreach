@@ -1,57 +1,87 @@
-# CipherOutreach · SMS Demo Builder
+# CipherOutreach · DRG-Specific Workflows
 
-A lightweight, single-file web tool for demoing what the **CipherOutreach** SMS patient
-experience looks like on a phone. Upload a script template, swap between templates per use
-case, edit the script live, and present an animated iMessage-style thread.
+An interactive, presenter-friendly demo that simulates the **patient SMS experience**
+for CipherOutreach **DRG-specific / high-risk post-discharge** programs. Switch between
+workflows (COPD, CHF, and more as they're added) from a dropdown and walk a patient
+through the full outreach journey using CipherOutreach's **conversational AI** pattern —
+patients reply in plain language; the AI maps each reply to a scripted intent and fires
+the approved canned response.
 
-> Live demo: enable GitHub Pages for this repo (Settings → Pages → Deploy from branch → `main` / root),
-> then open `https://<your-username>.github.io/demo-builder-outreach/`.
+> Evolved from the COPD Post-Discharge Journey demo into a multi-workflow tool.
+
+## Workflows
+
+| Workflow | Use case | Timeline |
+|----------|----------|----------|
+| **COPD Post-Discharge** | Best-practice COPD recovery check-ins | 4 touches · Days 2 / 9 / 16 / 23 |
+| **CHF Post-Discharge** | Heart-failure home monitoring (weight, SOB, diet, meds, symptoms) | 5 touches · Days 2 / 7 / 14 / 21 / 30 |
+
+Both scripts were adapted from "press 1 / press 2" IVR-style outreach into **open-ended
+SMS prompts**. Patient replies are realistic free text; the bot still only responds with
+the configured, approved messages for the mapped intent.
 
 ## What it does
 
-- **Realistic iOS SMS preview** — animated typing indicator, message bubbles, read receipts,
-  and tappable scripted patient replies, all inside an iPhone frame you can present full-screen.
-- **Template library** — import as many templates as you like and switch between them from a
-  dropdown. Rename, duplicate, export, and delete them. Everything is saved in your browser.
-- **Inline script editing** — edit bot messages and the patient's scripted reply for every step,
-  reorder or add/remove steps, without touching a spreadsheet.
-- **Tokens** — use `{patient}` and `{hospital}` anywhere in the script; they're replaced live and
-  the hospital name shows as the SMS sender.
+- **Workflow dropdown.** Switch COPD ↔ CHF without reloading — each keeps its own
+  editable script and completion state in the browser.
+- **Clickable journey timeline.** Jump between touchpoints; camera icon / **Advance**
+  plays the natural-language patient replies.
+- **Conversational AI demo.** Free-text patient replies map to scripted intents
+  (e.g. `"Feeling worse"`, `"Have gained 2 or more pounds"`) — the SMS thread stays
+  clean and realistic with no demo overlays.
+- **Live branding tokens.** `{hospital}` and `{patient}` substitute throughout.
+- **Editable script.** Edit any outreach message, patient reply, mapped intent, or
+  response per touch; **Apply & Refresh** or **Reset** to the built-in default for
+  the active workflow.
+- **Present mode.** Hide the panel for a clean phone-only view; floating day pills
+  switch touches.
 
-## Template format
+## The recovery stories
 
-Import a spreadsheet (`.xlsx` or `.csv`) with these columns:
+### COPD
 
-| Step ID | Bot Message | Choice Text | Choice Next |
-| ------- | ----------- | ----------- | ----------- |
+| Touch | Day | Focus | Patient state |
+|------|-----|-------|---------------|
+| 1 | 2 | Initial check-in (7 questions) | Mostly on track; med question + unscheduled follow-up need outreach |
+| 2 | 9 | Early progress (5 questions) | Turning the corner |
+| 3 | 16 | Continued recovery (3 questions) | Steady improvement |
+| 4 | 23 | Final check-in (3 questions) | Back to normal, program close-out |
 
-- Rows that share a **Step ID** are grouped into one step.
-- Each non-empty **Bot Message** becomes a texted bubble, sent in order.
-- **Choice Text** is the patient's scripted reply for that step (shown as a tappable chip).
-- **Choice Next** is the Step ID the thread advances to after the reply. Leave it blank to just
-  advance to the next step in order; a step with no Choice Text is treated as a closing message.
+### CHF
 
-A ready-to-edit **TCM (Transitional Care Management) outreach** script ships as the built-in
-sample. Use the **Export** button to download the current template in this exact format as a
-starting point for new ones.
+| Touch | Day | Focus | Patient state |
+|------|-----|-------|---------------|
+| 1 | 2 | Initial check-in (10 questions) | Mostly stable; weight gain + unscheduled follow-up (with scheduling phone #) |
+| 2 | 7 | Early progress (7 questions) | Stabilizing; follow-up scheduled but not yet completed |
+| 3 | 14 | Continued recovery (5 questions) | Weight stable, diet and meds on track |
+| 4 | 21 | Late recovery (5 questions) | Reinforcing daily weigh-ins and low-salt diet |
+| 5 | 30 | Final check-in (5 questions) | Program close-out — recovery on track |
 
-## Presenting
+## Run it
 
-- **Advance** (button, the pulsing camera icon, or tapping a reply chip) steps the thread forward
-  one message/reply at a time.
-- **Restart** replays the thread from the top.
-- **Present mode** (expand icon) hides the editor panel for a clean, phone-only view.
-
-## Running locally
-
-It's a static file — just open `index.html` in a browser, or serve the folder:
+Static single-file app — no build step.
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000
+# open http://localhost:8000
 ```
 
-## Tech
+Or open `index.html` directly in a browser.
 
-Plain HTML/CSS/JS. Tailwind, Font Awesome, and [SheetJS](https://sheetjs.com) (`xlsx`) are loaded
-from CDNs; there is no build step and no backend. All data lives in `localStorage`.
+## Customizing the script
+
+Most tweaks can be done live in the **Edit Script** tab (no code). For deeper changes,
+each workflow's default journey is built in `buildCopdJourney()` / `buildChfJourney()`
+inside `index.html`. Each touch has `steps`, and each step is either:
+
+- a **question** — `{ messages: [...], reply: { text, intent, ack: [...] } }`, or
+- a **system/closing** message — `{ messages: [...], reply: null }`.
+
+In-browser edits are stored in local storage and take priority until you use
+**Reset to default for this workflow**.
+
+---
+
+*Demo/illustrative tool. Not for clinical use. COPD script derived from an internal
+best-practice COPD post-discharge outreach document. CHF script adapted from a
+Kaiser SoCal LAMC CHF post-discharge outreach program.*
