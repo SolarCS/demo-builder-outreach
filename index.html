@@ -387,7 +387,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v6";
+    const STORE_KEY = "drg_workflows_v7";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -476,7 +476,7 @@
                     { id: 'rxq', kind: 'q', messages: [
                             "Do you feel like you understand all of your medications, or do you have any questions about them?"
                         ],
-                        reply: { text: "I do have one question, should I keep taking my old blood pressure pill along with the new inhaler?",
+                        reply: { text: "I did have a question about how often I need to take my blood pressure medication",
                             intent: "Has medication questions", alert: true,
                             ack: ["Thank you for letting us know, we'll have someone from our care team reach out to answer that for you."] }
                     },

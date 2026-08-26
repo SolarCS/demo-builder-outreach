@@ -51,7 +51,7 @@ the configured, approved messages for the mapped intent.
 
 | Touch | Day | Focus | Patient state |
 |------|-----|-------|---------------|
-| 1 | 2 | Initial check-in (10 questions) | Early red flags — feeling worse, weight gain, SOB, med questions |
+| 1 | 2 | Initial check-in (10 questions) | Mostly stable; weight gain + unscheduled follow-up (with scheduling phone #) |
 | 2 | 7 | Early progress (7 questions) | Stabilizing; follow-up scheduled but not yet completed |
 | 3 | 14 | Continued recovery (5 questions) | Weight stable, diet and meds on track |
 | 4 | 21 | Late recovery (5 questions) | Reinforcing daily weigh-ins and low-salt diet |
