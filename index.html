@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CipherOutreach · SMS Demo Builder</title>
+    <title>CipherOutreach · DRG-Specific Workflows</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Spreadsheet parsing / export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --iphone-width: 375px;
             --iphone-height: 812px;
-            --sidebar-width: 420px;
+            --sidebar-width: 430px;
             --ios-blue: #007AFF;
             --ios-grey: #E9E9EB;
             --brand: #005A8C;
+            --brand-light: #0a84ff;
+            --ai: #7c3aed;
         }
         * { box-sizing: border-box; }
         body {
@@ -27,8 +27,6 @@
             height: 100vh;
             overflow: hidden;
         }
-
-        /* ============ SIDEBAR ============ */
         #config-panel {
             width: var(--sidebar-width);
             min-width: var(--sidebar-width);
@@ -71,71 +69,98 @@
             font-family: inherit;
         }
         .txt-input:focus { border-color: var(--ios-blue); box-shadow: 0 0 0 3px rgba(0,122,255,0.12); }
+        textarea.txt-input { line-height: 1.4; min-height: 42px; }
+        select.txt-input { cursor: pointer; }
 
-        /* ---- Tabs ---- */
         .tab-btn {
-            flex: 1;
-            padding: 9px 6px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #64748b;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-align: center;
+            flex: 1; padding: 9px 6px; font-size: 12px; font-weight: 700;
+            color: #64748b; border-radius: 8px; cursor: pointer;
+            transition: all 0.15s; text-align: center;
         }
         .tab-btn.active { background: #fff; color: var(--brand); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
-        /* ---- Editor cards ---- */
+        .ed-pills { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .ed-pill { font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.15s; }
+        .ed-pill:hover { background: #e2e8f0; }
+        .ed-pill.active { background: var(--brand); color: #fff; }
         .step-card {
-            background: white;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 14px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            background: white; border: 1px solid #E2E8F0; border-radius: 12px;
+            padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
         .step-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--brand);
-            background: #EFF6FF;
-            border: 1px solid #DBEAFE;
-            padding: 3px 9px;
-            border-radius: 999px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
         }
-        .mini-btn {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 5px 9px;
-            border-radius: 8px;
+        .badge-q { color: var(--brand); background: #EFF6FF; border: 1px solid #DBEAFE; }
+        .badge-s { color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; }
+        .badge-c { color: #16a34a; background: #f0fdf4; border: 1px solid #bbf7d0; }
+        .reply-field { background: #f0f7ff; border-color: #cfe4ff; }
+
+        .touch-card {
+            position: relative;
+            display: flex;
+            gap: 14px;
+            padding: 14px 14px 14px 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            background: #fff;
             cursor: pointer;
             transition: all 0.15s;
+            margin-bottom: 12px;
+            z-index: 1;
+        }
+        .touch-card:hover { border-color: #cbd5e1; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .touch-card.active { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(0,90,140,0.12); background: #f6fbff; }
+        .touch-node {
+            flex: none;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-weight: 800;
+            background: #EFF6FF;
+            color: var(--brand);
+            border: 2px solid #DBEAFE;
+            line-height: 1;
+        }
+        .touch-card.active .touch-node { background: var(--brand); color: #fff; border-color: var(--brand); }
+        .touch-card.done .touch-node { background: #16a34a; color: #fff; border-color: #16a34a; }
+        .touch-node .tn-day { font-size: 9px; font-weight: 700; opacity: 0.85; }
+        .touch-node .tn-num { font-size: 15px; }
+        .touch-meta h4 { font-size: 13.5px; font-weight: 800; color: #1e293b; margin: 0 0 2px; }
+        .touch-meta p { font-size: 11.5px; color: #64748b; margin: 0; line-height: 1.35; }
+        .touch-pills { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+        .touch-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f1f5f9; color: #475569; }
+        .touch-pill.q { background: #eef2ff; color: #4338ca; }
+        .touch-check { position: absolute; top: 12px; right: 12px; font-size: 13px; color: #16a34a; display: none; }
+        .touch-card.done .touch-check { display: block; }
+
+        .timeline { position: relative; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 32px; top: 22px; bottom: 22px;
+            width: 2px;
+            background: linear-gradient(#DBEAFE, #E2E8F0);
+            z-index: 0;
         }
 
-        /* ============ PREVIEW / PHONE ============ */
         #preview-area {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            background: radial-gradient(circle at 50% 30%, #F1F5F9 0%, #E2E8F0 100%);
+            background: radial-gradient(circle at 50% 25%, #eef4f9 0%, #dde6ef 100%);
             transition: all 0.3s ease;
             z-index: 10;
         }
         .viewport-container {
             width: var(--iphone-width);
             height: var(--iphone-height);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            display: flex; justify-content: center; align-items: center; position: relative;
         }
         .iphone-frame {
             width: var(--iphone-width);
@@ -150,31 +175,25 @@
             transform-origin: center center;
         }
         .notch {
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 150px; height: 30px;
-            background-color: #1F2937;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            z-index: 50;
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 150px; height: 30px; background-color: #1F2937;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 50;
         }
         .chat-container {
             flex-grow: 1;
-            padding: 20px 14px;
+            padding: 20px 14px 12px;
             padding-top: 98px;
-            padding-bottom: 12px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             scrollbar-width: none;
             scroll-behavior: smooth;
             background: #fff;
         }
         .chat-container::-webkit-scrollbar { display: none; }
         .bubble {
-            max-width: 76%;
+            max-width: 78%;
             padding: 9px 14px;
             border-radius: 20px;
             font-size: 15px;
@@ -190,52 +209,26 @@
         .bubble-user { background-color: var(--ios-blue); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
         .bubble.grouped-top { margin-top: 6px; }
         .intro-divider {
-            align-self: center;
-            text-align: center;
-            margin: 4px 0 10px;
-            font-size: 11px;
-            color: #8A8A8E;
-            animation: fadeIn 0.3s ease;
+            align-self: center; text-align: center; margin: 6px 0 12px;
+            font-size: 11px; color: #8A8A8E; animation: fadeIn 0.3s ease; line-height: 1.5;
         }
         .receipt {
-            align-self: flex-end;
-            font-size: 10px;
-            color: #8A8A8E;
-            margin: 0 4px 6px 0;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease;
+            align-self: flex-end; font-size: 10px; color: #8A8A8E;
+            margin: 0 4px 6px 0; font-weight: 500; animation: fadeIn 0.3s ease;
         }
         .bubble-bot .sms-link { color: #0a84ff; text-decoration: underline; }
         .bubble-user .sms-link { color: #fff; text-decoration: underline; }
 
-        .ios-input-container {
-            background: white;
-            border-top: 1px solid #E5E7EB;
-            padding: 9px 12px 30px 12px;
-            z-index: 40;
-        }
+        .ios-input-container { background: white; border-top: 1px solid #E5E7EB; padding: 9px 12px 30px; z-index: 40; }
         .ios-bar { display: flex; align-items: center; gap: 12px; }
         .ios-field {
-            flex-grow: 1;
-            background: white;
-            border: 1px solid #D1D5DB;
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 15px;
-            color: #111827;
-            min-height: 34px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            white-space: pre-wrap;
+            flex-grow: 1; background: white; border: 1px solid #D1D5DB; border-radius: 20px;
+            padding: 6px 14px; font-size: 15px; color: #111827; min-height: 34px;
+            display: flex; align-items: center; overflow: hidden; white-space: pre-wrap;
         }
         .ios-icon { color: #9CA3AF; font-size: 20px; cursor: pointer; transition: all 0.2s; }
         .ios-icon-ready { color: var(--ios-blue) !important; animation: pulse-camera 2s infinite ease-in-out; }
-        @keyframes pulse-camera {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.18); opacity: 0.75; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes pulse-camera { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.18); opacity: 0.75; } 100% { transform: scale(1); opacity: 1; } }
         .ios-send-btn { width: 30px; height: 30px; background-color: #E5E7EB; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: background-color 0.2s; }
         .ios-send-btn.active { background-color: var(--ios-blue); }
 
@@ -248,20 +241,31 @@
         #open-config-btn { position: fixed; top: 20px; left: 20px; z-index: 300; display: none; cursor: pointer; }
         body.sidebar-hidden #open-config-btn { display: flex; }
         .typing-bubble { align-self: flex-start; }
+
+        #present-switcher {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 300; display: none; gap: 6px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+            border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+        }
+        body.sidebar-hidden #present-switcher { display: flex; }
+        .ps-pill { font-size: 12px; font-weight: 700; color: #64748b; padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: all 0.15s; }
+        .ps-pill.active { background: var(--brand); color: #fff; }
+        .ps-pill.done:not(.active) { color: #16a34a; }
     </style>
 </head>
 <body id="main-body">
 
-    <!-- ============ SIDEBAR ============ -->
     <div id="config-panel">
         <div class="px-5 py-4 border-b border-slate-200 bg-white flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white" style="background:var(--brand)">
-                    <i class="fa-solid fa-comment-medical"></i>
+                    <i class="fa-solid fa-heart-pulse"></i>
                 </div>
                 <div>
                     <h1 class="text-[15px] font-extrabold text-slate-800 leading-tight">CipherOutreach</h1>
-                    <p class="text-[11px] text-slate-500 font-medium">SMS Demo Builder</p>
+                    <p class="text-[11px] text-slate-500 font-medium">DRG-Specific Workflows</p>
                 </div>
             </div>
             <button onclick="toggleConfig()" title="Present mode (hide panel)" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
@@ -269,90 +273,54 @@
             </button>
         </div>
 
-        <!-- Organization name (shown at top of the phone) -->
-        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
-            <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i> Hospital / Organization Name</label>
-            <input type="text" id="set-hospital-top" class="txt-input font-semibold" placeholder="e.g. Central Hospital" oninput="updateSetting('hospital', this.value)">
-            <p class="text-[10px] text-slate-400 mt-1">Displayed as the SMS sender at the top of the phone, and replaces <code class="bg-slate-100 px-1 rounded">{hospital}</code> in the script.</p>
-        </div>
-
-        <!-- Template library selector -->
-        <div class="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
-            <label class="input-label">Active Template</label>
-            <div class="flex gap-2">
-                <select id="template-select" onchange="switchTemplate(this.value)" class="txt-input flex-1 font-semibold"></select>
-                <button onclick="document.getElementById('file-import').click()" title="Import a new template (.xlsx / .csv)" class="mini-btn text-white flex items-center gap-1" style="background:var(--brand)">
-                    <i class="fa-solid fa-file-import"></i> Import
-                </button>
-                <input type="file" id="file-import" class="hidden" accept=".xlsx,.xls,.csv" onchange="importFile(this)">
-            </div>
-            <div class="flex gap-2 mt-2">
-                <button onclick="renameTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-i-cursor mr-1"></i>Rename</button>
-                <button onclick="duplicateTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-regular fa-copy mr-1"></i>Duplicate</button>
-                <button onclick="downloadTemplate()" class="mini-btn bg-slate-100 text-slate-600 hover:bg-slate-200 flex-1"><i class="fa-solid fa-download mr-1"></i>Export</button>
-                <button onclick="deleteTemplate()" class="mini-btn bg-red-50 text-red-500 hover:bg-red-100" title="Delete this template"><i class="fa-solid fa-trash"></i></button>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="px-4 pt-3 pb-1 bg-white">
-            <div class="flex gap-1 bg-slate-100 p-1 rounded-xl">
-                <div class="tab-btn active" data-tab="editor" onclick="switchTab('editor')"><i class="fa-solid fa-pen mr-1"></i> Script Editor</div>
-                <div class="tab-btn" data-tab="settings" onclick="switchTab('settings')"><i class="fa-solid fa-sliders mr-1"></i> Settings</div>
-            </div>
-        </div>
-
         <div class="scroll-area">
-            <!-- EDITOR TAB -->
-            <div class="tab-pane active" id="pane-editor">
-                <div id="editor-list"></div>
-                <button onclick="addStep()" class="w-full border-2 border-dashed border-slate-200 text-slate-400 hover:text-slate-600 hover:border-slate-300 rounded-xl py-2.5 text-xs font-bold mb-3">
-                    <i class="fa-solid fa-plus"></i> Add Step
-                </button>
-                <button onclick="applyAndRestart()" class="w-full text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue)">
-                    <i class="fa-solid fa-play"></i> Apply &amp; Restart Thread
-                </button>
-            </div>
-
-            <!-- SETTINGS TAB -->
-            <div class="tab-pane" id="pane-settings">
-                <div class="space-y-4">
+            <div class="bg-white border border-slate-200 rounded-xl p-3 mb-4">
+                <label class="input-label"><i class="fa-solid fa-layer-group mr-1"></i>Workflow</label>
+                <select id="set-program" class="txt-input font-semibold mb-3" onchange="switchProgram(this.value)"></select>
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="input-label">Patient First Name</label>
-                        <input type="text" id="set-patient" class="txt-input" oninput="updateSetting('patient', this.value)">
+                        <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i>Hospital</label>
+                        <input type="text" id="set-hospital" class="txt-input font-semibold" oninput="updateSetting('hospital', this.value)">
                     </div>
                     <div>
-                        <label class="input-label">Hospital / Health System (SMS sender name)</label>
-                        <input type="text" id="set-hospital" class="txt-input" oninput="updateSetting('hospital', this.value)">
+                        <label class="input-label"><i class="fa-solid fa-user mr-1"></i>Patient</label>
+                        <input type="text" id="set-patient" class="txt-input font-semibold" oninput="updateSetting('patient', this.value)">
                     </div>
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed">
-                        <i class="fa-solid fa-circle-info mr-1"></i>
-                        Use the tokens
-                        <code class="bg-white px-1 rounded">{patient}</code> and
-                        <code class="bg-white px-1 rounded">{hospital}</code>
-                        anywhere in your script and they'll be replaced live in the preview. The hospital name also
-                        appears as the message sender at the top of the thread.
-                    </div>
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] text-slate-600 leading-relaxed">
-                        <p class="font-bold text-slate-700 mb-1"><i class="fa-solid fa-table-list mr-1"></i> Template format</p>
-                        Import a spreadsheet (<code class="bg-white px-1 rounded">.xlsx</code> or <code class="bg-white px-1 rounded">.csv</code>) with these columns:
-                        <div class="mt-1 font-mono text-[10px] bg-white border border-slate-200 rounded p-2">Step ID · Bot Message · Choice Text · Choice Next</div>
-                        Rows sharing a <b>Step ID</b> are grouped: each <b>Bot Message</b> becomes a texted bubble; the
-                        <b>Choice Text</b> is the patient's scripted reply, and <b>Choice Next</b> is the Step ID it advances to.
-                    </div>
-                    <button onclick="resetDefaults()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl transition-all">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset to TCM Sample Template
-                    </button>
                 </div>
             </div>
+
+            <div class="flex gap-1 bg-slate-100 p-1 rounded-xl mb-4">
+                <div class="tab-btn active" data-tab="journey" onclick="switchTab('journey')"><i class="fa-solid fa-timeline mr-1"></i> Journey</div>
+                <div class="tab-btn" data-tab="editor" onclick="switchTab('editor')"><i class="fa-solid fa-pen mr-1"></i> Edit Script</div>
+            </div>
+
+            <div class="tab-pane active" id="pane-journey">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-[12px] font-extrabold uppercase tracking-wide text-slate-500">Outreach Journey</h3>
+                    <span class="text-[11px] font-semibold text-slate-400" id="journey-meta"></span>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Click a touchpoint to load that SMS conversation. Then use the camera icon on the phone (or <b>Advance</b>) to play the patient's natural-language responses.</p>
+                <div class="timeline" id="timeline"></div>
+                <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed mt-5" id="journey-blurb"></div>
+            </div>
+
+            <div class="tab-pane" id="pane-editor">
+                <div class="ed-pills" id="editor-touch-pills"></div>
+                <div id="editor-list"></div>
+                <button id="apply-refresh-btn" onclick="applyAndRefresh()" class="w-full text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 mt-1" style="background:var(--ios-blue)">
+                    <i class="fa-solid fa-rotate"></i> Apply &amp; Refresh
+                </button>
+                <button onclick="resetScript()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold py-2.5 rounded-xl transition-all mt-2 text-xs">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset to default for this workflow
+                </button>
+            </div>
         </div>
 
-        <!-- Persistent presenter control bar -->
         <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] flex gap-2">
-            <button onclick="stepAdvance()" class="flex-1 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue);box-shadow:0 8px 18px -6px rgba(0,122,255,0.5)">
+            <button onclick="advance()" class="flex-1 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2" style="background:var(--ios-blue);box-shadow:0 8px 18px -6px rgba(0,122,255,0.5)">
                 <i class="fa-solid fa-forward-step"></i> Advance
             </button>
-            <button onclick="restartThread()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all" title="Restart from beginning">
+            <button onclick="restartTouch()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all" title="Restart this touchpoint">
                 <i class="fa-solid fa-backward-fast"></i>
             </button>
             <button onclick="toggleConfig()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all" title="Present mode">
@@ -361,12 +329,13 @@
         </div>
     </div>
 
-    <!-- ============ PREVIEW AREA ============ -->
     <div id="preview-area">
         <button id="open-config-btn" onclick="toggleConfig()" class="bg-white p-3 rounded-full shadow-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-2 pr-4 group">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background:var(--brand)"><i class="fa-solid fa-sliders text-sm"></i></div>
             <span class="text-xs font-bold text-slate-700">Show Panel</span>
         </button>
+
+        <div id="present-switcher"></div>
 
         <div class="viewport-container">
             <div class="iphone-frame" id="iphone-frame">
@@ -395,7 +364,7 @@
 
                 <div class="ios-input-container">
                     <div class="ios-bar">
-                        <i id="camera-trigger" onclick="stepAdvance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
+                        <i id="camera-trigger" onclick="advance()" title="Advance" class="fa-solid fa-camera ios-icon"></i>
                         <div class="ios-field">
                             <span id="ios-text-placeholder" class="text-slate-300">Text Message</span>
                             <span id="ios-actual-text" class="hidden"></span>
@@ -409,216 +378,641 @@
     </div>
 
     <script>
+
     /* =====================================================================
-       CipherOutreach · SMS Demo Builder
-       A lightweight, template-driven SMS thread simulator. Import a
-       spreadsheet (Step ID / Bot Message / Choice Text / Choice Next),
-       swap between saved templates, and edit the script inline.
+       CipherOutreach · DRG-Specific Workflows
+       Multi-workflow conversational-AI SMS demo (COPD / CHF).
+       Patients answer in natural language; AI maps each reply to a
+       scripted intent and fires the approved response.
        ===================================================================== */
 
-    /* ---- Bundled sample: TCM (Transitional Care Management) outreach ---- */
-    const TCM_TEMPLATE = {
-        id: 'tcm-sample',
-        name: 'TCM Outreach (Sample)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hello, this is {hospital}. We are contacting you to see how you're recovering at home after your recent hospital stay and wanted to check in on how you are recovering at home and have a few questions we would like to ask you.",
-                "Are we speaking with the patient, a caregiver, or do we have the wrong number?"
-            ], choices: [{ text: "I am the patient", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, let's get started! How are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "I have been having consistent headaches since I left the hospital and I have been really tired", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Ok thanks for letting us know, we will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue please contact your doctor's office or go to the nearest emergency department.",
-                "When leaving the hospital you were given discharge instructions to help you stay healthy at home. Do you understand all of your hospital discharge instructions?"
-            ], choices: [{ text: "Yes I understood", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, we will have someone on our care team call you back shortly.",
-                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
-            ], choices: [{ text: "Yes, I do have my medication", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Do you have any questions about any of your medications?"
-            ], choices: [{ text: "Yes I have a question about the lisinopril", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Ok, we will have someone on our care team call you back shortly to discuss your medication.",
-                "It is important to schedule a follow up appointment within 7 to 14 days after leaving the hospital. Have you scheduled your appointment with your doctor's office?"
-            ], choices: [{ text: "No, I have not been able to schedule a follow-up appointment yet", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "Ok, thanks for letting us know. Would you like help scheduling a follow-up appointment?"
-            ], choices: [{ text: "Yes, I would appreciate some help scheduling it", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "Ok we will have someone on our care team call you to help schedule an appointment.",
-                "Thank you for participating in this brief conversation.",
-                "Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
-        ]
-    };
+    const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
+    const STORE_KEY = "drg_workflows_v7";
+    const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
-    /* ---- Bundled: Cedars-Sinai Inpatient Post-Discharge (numeric / touch-tone replies) ---- */
-    const CEDARS_INPATIENT_TEMPLATE = {
-        "id": "cs-inpatient-post-discharge-v3",
-        "name": "Cedars-Sinai Inpatient Post-Discharge",
-        "steps": [
-            {
-                "id": "0.0",
-                "messages": [
-                    "Hello, this is Cedars-Sinai. We're reaching out today because we care about your health and recovery. Please read carefully as we ask you a few questions about how you're recovering at home. Thank you for participating and for choosing Cedars-Sinai.\n\nTo continue in English, reply 1. Para continuar en español, responda 2."
+    /* ---- Shared script fragments ---- */
+    const INTRO = "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.";
+    const CLINICAL_DISCLAIMER = "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.";
+    const CLINICAL_NEXT = "We'll check in with you again over the next week to see how you're progressing.";
+    const GOODBYE = "Take care and have a great day. Reply STOP at any time to unsubscribe.";
+
+    function opening(n, count, totalTouches) {
+        if (n === 1) {
+            return [
+                { id: 'intro', kind: 'system', messages: [
+                        INTRO,
+                        "To continue in English, just reply here. Para continuar en español, responda ESPAÑOL."
+                    ],
+                    reply: { text: "English is fine thanks", intent: "Language: English", ack: ["Great, thank you!"] }
+                },
+                { id: 'who', kind: 'system', messages: [
+                        "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
+                    ],
+                    reply: { text: "Yes this is {patient}", intent: "Confirmed: Patient", ack: ["Perfect, thanks {patient}."] }
+                },
+                { id: 'instructions', kind: 'system', messages: [
+                        "This is check-in 1 of " + totalTouches + " in your recovery series, with " + count + " short questions. Reply STOP anytime to opt out."
+                    ],
+                    reply: null
+                }
+            ];
+        }
+        return [
+            { id: 'intro', kind: 'system', messages: [
+                    "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                    "This is check-in " + n + " of " + totalTouches + ", with " + count + " short questions. Reply STOP anytime to opt out."
                 ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "1.0"
-                    }
-                ]
-            },
-            {
-                "id": "1.0",
-                "messages": [
-                    "Ok, thanks.",
-                    "If you recently left Cedars-Sinai, please reply 1. If you are the caregiver of the patient, reply 2. If you would like us to call you back later, reply 3. If we have reached the wrong number, reply 4. To opt out of this outreach, reply 5."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "2.0"
-                    }
-                ]
-            },
-            {
-                "id": "2.0",
-                "messages": [
-                    "Ok, thanks.",
-                    "This short survey will ask a few questions about how you're recovering at home. Okay, let's get started. How are you feeling now compared to when you left the hospital?\n\nReply 1 if you're feeling better, 2 if you're feeling the same, or 3 if you're feeling worse."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "3.0"
-                    }
-                ]
-            },
-            {
-                "id": "3.0",
-                "messages": [
-                    "Ok, that is fantastic!",
-                    "When you left the hospital, you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?\n\nReply 1 if you understand them, 2 if you do not understand them, or 3 if you did not receive these care instructions."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "4.0"
-                    }
-                ]
-            },
-            {
-                "id": "4.0",
-                "messages": [
-                    "Ok, that is very good to hear!",
-                    "Another important step in your recovery is taking your medications as directed. Have you been able to obtain all of your prescribed medications?\n\nReply 1 if you have, 2 if you have not been able to obtain all of your prescribed medications, or 3 if you were not prescribed any medications."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "5.0"
-                    }
-                ]
-            },
-            {
-                "id": "5.0",
-                "messages": [
-                    "That is great to hear.",
-                    "Do you understand all of your medications?\n\nReply 1 if you understand, or 2 if you have any questions."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "6.0"
-                    }
-                ]
-            },
-            {
-                "id": "6.0",
-                "messages": [
-                    "Ok, great!",
-                    "Please note: if you are having medical problems now or if you experience medical problems after this survey, please consult your physician, go to the nearest emergency room, or call 911.\n\nThank you for participating in this survey. Have a nice day. Goodbye."
-                ],
-                "choices": []
+                reply: null
             }
-        ]
-    };
-
-    const BUNDLED_TEMPLATES = [TCM_TEMPLATE, CEDARS_INPATIENT_TEMPLATE];
-
-
-
-    const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
-
-    /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v1';
-    function load() {
-        try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
+        ];
     }
-    function persist() { localStorage.setItem(STORE_KEY, JSON.stringify({ templates, activeId, settings })); }
 
-    let templates, activeId, settings;
-    function ensureBundledTemplates() {
-        BUNDLED_TEMPLATES.forEach(bundled => {
-            if (!templates.find(t => t.id === bundled.id)) {
-                templates.push(JSON.parse(JSON.stringify(bundled)));
+    function closeMid() {
+        return { id: 'close', kind: 'system', messages: [ CLINICAL_DISCLAIMER, CLINICAL_NEXT, GOODBYE ], reply: null };
+    }
+    function closeFinal(thanksMsg) {
+        return { id: 'close', kind: 'system', messages: [ CLINICAL_DISCLAIMER, thanksMsg, GOODBYE ], reply: null };
+    }
+
+
+    /* ===================== COPD JOURNEY (4 touches / 23 days) ===================== */
+    function buildCopdJourney() {
+        const CLOSE_MID = closeMid();
+        const CLOSE_FINAL = closeFinal("Thank you for completing all four check-ins with us. We're so glad to see how far you've come.");
+        return [
+            {
+                day: "Day 2", offset: 2, title: "Initial Recovery Check-In", questions: 7,
+                summary: "First 48 hours home — mostly on track, with a couple follow-ups.",
+                steps: [
+                    ...opening(1, 7, 4),
+                    { id: 'general', kind: 'q', messages: [
+                            "Let's get started! First, how are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "A little better than when I left, still getting my energy back",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is good to hear."] }
+                    },
+                    { id: 'discharge', kind: 'q', messages: [
+                            "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?"
+                        ],
+                        reply: { text: "Yes I think I understand them",
+                            intent: "Understands instructions", alert: false,
+                            ack: ["Thanks for letting us know."] }
+                    },
+                    { id: 'smoking', kind: 'q', messages: [
+                            "Do you currently smoke e-cigarettes, cigarettes, or tobacco?"
+                        ],
+                        reply: { text: "I used to but I've been trying to cut back since the hospital",
+                            intent: "Currently smokes", alert: false,
+                            ack: ["Thank you for sharing that. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking"] }
+                    },
+                    { id: 'rx', kind: 'q', messages: [
+                            "Another important part of recovery is taking your medications as directed. Were you able to pick up all of your prescribed medications?"
+                        ],
+                        reply: { text: "Yes I picked everything up from the pharmacy the day I got home",
+                            intent: "Has all medications", alert: false,
+                            ack: ["That's great to hear."] }
+                    },
+                    { id: 'rxq', kind: 'q', messages: [
+                            "Do you feel like you understand all of your medications, or do you have any questions about them?"
+                        ],
+                        reply: { text: "I did have a question about how often I need to take my blood pressure medication",
+                            intent: "Has medication questions", alert: true,
+                            ack: ["Thank you for letting us know, we'll have someone from our care team reach out to answer that for you."] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?"
+                        ],
+                        reply: { text: "Yes a little better day by day",
+                            intent: "Shortness of breath improved", alert: false,
+                            ack: ["Ok, that's good to hear."] }
+                    },
+                    { id: 'followup', kind: 'q', messages: [
+                            "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?"
+                        ],
+                        reply: { text: "Not yet, I wasn't really sure who I was supposed to call",
+                            intent: "Follow-up not scheduled, needs help", alert: true,
+                            ack: ["No problem, we'll have someone on our care team reach out to help you get that scheduled."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            {
+                day: "Day 9", offset: 9, title: "Early Progress Check-In", questions: 5,
+                summary: "One week later — starting to turn the corner.",
+                steps: [
+                    ...opening(2, 5, 4),
+                    { id: 'general', kind: 'q', messages: [
+                            "Let's pick up where we left off. How are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "A good bit better than last week, I've got more energy now",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that's good to hear!"] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Has your shortness of breath improved over the last 7 days?"
+                        ],
+                        reply: { text: "Definitely easier to breathe than it was",
+                            intent: "Shortness of breath improved", alert: false,
+                            ack: ["Ok, great."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Have you been able to take all of your medications as directed?"
+                        ],
+                        reply: { text: "Yes I've kept up with all of them and I'm using the inhaler the way they showed me",
+                            intent: "Taking medications as directed", alert: false,
+                            ack: ["Ok, great."] }
+                    },
+                    { id: 'fucomplete', kind: 'q', messages: [
+                            "Have you been able to complete your follow-up visit with your doctor yet?"
+                        ],
+                        reply: { text: "Not quite, but I do have it on the calendar for this Friday",
+                            intent: "Follow-up not yet completed", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    { id: 'fumissed', kind: 'q', messages: [
+                            "Got it, can you tell us a little more? Is that because the appointment simply hasn't happened yet, or did you miss it?"
+                        ],
+                        reply: { text: "It just hasn't happened yet, it's coming up in a few days",
+                            intent: "Appointment upcoming (not missed)", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            {
+                day: "Day 16", offset: 16, title: "Continued Recovery Check-In", questions: 3,
+                summary: "Two weeks in — steady improvement.",
+                steps: [
+                    ...opening(3, 3, 4),
+                    { id: 'general', kind: 'q', messages: [
+                            "How are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "Really good actually, almost back to my normal self",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is good to hear!"] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Has your shortness of breath improved over the last 7 days?"
+                        ],
+                        reply: { text: "Yes, hardly any trouble breathing now unless I really overdo it",
+                            intent: "Shortness of breath improved", alert: false,
+                            ack: ["Ok, that's good to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "Yes every day without missing a dose",
+                            intent: "Taking medications as directed", alert: false,
+                            ack: ["Ok, great."] }
+                    },
+                    { id: 'smokedisc', kind: 'system', messages: [
+                            "It's very important to keep avoiding cigarette smoke while you recover. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking"
+                        ], reply: null },
+                    CLOSE_MID
+                ]
+            },
+            {
+                day: "Day 23", offset: 23, title: "Final Recovery Check-In", questions: 3,
+                summary: "Program close-out — recovery on track.",
+                steps: [
+                    ...opening(4, 3, 4),
+                    { id: 'general', kind: 'q', messages: [
+                            "This is our last check-in of the series. How are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "Back to normal, I feel great. Thanks so much for checking in on me all this time",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is wonderful to hear!"] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Has your shortness of breath improved over the last 7 days?"
+                        ],
+                        reply: { text: "All good now, my breathing is back to normal",
+                            intent: "Shortness of breath improved", alert: false,
+                            ack: ["Ok, that's good to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "Yes, still sticking with all of them",
+                            intent: "Taking medications as directed", alert: false,
+                            ack: ["Ok, great."] }
+                    },
+                    CLOSE_FINAL
+                ]
             }
+        ];
+    }
+
+    /* ===================== CHF JOURNEY (5 touches / 30 days) ===================== */
+    /* Adapted from Kaiser SoCal LAMC CHF PD IVR/SMS script into conversational AI.
+       Patient free-text replies map to scripted intents (Feeling worse, Weight gain, etc.)
+       and fire the approved canned SMS responses. */
+    function buildChfJourney() {
+        const CLOSE_MID = closeMid();
+        const CLOSE_FINAL = closeFinal("It has been our pleasure taking care of you during your recovery journey. Thank you for choosing {hospital}.");
+        const CARE_TEAM_CB = "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.";
+        return [
+            /* ---- Touch 1 · Day 2 · 10 questions ---- */
+            {
+                day: "Day 2", offset: 2, title: "Initial CHF Recovery Check-In", questions: 10,
+                summary: "First 48 hours home — mostly on track, with weight and follow-up needing attention.",
+                steps: [
+                    ...opening(1, 10, 5),
+                    { id: 'general', kind: 'q', messages: [
+                            "Let's get started! How are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "a little better than when I left, still taking it easy",
+                            intent: "Feeling better", alert: false,
+                            ack: ["Ok, that is good to hear."] }
+                    },
+                    { id: 'weight', kind: 'q', messages: [
+                            "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+                        ],
+                        reply: { text: "my scale said that I put on 3 pounds since the last time I weighed myself",
+                            intent: "Have gained 2 or more pounds", alert: true,
+                            ack: [CARE_TEAM_CB] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Have you experienced shortness of breath that limits your daily activities?"
+                        ],
+                        reply: { text: "no not really, breathing has been ok",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    { id: 'followup', kind: 'q', messages: [
+                            "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?"
+                        ],
+                        reply: { text: "not yet I still need to call",
+                            intent: "Appointment is not scheduled", alert: true,
+                            ack: ["Ok, thanks for letting us know. For scheduling assistance, please call 1-833-574-2273. We recommend scheduling your follow up appointment as soon as possible."] }
+                    },
+                    { id: 'diet', kind: 'q', messages: [
+                            "Have you been following the low-salt diet recommended by your doctor?"
+                        ],
+                        reply: { text: "I've been trying to, reading labels and skipping the chips",
+                            intent: "Have been following diet", alert: false,
+                            ack: ["That's fantastic. Please keep it up!"] }
+                    },
+                    { id: 'rx', kind: 'q', messages: [
+                            "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
+                        ],
+                        reply: { text: "yes got them all from the pharmacy already",
+                            intent: "Have all meds", alert: false,
+                            ack: ["That is great to hear."] }
+                    },
+                    { id: 'rxq', kind: 'q', messages: [
+                            "Do you understand all of your medications?"
+                        ],
+                        reply: { text: "yes I understand them",
+                            intent: "Understand all meds", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    { id: 'discharge', kind: 'q', messages: [
+                            "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
+                        ],
+                        reply: { text: "pretty much, I think I got it",
+                            intent: "Understand instructions", alert: false,
+                            ack: ["Thanks for letting us know."] }
+                    },
+                    { id: 'homehealth', kind: 'q', messages: [
+                            "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?"
+                        ],
+                        reply: { text: "yes they called yesterday and set up a visit",
+                            intent: "Have received call from home health", alert: false,
+                            ack: ["That is good to hear."] }
+                    },
+                    { id: 'concerns', kind: 'q', messages: [
+                            "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+                        ],
+                        reply: { text: "no none of those",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            /* ---- Touch 2 · Day 7 · 7 questions ---- */
+            {
+                day: "Day 7", offset: 7, title: "Early Progress Check-In", questions: 7,
+                summary: "One week home — weight trend, meds, follow-up, and diet.",
+                steps: [
+                    ...opening(2, 7, 5),
+                    { id: 'weight', kind: 'q', messages: [
+                            "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+                        ],
+                        reply: { text: "no it's been pretty steady this week",
+                            intent: "Weight has stayed the same", alert: false,
+                            ack: ["That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible."] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Have you experienced shortness of breath that limits your daily activities?"
+                        ],
+                        reply: { text: "not really, breathing's been better than last week",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "yes every morning and night like they said",
+                            intent: "Taking all meds as directed", alert: false,
+                            ack: ["Ok, great"] }
+                    },
+                    { id: 'diet', kind: 'q', messages: [
+                            "Have you been following the low-salt diet recommended by your doctor?"
+                        ],
+                        reply: { text: "yes sticking with it",
+                            intent: "Have been following diet", alert: false,
+                            ack: ["That's fantastic. Please keep it up!"] }
+                    },
+                    { id: 'homehealth', kind: 'q', messages: [
+                            "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?"
+                        ],
+                        reply: { text: "yes nurse came by twice already",
+                            intent: "Have received call from home health", alert: false,
+                            ack: ["That is good to hear."] }
+                    },
+                    { id: 'fucomplete', kind: 'q', messages: [
+                            "Have you completed a follow-up visit with your doctor?"
+                        ],
+                        reply: { text: "not yet but it's scheduled for Thursday",
+                            intent: "Have not completed follow up appointment", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    { id: 'fumissed', kind: 'q', messages: [
+                            "What is the reason you did not attend your follow-up visit? Is it scheduled but hasn't happened yet, or is it not scheduled / did you miss it?"
+                        ],
+                        reply: { text: "it's on the calendar just hasn't happened yet",
+                            intent: "It's scheduled but has not happened yet", alert: false,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    { id: 'concerns', kind: 'q', messages: [
+                            "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+                        ],
+                        reply: { text: "swelling's gone down and no chest pain",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            /* ---- Touch 3 · Day 14 · 5 questions ---- */
+            {
+                day: "Day 14", offset: 14, title: "Continued Recovery Check-In", questions: 5,
+                summary: "Two weeks in — steady improvement on heart-failure self-care.",
+                steps: [
+                    ...opening(3, 5, 5),
+                    { id: 'weight', kind: 'q', messages: [
+                            "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+                        ],
+                        reply: { text: "no weight's been the same",
+                            intent: "Weight has stayed the same", alert: false,
+                            ack: ["That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible."] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Have you experienced shortness of breath that limits your daily activities?"
+                        ],
+                        reply: { text: "no I'm doing ok with stairs and walking around",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "yes haven't missed any",
+                            intent: "Taking all meds as directed", alert: false,
+                            ack: ["Ok, great"] }
+                    },
+                    { id: 'diet', kind: 'q', messages: [
+                            "Have you been following the low-salt diet recommended by your doctor?"
+                        ],
+                        reply: { text: "yes keeping to the low salt diet",
+                            intent: "Have been following diet", alert: false,
+                            ack: ["That's fantastic. Please keep it up!"] }
+                    },
+                    { id: 'concerns', kind: 'q', messages: [
+                            "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+                        ],
+                        reply: { text: "no I'm feeling pretty good",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            /* ---- Touch 4 · Day 21 · 5 questions ---- */
+            {
+                day: "Day 21", offset: 21, title: "Late Recovery Check-In", questions: 5,
+                summary: "Three weeks out — reinforcing daily weigh-ins and diet.",
+                steps: [
+                    ...opening(4, 5, 5),
+                    { id: 'weight', kind: 'q', messages: [
+                            "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+                        ],
+                        reply: { text: "all good still checking every morning",
+                            intent: "Weight has stayed the same", alert: false,
+                            ack: ["That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible."] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Have you experienced shortness of breath that limits your daily activities?"
+                        ],
+                        reply: { text: "no shortness of breath",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "yes still on track with all of them",
+                            intent: "Taking all meds as directed", alert: false,
+                            ack: ["Ok, great"] }
+                    },
+                    { id: 'diet', kind: 'q', messages: [
+                            "Have you been following the low-salt diet recommended by your doctor?"
+                        ],
+                        reply: { text: "yes getting used to it actually",
+                            intent: "Have been following diet", alert: false,
+                            ack: ["That's fantastic. Please keep it up!"] }
+                    },
+                    { id: 'concerns', kind: 'q', messages: [
+                            "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+                        ],
+                        reply: { text: "none of those",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    CLOSE_MID
+                ]
+            },
+            /* ---- Touch 5 · Day 30 · 5 questions ---- */
+            {
+                day: "Day 30", offset: 30, title: "Final Recovery Check-In", questions: 5,
+                summary: "Program close-out — CHF recovery on track at 30 days.",
+                steps: [
+                    ...opening(5, 5, 5),
+                    { id: 'weight', kind: 'q', messages: [
+                            "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+                        ],
+                        reply: { text: "no weight's been stable",
+                            intent: "Weight has stayed the same", alert: false,
+                            ack: ["That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible."] }
+                    },
+                    { id: 'sob', kind: 'q', messages: [
+                            "Have you experienced shortness of breath that limits your daily activities?"
+                        ],
+                        reply: { text: "no I'm breathing fine",
+                            intent: "No shortness of breath", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    { id: 'adherence', kind: 'q', messages: [
+                            "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?"
+                        ],
+                        reply: { text: "yes still taking everything",
+                            intent: "Taking all meds as directed", alert: false,
+                            ack: ["Ok, great"] }
+                    },
+                    { id: 'diet', kind: 'q', messages: [
+                            "Have you been following the low-salt diet recommended by your doctor?"
+                        ],
+                        reply: { text: "yes keeping it up",
+                            intent: "Have been following diet", alert: false,
+                            ack: ["That's fantastic. Please keep it up!"] }
+                    },
+                    { id: 'concerns', kind: 'q', messages: [
+                            "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+                        ],
+                        reply: { text: "feeling good no swelling or pain thanks for checking in",
+                            intent: "Have not experienced any of these symptoms", alert: false,
+                            ack: ["Ok, that is great to hear."] }
+                    },
+                    CLOSE_FINAL
+                ]
+            }
+        ];
+    }
+
+    const DEFAULT_PROGRAMS = [
+        {
+            id: "copd",
+            name: "COPD Post-Discharge",
+            shortName: "COPD",
+            meta: "4 touches · 23 days",
+            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>) and fires the approved response. Based on the Best-Practice COPD post-discharge script (4 touches: Day 2, 9, 16, 23).",
+            journey: buildCopdJourney()
+        },
+        {
+            id: "chf",
+            name: "CHF Post-Discharge",
+            shortName: "CHF",
+            meta: "5 touches · 30 days",
+            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"weight gain\"</b>, <b>\"shortness of breath\"</b>) and fires the approved response. Based on the CHF post-discharge monitoring script (5 touches over 30 days: Day 2, 7, 14, 21, 30).",
+            journey: buildChfJourney()
+        }
+    ];
+
+    /* ---------------- State ---------------- */
+    let settings = Object.assign({}, DEFAULT_SETTINGS);
+    let activeProgramId = "copd";
+    let programState = {};
+    let currentStep = -1;
+    let awaitingReply = false;
+    let isProcessing = false;
+
+    function defaultStateFor(p) {
+        return { journey: deepClone(p.journey), completed: {}, activeTouch: 0 };
+    }
+    function ensureProgramStates() {
+        DEFAULT_PROGRAMS.forEach(p => {
+            if (!programState[p.id]) programState[p.id] = defaultStateFor(p);
         });
     }
-    (function init() {
+    function prog() { return DEFAULT_PROGRAMS.find(p => p.id === activeProgramId) || DEFAULT_PROGRAMS[0]; }
+    function state() { return programState[activeProgramId]; }
+    function journey() { return state().journey; }
+    function touch() { return journey()[state().activeTouch]; }
+    function steps() { return touch().steps; }
+
+    function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; } }
+    function persist() {
+        localStorage.setItem(STORE_KEY, JSON.stringify({ settings, activeProgramId, programState }));
+    }
+
+    (function initState() {
+        ensureProgramStates();
         const s = load();
-        if (s && Array.isArray(s.templates) && s.templates.length) {
-            templates = s.templates;
-            activeId = s.activeId;
-            settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
-            ensureBundledTemplates();
-            if (!templates.find(t => t.id === activeId)) activeId = templates[0].id;
-            persist();
-        } else {
-            templates = BUNDLED_TEMPLATES.map(t => JSON.parse(JSON.stringify(t)));
-            activeId = TCM_TEMPLATE.id;
-            settings = Object.assign({}, DEFAULT_SETTINGS);
+        if (!s) return;
+        settings = Object.assign({}, DEFAULT_SETTINGS, s.settings || {});
+        if (s.activeProgramId && DEFAULT_PROGRAMS.some(p => p.id === s.activeProgramId)) {
+            activeProgramId = s.activeProgramId;
+        }
+        if (s.programState && typeof s.programState === "object") {
+            DEFAULT_PROGRAMS.forEach(p => {
+                const saved = s.programState[p.id];
+                if (saved && Array.isArray(saved.journey) && saved.journey.length) {
+                    programState[p.id] = {
+                        journey: saved.journey,
+                        completed: saved.completed || {},
+                        activeTouch: typeof saved.activeTouch === "number" ? saved.activeTouch : 0
+                    };
+                }
+            });
         }
     })();
 
-    function active() { return templates.find(t => t.id === activeId) || templates[0]; }
-    function steps() { return active().steps; }
-
-    /* ---------------- Playback state ---------------- */
-    let currentStep = -1;      // index of last revealed step
-    let awaitingReply = false; // current step has a pending scripted reply
-    let replied = {};          // index -> chosen choice index
-    let isProcessing = false;
-
     function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    /* ---------------- Tokens & text ---------------- */
     function token(str) {
         if (str == null) return "";
         return String(str)
             .replace(/{patient}/gi, settings.patient || DEFAULT_SETTINGS.patient)
-            .replace(/{hospital}/gi, settings.hospital || DEFAULT_SETTINGS.hospital);
+            .replace(/{hospital}/gi, settings.hospital || DEFAULT_SETTINGS.hospital)
+            .replace(/{phone}/gi, settings.phone || DEFAULT_SETTINGS.phone);
     }
-    function escapeHtml(s) { const d = document.createElement('div'); d.innerText = s == null ? '' : s; return d.innerHTML; }
-    function escapeAttr(s) { return (s == null ? '' : String(s)).replace(/"/g, '&quot;'); }
     function renderText(raw) {
         let safe = token(raw).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" class="sms-link">$1</a>');
         return safe;
     }
 
-    /* ---------------- Branding ---------------- */
     function updateBranding() {
         const name = settings.hospital || DEFAULT_SETTINGS.hospital;
         document.getElementById('header-name').innerText = name;
         const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase();
         document.getElementById('header-logo').innerText = initials || 'CH';
+        document.getElementById('journey-meta').innerText = prog().meta;
+        document.getElementById('journey-blurb').innerHTML = '<i class="fa-solid fa-circle-info mr-1"></i>' + prog().blurb;
+        const icon = document.querySelector('#config-panel .fa-heart-pulse, #config-panel .fa-lungs, #config-panel .w-9 i');
+        if (icon) {
+            icon.className = prog().id === 'chf' ? 'fa-solid fa-heart-pulse' : (prog().id === 'copd' ? 'fa-solid fa-lungs' : 'fa-solid fa-heart-pulse');
+        }
     }
 
-    /* ---------------- Thread rendering ---------------- */
+    function fillProgramSelect() {
+        const sel = document.getElementById('set-program');
+        sel.innerHTML = '';
+        DEFAULT_PROGRAMS.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name;
+            if (p.id === activeProgramId) opt.selected = true;
+            sel.appendChild(opt);
+        });
+    }
+
+    function switchProgram(id) {
+        if (!DEFAULT_PROGRAMS.some(p => p.id === id)) return;
+        activeProgramId = id;
+        ensureProgramStates();
+        if (state().activeTouch >= journey().length) state().activeTouch = 0;
+        persist();
+        updateBranding();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
     const feed = () => document.getElementById('chat-feed');
     function scrollToBottom() { const f = feed(); f.scrollTop = f.scrollHeight; }
 
@@ -637,13 +1031,13 @@
         const last = users[users.length - 1];
         const rc = document.createElement('div');
         rc.className = 'receipt';
-        rc.innerText = 'Read';
+        rc.innerText = 'Delivered';
         last.insertAdjacentElement('afterend', rc);
     }
     async function showTyping() {
         const tc = document.getElementById('typing-container');
         tc.classList.remove('hidden'); scrollToBottom();
-        await wait(1050);
+        await wait(950);
         tc.classList.add('hidden');
     }
     async function simulateUserTyping(text) {
@@ -655,8 +1049,8 @@
         field.textContent = '';
         send.classList.add('active');
         const t = token(text);
-        for (let ch of t) { field.textContent += ch; await wait(16 + Math.random() * 14); }
-        await wait(280);
+        for (let ch of t) { field.textContent += ch; await wait(14 + Math.random() * 12); }
+        await wait(260);
         field.textContent = '';
         field.classList.add('hidden');
         place.classList.remove('hidden');
@@ -664,7 +1058,6 @@
         addBubble(text, 'user');
     }
 
-    /* ---------------- Reveal / navigation ---------------- */
     function updateCamera() {
         const cam = document.getElementById('camera-trigger');
         const atEnd = (currentStep >= steps().length - 1) && !awaitingReply;
@@ -682,53 +1075,54 @@
         for (const msg of st.messages) {
             await showTyping();
             addBubble(msg, 'bot');
-            await wait(430);
+            await wait(380);
         }
-        if ((st.choices || []).length) awaitingReply = true;
+        if (st.reply) awaitingReply = true;
         isProcessing = false;
+        if (i >= steps().length - 1 && !st.reply) markComplete();
         updateCamera();
     }
 
-    function indexOfStepId(id) {
-        const arr = steps();
-        const norm = v => String(v == null ? '' : v).trim();
-        let i = arr.findIndex(s => norm(s.id) === norm(id));
-        if (i === -1) {
-            const n = parseFloat(id);
-            if (!isNaN(n)) i = arr.findIndex(s => parseFloat(s.id) === n);
-        }
-        return i;
-    }
-
-    async function selectChoice(idx) {
-        if (isProcessing || !awaitingReply) return;
+    async function doReply() {
         const st = steps()[currentStep];
-        const choice = (st.choices || [])[idx];
-        if (!choice) return;
+        if (!st || !st.reply) return;
         isProcessing = true;
         awaitingReply = false;
         document.getElementById('camera-trigger').classList.remove('ios-icon-ready');
-        await simulateUserTyping(choice.text);
-        replied[currentStep] = idx;
+
+        await simulateUserTyping(st.reply.text);
         updateReceipt();
+        await wait(400);
+
+        for (const msg of (st.reply.ack || [])) {
+            await showTyping();
+            addBubble(msg, 'bot');
+            await wait(360);
+        }
         isProcessing = false;
-        // advance to the target step (by Choice Next; fallback to the next step in order)
-        let target = choice.next != null && String(choice.next).trim() !== '' ? indexOfStepId(choice.next) : -1;
-        if (target === -1) target = currentStep + 1;
-        if (target < steps().length) await revealStep(target);
-        else { updateCamera(); }
+        if (currentStep < steps().length - 1) await revealStep(currentStep + 1);
+        else { markComplete(); updateCamera(); }
     }
 
-    async function stepAdvance() {
+    async function advance() {
         if (isProcessing) return;
-        if (awaitingReply) { await selectChoice(0); return; }
+        if (awaitingReply) { await doReply(); return; }
         if (currentStep < steps().length - 1) await revealStep(currentStep + 1);
     }
 
-    function restartThread() {
-        replied = {};
+    function markComplete() {
+        if (!state().completed[state().activeTouch]) {
+            state().completed[state().activeTouch] = true;
+            persist();
+            renderTimeline();
+            renderPresentSwitcher();
+        }
+    }
+
+    function restartTouch() {
         currentStep = -1;
         awaitingReply = false;
+        isProcessing = false;
         feed().innerHTML = '';
         const intro = document.createElement('div');
         intro.className = 'intro-divider';
@@ -737,218 +1131,165 @@
         if (steps().length) revealStep(0);
     }
 
-    /* ---------------- Settings ---------------- */
+    function selectTouch(i) {
+        state().activeTouch = i;
+        persist();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
+    function renderTimeline() {
+        const wrap = document.getElementById('timeline');
+        wrap.innerHTML = '';
+        const completed = state().completed;
+        const active = state().activeTouch;
+        journey().forEach((t, i) => {
+            const card = document.createElement('div');
+            card.className = 'touch-card' + (i === active ? ' active' : '') + (completed[i] ? ' done' : '');
+            card.onclick = () => selectTouch(i);
+            card.innerHTML = `
+                <i class="fa-solid fa-circle-check touch-check"></i>
+                <div class="touch-node">
+                    <span class="tn-day">DAY</span>
+                    <span class="tn-num">${t.offset}</span>
+                </div>
+                <div class="touch-meta">
+                    <h4>Touch ${i + 1} · ${t.title}</h4>
+                    <p>${t.summary}</p>
+                    <div class="touch-pills">
+                        <span class="touch-pill q"><i class="fa-regular fa-circle-question mr-1"></i>${t.questions} questions</span>
+                        <span class="touch-pill">${completed[i] ? 'Completed' : (i === active ? 'Active' : 'Not started')}</span>
+                    </div>
+                </div>`;
+            wrap.appendChild(card);
+        });
+    }
+
+    function renderPresentSwitcher() {
+        const wrap = document.getElementById('present-switcher');
+        wrap.innerHTML = '';
+        const completed = state().completed;
+        const active = state().activeTouch;
+        journey().forEach((t, i) => {
+            const pill = document.createElement('div');
+            pill.className = 'ps-pill' + (i === active ? ' active' : '') + (completed[i] ? ' done' : '');
+            pill.textContent = t.day;
+            pill.onclick = () => selectTouch(i);
+            wrap.appendChild(pill);
+        });
+    }
+
+    function escapeHtml(s) { const d = document.createElement('div'); d.innerText = s == null ? '' : s; return d.innerHTML; }
+
+    function stepLabel(st) {
+        if (st.reply) return { txt: 'Question / Prompt', cls: 'q' };
+        if (st.id === 'close') return { txt: 'Closing message', cls: 'c' };
+        return { txt: 'Outreach message', cls: 's' };
+    }
+
+    function renderEditorPills() {
+        const wrap = document.getElementById('editor-touch-pills');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        const active = state().activeTouch;
+        journey().forEach((t, i) => {
+            const pill = document.createElement('div');
+            pill.className = 'ed-pill' + (i === active ? ' active' : '');
+            pill.textContent = t.day;
+            pill.onclick = () => selectTouch(i);
+            wrap.appendChild(pill);
+        });
+    }
+
+    function renderEditor() {
+        renderEditorPills();
+        const list = document.getElementById('editor-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const t = touch();
+        const active = state().activeTouch;
+        const heading = document.createElement('p');
+        heading.className = 'text-[11px] text-slate-400 mb-3 leading-relaxed';
+        heading.innerHTML = `Editing <b class="text-slate-600">${escapeHtml(prog().name)} · Touch ${active + 1} · ${escapeHtml(t.day)} (${escapeHtml(t.title)})</b>. Edit any message or reply below, then hit <b>Apply &amp; Refresh</b>. Tokens <code class="bg-slate-100 px-1 rounded">{patient}</code> and <code class="bg-slate-100 px-1 rounded">{hospital}</code> are supported.`;
+        list.appendChild(heading);
+
+        t.steps.forEach((st, si) => {
+            const lab = stepLabel(st);
+            const card = document.createElement('div');
+            card.className = 'step-card';
+            let html = `<div class="flex justify-between items-center mb-2">
+                    <span class="step-badge badge-${lab.cls}">${lab.txt}</span>
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Step ${si + 1}</span>
+                </div>`;
+            html += `<label class="input-label">Outreach ${st.messages.length > 1 ? 'messages' : 'message'} (each bubble)</label>`;
+            html += st.messages.map((m, mi) =>
+                `<textarea oninput="updMsg(${si},${mi},this.value)" class="txt-input text-xs resize-y mb-1.5" rows="2">${escapeHtml(m)}</textarea>`
+            ).join('');
+
+            if (st.reply) {
+                html += `<label class="input-label mt-2"><i class="fa-solid fa-comment-dots mr-1"></i>Patient reply (natural language)</label>
+                    <textarea oninput="updReply(${si},'text',this.value)" class="txt-input text-xs resize-y mb-1.5 reply-field" rows="2">${escapeHtml(st.reply.text)}</textarea>`;
+                html += `<label class="input-label"><i class="fa-solid fa-wand-magic-sparkles mr-1" style="color:var(--ai)"></i>Mapped intent (internal)</label>
+                    <input type="text" oninput="updReply(${si},'intent',this.value)" class="txt-input text-xs mb-1.5" value="${escapeHtml(st.reply.intent || '')}">`;
+                if ((st.reply.ack || []).length) {
+                    html += `<label class="input-label">Outreach response${st.reply.ack.length > 1 ? 's' : ''}</label>`;
+                    html += st.reply.ack.map((a, ai) =>
+                        `<textarea oninput="updAck(${si},${ai},this.value)" class="txt-input text-xs resize-y mb-1.5" rows="2">${escapeHtml(a)}</textarea>`
+                    ).join('');
+                }
+            }
+            card.innerHTML = html;
+            list.appendChild(card);
+        });
+    }
+
+    function updMsg(si, mi, v) { touch().steps[si].messages[mi] = v; persist(); }
+    function updReply(si, key, v) { touch().steps[si].reply[key] = v; persist(); }
+    function updAck(si, ai, v) { touch().steps[si].reply.ack[ai] = v; persist(); }
+
+    function applyAndRefresh() {
+        state().completed = {};
+        persist();
+        updateBranding();
+        renderTimeline();
+        renderPresentSwitcher();
+        restartTouch();
+        const btn = document.getElementById('apply-refresh-btn');
+        if (btn) {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Applied!';
+            setTimeout(() => { btn.innerHTML = orig; }, 1400);
+        }
+    }
+
+    function resetScript() {
+        if (!confirm("Reset this workflow's script back to the built-in default? This discards edits for " + prog().name + ".")) return;
+        programState[activeProgramId] = defaultStateFor(prog());
+        persist();
+        renderTimeline();
+        renderPresentSwitcher();
+        renderEditor();
+        restartTouch();
+    }
+
     function fillSettings() {
         document.getElementById('set-patient').value = settings.patient;
         document.getElementById('set-hospital').value = settings.hospital;
-        document.getElementById('set-hospital-top').value = settings.hospital;
     }
     function updateSetting(key, val) {
         settings[key] = val;
         persist();
-        if (key === 'hospital') {
-            updateBranding();
-            // keep the top box and the Settings-tab box in sync
-            const top = document.getElementById('set-hospital-top');
-            const inSettings = document.getElementById('set-hospital');
-            if (top.value !== val) top.value = val;
-            if (inSettings.value !== val) inSettings.value = val;
-        }
+        if (key === 'hospital') updateBranding();
     }
 
-    function applyAndRestart() { persist(); updateBranding(); renderEditor(); restartThread(); }
-    function resetDefaults() {
-        if (!confirm('Reset to the built-in TCM sample template? Your other saved templates are kept.')) return;
-        const existing = templates.findIndex(t => t.id === TCM_TEMPLATE.id);
-        const fresh = JSON.parse(JSON.stringify(TCM_TEMPLATE));
-        if (existing >= 0) templates[existing] = fresh; else templates.push(fresh);
-        activeId = TCM_TEMPLATE.id;
-        settings = Object.assign({}, DEFAULT_SETTINGS);
-        persist();
-        fillSettings(); updateBranding(); renderLibrary(); renderEditor(); restartThread();
-    }
-
-    /* ---------------- Template library ---------------- */
-    function renderLibrary() {
-        const sel = document.getElementById('template-select');
-        sel.innerHTML = '';
-        templates.forEach(t => {
-            const o = document.createElement('option');
-            o.value = t.id; o.textContent = t.name;
-            if (t.id === activeId) o.selected = true;
-            sel.appendChild(o);
-        });
-    }
-    function switchTemplate(id) {
-        activeId = id;
-        if (id === CEDARS_INPATIENT_TEMPLATE.id) {
-            settings.hospital = 'Cedars-Sinai';
-            fillSettings();
-            updateBranding();
-        }
-        persist();
-        renderEditor(); restartThread();
-    }
-    function newId() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-    function renameTemplate() {
-        const t = active();
-        const name = prompt('Template name:', t.name);
-        if (name && name.trim()) { t.name = name.trim(); persist(); renderLibrary(); }
-    }
-    function duplicateTemplate() {
-        const copy = JSON.parse(JSON.stringify(active()));
-        copy.id = newId();
-        copy.name = active().name + ' (copy)';
-        templates.push(copy);
-        activeId = copy.id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
-    }
-    function deleteTemplate() {
-        if (templates.length <= 1) { alert('You need at least one template.'); return; }
-        if (!confirm(`Delete template "${active().name}"?`)) return;
-        templates = templates.filter(t => t.id !== activeId);
-        activeId = templates[0].id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
-    }
-
-    /* ---------------- Editor ---------------- */
-    function renderEditor() {
-        const list = document.getElementById('editor-list');
-        list.innerHTML = '';
-        steps().forEach((st, sIdx) => {
-            const card = document.createElement('div');
-            card.className = 'step-card';
-            card.innerHTML = `
-                <div class="flex justify-between items-center mb-3">
-                    <span class="step-badge"><i class="fa-solid fa-hashtag"></i>Step
-                        <input type="text" value="${escapeAttr(st.id)}" oninput="updStepId(${sIdx}, this.value)" class="w-12 bg-transparent border-0 outline-none font-black text-center" style="color:var(--brand)">
-                    </span>
-                    <div class="flex items-center gap-1">
-                        <button onclick="moveStep(${sIdx},-1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
-                        <button onclick="moveStep(${sIdx},1)" class="text-slate-300 hover:text-slate-500 px-1" title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button onclick="removeStep(${sIdx})" class="text-slate-300 hover:text-red-500 text-lg leading-none px-1" title="Delete step">&times;</button>
-                    </div>
-                </div>
-                <label class="input-label flex justify-between items-center">Bot Messages <button onclick="addMsg(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add message</button></label>
-                ${st.messages.map((m, mIdx) => `<div class="flex gap-1 mb-1.5 items-start"><textarea oninput="updMsg(${sIdx},${mIdx},this.value)" class="txt-input text-xs resize-y h-16">${escapeHtml(m)}</textarea><button onclick="delMsg(${sIdx},${mIdx})" class="text-slate-300 hover:text-red-500 px-1 pt-2">&times;</button></div>`).join('')}
-                <label class="input-label flex justify-between items-center mt-3">Scripted Patient Reply <button onclick="addChoice(${sIdx})" class="text-blue-500 text-[10px] font-bold">+ Add reply</button></label>
-                ${(st.choices || []).length ? (st.choices || []).map((c, cIdx) => `
-                    <div class="bg-slate-50 p-2 rounded-lg mb-1.5 border border-slate-200">
-                        <textarea oninput="updChoice(${sIdx},${cIdx},'text',this.value)" class="txt-input text-xs resize-y h-14 mb-1.5" placeholder="What the patient replies…">${escapeHtml(c.text)}</textarea>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase whitespace-nowrap">Advance to step</label>
-                            <input type="text" value="${escapeAttr(c.next == null ? '' : c.next)}" oninput="updChoice(${sIdx},${cIdx},'next',this.value)" class="txt-input text-xs py-1 flex-1" placeholder="(next step)">
-                            <button onclick="delChoice(${sIdx},${cIdx})" class="text-slate-300 hover:text-red-500 text-sm px-1">&times;</button>
-                        </div>
-                    </div>`).join('')
-                : `<p class="text-[11px] text-slate-400 italic px-1 py-1">No reply — this is a closing/terminal step.</p>`}`;
-            list.appendChild(card);
-        });
-    }
-    function updStepId(i, v) { steps()[i].id = v; persist(); }
-    function updMsg(i, j, v) { steps()[i].messages[j] = v; persist(); }
-    function addMsg(i) { steps()[i].messages.push('New message…'); persist(); renderEditor(); }
-    function delMsg(i, j) { steps()[i].messages.splice(j, 1); persist(); renderEditor(); }
-    function addChoice(i) {
-        const st = steps()[i];
-        st.choices = st.choices || [];
-        const nextGuess = steps()[i + 1] ? steps()[i + 1].id : '';
-        st.choices.push({ text: 'Patient reply…', next: nextGuess });
-        persist(); renderEditor();
-    }
-    function updChoice(i, j, k, v) { steps()[i].choices[j][k] = v; persist(); }
-    function delChoice(i, j) { steps()[i].choices.splice(j, 1); persist(); renderEditor(); }
-    function removeStep(i) {
-        if (steps().length <= 1) { alert('A template needs at least one step.'); return; }
-        steps().splice(i, 1); persist(); renderEditor();
-    }
-    function moveStep(i, dir) {
-        const arr = steps();
-        const j = i + dir;
-        if (j < 0 || j >= arr.length) return;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-        persist(); renderEditor();
-    }
-    function addStep() {
-        const arr = steps();
-        const last = arr[arr.length - 1];
-        const nextId = last ? (parseFloat(last.id) + 1).toFixed(1) : '0.0';
-        arr.push({ id: isNaN(parseFloat(nextId)) ? String(arr.length) : nextId, messages: ['New message…'], choices: [] });
-        persist(); renderEditor();
-    }
-
-    /* ---------------- Import (XLSX / CSV) ---------------- */
-    function parseRows(rows) {
-        const map = {};
-        const order = [];
-        const find = (r, arr) => {
-            const keys = Object.keys(r);
-            const m = keys.find(k => arr.includes(k.toLowerCase().trim().replace(/[\s_]+/g, '')));
-            return m ? r[m] : undefined;
-        };
-        rows.forEach(r => {
-            const rawId = find(r, ['stepid', 'step', 'id', 'touchpointid']);
-            if (rawId == null || String(rawId).trim() === '') return;
-            const id = String(rawId).trim();
-            if (!map[id]) { map[id] = { id, messages: [], choices: [] }; order.push(id); }
-            const msg = find(r, ['botmessage', 'message', 'text', 'bot']);
-            if (msg != null && String(msg).trim() !== '') map[id].messages.push(String(msg).replace(/\s+$/, ''));
-            const cText = find(r, ['choicetext', 'choice', 'reply', 'response', 'patientreply', 'button']);
-            if (cText != null && String(cText).trim() !== '') {
-                const cNext = find(r, ['choicenext', 'next', 'nextstep', 'target', 'goto']);
-                map[id].choices.push({ text: String(cText).replace(/\s+$/, ''), next: cNext == null ? '' : String(cNext).trim() });
-            }
-        });
-        return order.map(id => map[id]).filter(s => s.messages.length || s.choices.length);
-    }
-
-    function importFile(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
-                const built = parseRows(rows);
-                if (!built.length) { alert('No valid rows found. Expected columns: Step ID, Bot Message, Choice Text, Choice Next.'); input.value = ''; return; }
-                const baseName = file.name.replace(/\.(xlsx|xls|csv)$/i, '');
-                const tpl = { id: newId(), name: baseName || 'Imported template', steps: built };
-                templates.push(tpl);
-                activeId = tpl.id;
-                persist();
-                renderLibrary(); renderEditor(); restartThread();
-            } catch (err) {
-                alert('Import failed: ' + err.message);
-            }
-            input.value = '';
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    /* ---------------- Export current template as .xlsx ---------------- */
-    function downloadTemplate() {
-        const aoa = [['Step ID', 'Bot Message', 'Choice Text', 'Choice Next']];
-        steps().forEach(st => {
-            const rowCount = Math.max(st.messages.length, (st.choices || []).length, 1);
-            for (let k = 0; k < rowCount; k++) {
-                const c = (st.choices || [])[k] || {};
-                aoa.push([st.id, st.messages[k] || '', c.text || '', c.next != null ? c.next : '']);
-            }
-        });
-        const ws = XLSX.utils.aoa_to_sheet(aoa);
-        ws['!cols'] = [{ wch: 8 }, { wch: 70 }, { wch: 45 }, { wch: 10 }];
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'template');
-        const safe = (active().name || 'template').replace(/[^\w.-]+/g, '_');
-        XLSX.writeFile(wb, safe + '.xlsx');
-    }
-
-    /* ---------------- UI plumbing ---------------- */
     function switchTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + tab));
+        if (tab === 'editor') renderEditor();
     }
+
     function toggleConfig() { document.body.classList.toggle('sidebar-hidden'); setTimeout(updateScale, 305); }
     function updateScale() {
         const f = document.getElementById('iphone-frame');
@@ -962,14 +1303,16 @@
     }
 
     window.onload = () => {
+        fillProgramSelect();
         fillSettings();
         updateBranding();
-        renderLibrary();
+        renderTimeline();
+        renderPresentSwitcher();
         renderEditor();
         updateScale();
         updateClock();
         setInterval(updateClock, 30000);
-        restartThread();
+        restartTouch();
     };
     window.onresize = updateScale;
     </script>
