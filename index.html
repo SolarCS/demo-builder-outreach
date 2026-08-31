@@ -388,7 +388,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "outreach_workflows_v8";
+    const STORE_KEY = "outreach_workflows_v9";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -443,7 +443,7 @@
         return [
             {
                 day: "Day 2", offset: 2, title: "Initial Recovery Check-In", questions: 7,
-                summary: "First 48 hours home — mostly on track, with a couple follow-ups.",
+                summary: "First 48 hours home. Mostly on track, with a couple follow-ups.",
                 steps: [
                     ...opening(1, 7, 4),
                     { id: 'general', kind: 'q', messages: [
@@ -500,7 +500,7 @@
             },
             {
                 day: "Day 9", offset: 9, title: "Early Progress Check-In", questions: 5,
-                summary: "One week later — starting to turn the corner.",
+                summary: "One week later. Starting to turn the corner.",
                 steps: [
                     ...opening(2, 5, 4),
                     { id: 'general', kind: 'q', messages: [
@@ -543,7 +543,7 @@
             },
             {
                 day: "Day 16", offset: 16, title: "Continued Recovery Check-In", questions: 3,
-                summary: "Two weeks in — steady improvement.",
+                summary: "Two weeks in. Steady improvement.",
                 steps: [
                     ...opening(3, 3, 4),
                     { id: 'general', kind: 'q', messages: [
@@ -575,7 +575,7 @@
             },
             {
                 day: "Day 23", offset: 23, title: "Final Recovery Check-In", questions: 3,
-                summary: "Program close-out — recovery on track.",
+                summary: "Program close-out. Recovery on track.",
                 steps: [
                     ...opening(4, 3, 4),
                     { id: 'general', kind: 'q', messages: [
@@ -617,7 +617,7 @@
             /* ---- Touch 1 · Day 2 · 10 questions ---- */
             {
                 day: "Day 2", offset: 2, title: "Initial CHF Recovery Check-In", questions: 10,
-                summary: "First 48 hours home — mostly on track, with weight and follow-up needing attention.",
+                summary: "First 48 hours home. Mostly on track, with weight and follow-up needing attention.",
                 steps: [
                     ...opening(1, 10, 5),
                     { id: 'general', kind: 'q', messages: [
@@ -696,7 +696,7 @@
             /* ---- Touch 2 · Day 7 · 7 questions ---- */
             {
                 day: "Day 7", offset: 7, title: "Early Progress Check-In", questions: 7,
-                summary: "One week home — weight trend, meds, follow-up, and diet.",
+                summary: "One week home. Weight trend, meds, follow-up, and diet.",
                 steps: [
                     ...opening(2, 7, 5),
                     { id: 'weight', kind: 'q', messages: [
@@ -761,7 +761,7 @@
             /* ---- Touch 3 · Day 14 · 5 questions ---- */
             {
                 day: "Day 14", offset: 14, title: "Continued Recovery Check-In", questions: 5,
-                summary: "Two weeks in — steady improvement on heart-failure self-care.",
+                summary: "Two weeks in. Steady improvement on heart-failure self-care.",
                 steps: [
                     ...opening(3, 5, 5),
                     { id: 'weight', kind: 'q', messages: [
@@ -805,7 +805,7 @@
             /* ---- Touch 4 · Day 21 · 5 questions ---- */
             {
                 day: "Day 21", offset: 21, title: "Late Recovery Check-In", questions: 5,
-                summary: "Three weeks out — reinforcing daily weigh-ins and diet.",
+                summary: "Three weeks out. Reinforcing daily weigh-ins and diet.",
                 steps: [
                     ...opening(4, 5, 5),
                     { id: 'weight', kind: 'q', messages: [
@@ -849,7 +849,7 @@
             /* ---- Touch 5 · Day 30 · 5 questions ---- */
             {
                 day: "Day 30", offset: 30, title: "Final Recovery Check-In", questions: 5,
-                summary: "Program close-out — CHF recovery on track at 30 days.",
+                summary: "Program close-out. CHF recovery on track at 30 days.",
                 steps: [
                     ...opening(5, 5, 5),
                     { id: 'weight', kind: 'q', messages: [
@@ -898,11 +898,11 @@
         return [
             {
                 day: "Today", offset: 0, title: "TCM Post-Discharge Check-In", questions: 6,
-                summary: "Standard inpatient post-discharge outreach — symptoms, instructions, meds, and follow-up scheduling.",
+                summary: "Standard inpatient post-discharge outreach. Symptoms, instructions, meds, and follow-up scheduling.",
                 steps: [
                     { id: 'intro', kind: 'system', messages: [
                             "Hello, this is {hospital}. We are contacting you to see how you're recovering at home after your recent hospital stay and have a few questions we would like to ask you.",
-                            "Before we continue, can you confirm who we're texting with — the patient, a caregiver, or did we reach the wrong number?"
+                            "Before we continue, can you confirm who we're texting with. Are you the patient, a caregiver, or did we reach the wrong number?"
                         ],
                         reply: { text: "I am the patient", intent: "Confirmed: Patient", alert: false,
                             ack: ["Great, let's get started!"] }
@@ -961,7 +961,7 @@
         return [
             {
                 day: "Today", offset: 0, title: "Cancer Screening Outreach", questions: 3,
-                summary: "Preventive care-gap outreach — confirm identity, offer scheduling help, and capture preferred callback time.",
+                summary: "Preventive care-gap outreach. Confirm identity, offer scheduling help, and capture preferred callback time.",
                 steps: [
                     { id: 'intro', kind: 'system', messages: [
                             "Hello, this is {hospital} with an important message about scheduling your routine cancer screenings. There is no cost for your appointment and we can arrange transportation if needed.",
@@ -975,13 +975,13 @@
                         ],
                         reply: { text: "Yes, I'd like someone to call me and help schedule my screening",
                             intent: "Wants callback to schedule", alert: true,
-                            ack: ["Great — thanks for letting us know."] }
+                            ack: ["Great. Thanks for letting us know."] }
                     },
                     { id: 'callback', kind: 'q', messages: [
                             "When would be a good time for us to call you back?"
                         ],
                         reply: { text: "Afternoons work best for me, anytime between 12 and 3",
-                            intent: "Callback window: 12pm–3pm", alert: false,
+                            intent: "Callback window: 12pm-3pm", alert: false,
                             ack: ["Ok, great. Please expect our call in the next 3 business days."] }
                     },
                     { id: 'close', kind: 'system', messages: [
@@ -998,7 +998,7 @@
             name: "TCM / Inpatient Post-Discharge",
             shortName: "TCM",
             meta: "1 touch · same-day",
-            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>, <b>\"needs scheduling help\"</b>) and fires the approved response. Standard inpatient / TCM post-discharge check-in covering symptoms, discharge instructions, medications, and follow-up scheduling.",
+            blurb: "Patients reply in plain language. Our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>, <b>\"needs scheduling help\"</b>) and fires the approved response. Standard inpatient / TCM post-discharge check-in covering symptoms, discharge instructions, medications, and follow-up scheduling.",
             journey: buildTcmJourney()
         },
         {
@@ -1006,7 +1006,7 @@
             name: "Care Gaps · Cancer Screening",
             shortName: "Care Gaps",
             meta: "1 touch · same-day",
-            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"wants to schedule\"</b>, <b>\"afternoons 12–3\"</b>) and fires the approved response. Preventive care-gap outreach for overdue cancer screenings with callback scheduling — same Kaiser-style close-the-gap pattern.",
+            blurb: "Patients reply in plain language. Our conversational AI maps each reply to a scripted intent (e.g. <b>\"wants to schedule\"</b>, <b>\"afternoons 12-3\"</b>) and fires the approved response. Preventive care-gap outreach for overdue cancer screenings with callback scheduling. Same Kaiser-style close-the-gap pattern.",
             journey: buildCareGapsJourney()
         },
         {
@@ -1014,7 +1014,7 @@
             name: "COPD Post-Discharge",
             shortName: "COPD",
             meta: "4 touches · 23 days",
-            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>) and fires the approved response. Based on the Best-Practice COPD post-discharge script (4 touches: Day 2, 9, 16, 23).",
+            blurb: "Patients reply in plain language. Our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>) and fires the approved response. Based on the Best-Practice COPD post-discharge script (4 touches: Day 2, 9, 16, 23).",
             journey: buildCopdJourney()
         },
         {
@@ -1022,7 +1022,7 @@
             name: "CHF Post-Discharge",
             shortName: "CHF",
             meta: "5 touches · 30 days",
-            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"weight gain\"</b>, <b>\"shortness of breath\"</b>) and fires the approved response. Based on the CHF post-discharge monitoring script (5 touches over 30 days: Day 2, 7, 14, 21, 30).",
+            blurb: "Patients reply in plain language. Our conversational AI maps each reply to a scripted intent (e.g. <b>\"weight gain\"</b>, <b>\"shortness of breath\"</b>) and fires the approved response. Based on the CHF post-discharge monitoring script (5 touches over 30 days: Day 2, 7, 14, 21, 30).",
             journey: buildChfJourney()
         }
     ];
