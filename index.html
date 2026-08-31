@@ -388,7 +388,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "outreach_workflows_v10";
+    const STORE_KEY = "outreach_workflows_v11";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -965,7 +965,7 @@
                 steps: [
                     { id: 'intro', kind: 'system', messages: [
                             "Hello, this is {hospital} with an important message about scheduling your routine cancer screenings. There is no cost for your appointment and we can arrange transportation if needed.",
-                            "Before we continue, please confirm that you are {patient}."
+                            "Before we continue, can you please confirm that you are the patient, {patient}."
                         ],
                         reply: { text: "Yes, this is {patient}", intent: "Confirmed: Patient", alert: false,
                             ack: ["Thank you."] }
