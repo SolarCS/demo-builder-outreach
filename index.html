@@ -388,7 +388,7 @@
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "outreach_workflows_v9";
+    const STORE_KEY = "outreach_workflows_v10";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -905,7 +905,7 @@
                             "Before we continue, can you confirm who we're texting with. Are you the patient, a caregiver, or did we reach the wrong number?"
                         ],
                         reply: { text: "I am the patient", intent: "Confirmed: Patient", alert: false,
-                            ack: ["Great, let's get started!"] }
+                            ack: ["Great, then let's get started. This short survey has 5 questions. At any point you can reply STOP to opt out of these messages."] }
                     },
                     { id: 'feeling', kind: 'q', messages: [
                             "How are you feeling now compared to when you left the hospital?"
