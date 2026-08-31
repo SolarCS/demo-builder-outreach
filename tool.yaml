@@ -1,4 +1,4 @@
 name: demo-builder-outreach
 runtime: static
-display_name: CipherOutreach DRG-Specific Workflows
+display_name: CipherOutreach SMS Demo Builder
 repo: SolarCS/demo-builder-outreach

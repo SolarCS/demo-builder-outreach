@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CipherOutreach · DRG-Specific Workflows</title>
+    <title>CipherOutreach · SMS Demo Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -265,7 +265,7 @@
                 </div>
                 <div>
                     <h1 class="text-[15px] font-extrabold text-slate-800 leading-tight">CipherOutreach</h1>
-                    <p class="text-[11px] text-slate-500 font-medium">DRG-Specific Workflows</p>
+                    <p class="text-[11px] text-slate-500 font-medium">SMS Demo Builder</p>
                 </div>
             </div>
             <button onclick="toggleConfig()" title="Present mode (hide panel)" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
@@ -380,14 +380,15 @@
     <script>
 
     /* =====================================================================
-       CipherOutreach · DRG-Specific Workflows
-       Multi-workflow conversational-AI SMS demo (COPD / CHF).
+       CipherOutreach · SMS Demo Builder
+       Multi-workflow conversational-AI SMS demo
+       (TCM · Care Gaps / Cancer Screening · COPD · CHF).
        Patients answer in natural language; AI maps each reply to a
        scripted intent and fires the approved response.
        ===================================================================== */
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital", phone: "(555) 123-4567" };
-    const STORE_KEY = "drg_workflows_v7";
+    const STORE_KEY = "outreach_workflows_v8";
     const deepClone = (o) => JSON.parse(JSON.stringify(o));
 
     /* ---- Shared script fragments ---- */
@@ -892,7 +893,122 @@
         ];
     }
 
+    /* ===================== TCM / INPATIENT POST-DISCHARGE (1 touch) ===================== */
+    function buildTcmJourney() {
+        return [
+            {
+                day: "Today", offset: 0, title: "TCM Post-Discharge Check-In", questions: 6,
+                summary: "Standard inpatient post-discharge outreach — symptoms, instructions, meds, and follow-up scheduling.",
+                steps: [
+                    { id: 'intro', kind: 'system', messages: [
+                            "Hello, this is {hospital}. We are contacting you to see how you're recovering at home after your recent hospital stay and have a few questions we would like to ask you.",
+                            "Before we continue, can you confirm who we're texting with — the patient, a caregiver, or did we reach the wrong number?"
+                        ],
+                        reply: { text: "I am the patient", intent: "Confirmed: Patient", alert: false,
+                            ack: ["Great, let's get started!"] }
+                    },
+                    { id: 'feeling', kind: 'q', messages: [
+                            "How are you feeling now compared to when you left the hospital?"
+                        ],
+                        reply: { text: "I have been having consistent headaches since I left the hospital and I have been really tired",
+                            intent: "Feeling worse / new symptoms", alert: true,
+                            ack: ["Ok thanks for letting us know, we will want to discuss this with you and will have someone on our care team call you back shortly. If you feel you're having a serious medical issue please contact your doctor's office or go to the nearest emergency department."] }
+                    },
+                    { id: 'instructions', kind: 'q', messages: [
+                            "When leaving the hospital you were given discharge instructions to help you stay healthy at home. Do you understand all of your hospital discharge instructions?"
+                        ],
+                        reply: { text: "Yes I understood", intent: "Understands discharge instructions", alert: false,
+                            ack: ["Thanks for letting us know."] }
+                    },
+                    { id: 'rx', kind: 'q', messages: [
+                            "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
+                        ],
+                        reply: { text: "Yes, I do have my medication", intent: "Has all medications", alert: false,
+                            ack: ["That's great to hear."] }
+                    },
+                    { id: 'rxq', kind: 'q', messages: [
+                            "Do you have any questions about any of your medications?"
+                        ],
+                        reply: { text: "Yes I have a question about the lisinopril",
+                            intent: "Has medication questions", alert: true,
+                            ack: ["Ok, we will have someone on our care team call you back shortly to discuss your medication."] }
+                    },
+                    { id: 'followup', kind: 'q', messages: [
+                            "It is important to schedule a follow up appointment within 7 to 14 days after leaving the hospital. Have you scheduled your appointment with your doctor's office?"
+                        ],
+                        reply: { text: "No, I have not been able to schedule a follow-up appointment yet",
+                            intent: "Follow-up not scheduled", alert: true,
+                            ack: ["Ok, thanks for letting us know."] }
+                    },
+                    { id: 'schedhelp', kind: 'q', messages: [
+                            "Would you like help scheduling a follow-up appointment?"
+                        ],
+                        reply: { text: "Yes, I would appreciate some help scheduling it",
+                            intent: "Wants scheduling help", alert: true,
+                            ack: ["Ok we will have someone on our care team call you to help schedule an appointment."] }
+                    },
+                    { id: 'close', kind: 'system', messages: [
+                            "Thank you for participating in this brief conversation.",
+                            "Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+                        ], reply: null }
+                ]
+            }
+        ];
+    }
+
+    /* ===================== CARE GAPS · CANCER SCREENING (1 touch) ===================== */
+    function buildCareGapsJourney() {
+        return [
+            {
+                day: "Today", offset: 0, title: "Cancer Screening Outreach", questions: 3,
+                summary: "Preventive care-gap outreach — confirm identity, offer scheduling help, and capture preferred callback time.",
+                steps: [
+                    { id: 'intro', kind: 'system', messages: [
+                            "Hello, this is {hospital} with an important message about scheduling your routine cancer screenings. There is no cost for your appointment and we can arrange transportation if needed.",
+                            "Before we continue, please confirm that you are {patient}."
+                        ],
+                        reply: { text: "Yes, this is {patient}", intent: "Confirmed: Patient", alert: false,
+                            ack: ["Thank you."] }
+                    },
+                    { id: 'gap', kind: 'q', messages: [
+                            "We care about you and your health. We've noticed that you are overdue for one or more cancer screenings. Routine screenings can detect cancer and save lives. Our staff would like to help you schedule your screening. Would you like us to call you to help schedule?"
+                        ],
+                        reply: { text: "Yes, I'd like someone to call me and help schedule my screening",
+                            intent: "Wants callback to schedule", alert: true,
+                            ack: ["Great — thanks for letting us know."] }
+                    },
+                    { id: 'callback', kind: 'q', messages: [
+                            "When would be a good time for us to call you back?"
+                        ],
+                        reply: { text: "Afternoons work best for me, anytime between 12 and 3",
+                            intent: "Callback window: 12pm–3pm", alert: false,
+                            ack: ["Ok, great. Please expect our call in the next 3 business days."] }
+                    },
+                    { id: 'close', kind: 'system', messages: [
+                            "Thank you for completing this conversation. We look forward to speaking with you soon. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+                        ], reply: null }
+                ]
+            }
+        ];
+    }
+
     const DEFAULT_PROGRAMS = [
+        {
+            id: "tcm",
+            name: "TCM / Inpatient Post-Discharge",
+            shortName: "TCM",
+            meta: "1 touch · same-day",
+            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"feeling worse\"</b>, <b>\"needs scheduling help\"</b>) and fires the approved response. Standard inpatient / TCM post-discharge check-in covering symptoms, discharge instructions, medications, and follow-up scheduling.",
+            journey: buildTcmJourney()
+        },
+        {
+            id: "caregaps",
+            name: "Care Gaps · Cancer Screening",
+            shortName: "Care Gaps",
+            meta: "1 touch · same-day",
+            blurb: "Patients reply in plain language — our conversational AI maps each reply to a scripted intent (e.g. <b>\"wants to schedule\"</b>, <b>\"afternoons 12–3\"</b>) and fires the approved response. Preventive care-gap outreach for overdue cancer screenings with callback scheduling — same Kaiser-style close-the-gap pattern.",
+            journey: buildCareGapsJourney()
+        },
         {
             id: "copd",
             name: "COPD Post-Discharge",
@@ -913,7 +1029,7 @@
 
     /* ---------------- State ---------------- */
     let settings = Object.assign({}, DEFAULT_SETTINGS);
-    let activeProgramId = "copd";
+    let activeProgramId = "tcm";
     let programState = {};
     let currentStep = -1;
     let awaitingReply = false;
@@ -984,7 +1100,13 @@
         document.getElementById('journey-blurb').innerHTML = '<i class="fa-solid fa-circle-info mr-1"></i>' + prog().blurb;
         const icon = document.querySelector('#config-panel .fa-heart-pulse, #config-panel .fa-lungs, #config-panel .w-9 i');
         if (icon) {
-            icon.className = prog().id === 'chf' ? 'fa-solid fa-heart-pulse' : (prog().id === 'copd' ? 'fa-solid fa-lungs' : 'fa-solid fa-heart-pulse');
+            const icons = {
+                tcm: 'fa-solid fa-house-medical',
+                caregaps: 'fa-solid fa-shield-heart',
+                copd: 'fa-solid fa-lungs',
+                chf: 'fa-solid fa-heart-pulse'
+            };
+            icon.className = icons[prog().id] || 'fa-solid fa-comment-medical';
         }
     }
 
@@ -1152,8 +1274,8 @@
             card.innerHTML = `
                 <i class="fa-solid fa-circle-check touch-check"></i>
                 <div class="touch-node">
-                    <span class="tn-day">DAY</span>
-                    <span class="tn-num">${t.offset}</span>
+                    <span class="tn-day">${Number(t.offset) === 0 ? 'NOW' : 'DAY'}</span>
+                    <span class="tn-num">${Number(t.offset) === 0 ? '•' : t.offset}</span>
                 </div>
                 <div class="touch-meta">
                     <h4>Touch ${i + 1} · ${t.title}</h4>
