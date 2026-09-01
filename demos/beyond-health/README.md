@@ -9,7 +9,7 @@ Conversational AI SMS demos for **Beyond Health** (Albuquerque DPC), styled like
 3. Select **GLP-1 Program Continuity** (Hospital field defaults to Beyond Health; change it for other prospects).
 4. Patient defaults to Maria.
 5. Present mode → advance the natural-language risk path.
-6. Use `02-OPEN-CASES-SEED-LIST.md` for the staff / Open Cases moment.
+6. Use `/open-cases/` (Settings → Open Care Team Queue) for the staff / Open Cases moment.
 7. Follow `03-DEMO-RUN-OF-SHOW.md` for timing.
 
 **COPD / CHF multi-touch journeys** are in [`../../drg-specific-outreach/`](../../drg-specific-outreach/), not in this dropdown.

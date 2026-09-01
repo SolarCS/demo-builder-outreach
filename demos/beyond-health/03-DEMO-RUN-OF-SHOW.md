@@ -45,7 +45,7 @@
 3. Restart thread → Present mode
 4. Advance path: identity → taking meds → nausea worse → education link → missed nutrition → Yes (callback) → portal reschedule link
 5. Pause on the blue education + portal URLs (push info + self-service reschedule)
-6. Exit present → Open Cases seed list
+6. Exit present → **Open Care Team Queue** (`/open-cases/`) — Escalation toggle, then Open Cases
 
 Confirm dropdown still shows TCM, Care Gaps, GLP-1, Wellness, and Pre-Visit before the call. (COPD/CHF multi-touch lives in the DRG-Specific Outreach tool.)
 
