@@ -2,7 +2,7 @@
 
 **Account:** Beyond Health (Albuquerque, NM)  
 **Style:** Conversational AI outreach (same pattern as TCM)  
-**Patient replies:** natural language, casual texting (no "reply 1/2", no em dashes)  
+**Patient replies:** natural language with light context (not slangy — prefer “Yes, …” over “yeah”)  
 **Tokens:** `{patient}` → Maria · `{hospital}` → Beyond Health
 
 ## Dropdown programs in the tool
@@ -20,19 +20,21 @@ Cedars numeric / "reply 1" inpatient template is retired.
 
 ## Hero path (Maria, Week 4)
 
-Bot asks in plain language. Maria answers like a real texter:
+Bot asks in plain language. Maria answers with clear, natural replies:
 
-1. Confirm identity → `hey yes this is Maria`
-2. Med adherence → `yeah I've been taking it like they told me`
-3. Side effects → `honestly the nausea has been pretty bad and it's getting worse`
-4. Missed nutrition visit → `no I missed the nutrition one last week, things got crazy`
-5. Callback → `yes please call me when you can`
+1. Confirm identity → `Yes, this is Maria`
+2. Med adherence → `Yes, I've been taking it like they told me`
+3. Side effects → `Yes, the nausea has been pretty bad and it's getting worse`
+4. Education push → bot sends GLP-1 nausea guide URL (blue link)
+5. Missed nutrition visit → `No, I missed the nutrition appointment last week`
+6. Callback / reschedule → `Yes`
+7. Close → callback confirmation + patient portal reschedule URL (blue link)
 
-That path opens the care-team follow-up story (side effect + missed visit + callback).
+That path shows **education push**, **care-team callback**, and **self-service portal reschedule**.
 
 ## Voice outline (Week 4)
 
-Same questions as SMS, no touch-tone menus. Patient can speak naturally; intents map to the same branches (adherence, side effect, missed visit, callback).
+Same questions as SMS, no touch-tone menus. Patient can speak naturally; intents map to the same branches (adherence, side effect, missed visit, callback / reschedule).
 
 ## Rule for future use cases
 

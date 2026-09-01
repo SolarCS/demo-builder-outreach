@@ -489,25 +489,25 @@
             { id: '0.0', messages: [
                 "Hi {patient}, this is {hospital}. We're checking in on your weight management program and have a few quick questions about how things are going.",
                 "Before we continue, are we texting with {patient}, a caregiver, or did we reach the wrong number?"
-            ], choices: [{ text: "hey yes this is Maria", next: "1.0" }] },
+            ], choices: [{ text: "Yes, this is Maria", next: "1.0" }] },
             { id: '1.0', messages: [
                 "Great, thanks {patient}.",
                 "Our records show you're enrolled in Beyond Health's weight management program and you're due for your Week 4 check-in. Have you been able to take your prescribed medication as directed?"
-            ], choices: [{ text: "yeah I've been taking it like they told me", next: "2.0" }] },
+            ], choices: [{ text: "Yes, I've been taking it like they told me", next: "2.0" }] },
             { id: '2.0', messages: [
                 "Thanks for letting us know.",
                 "Are you having any side effects that concern you, like nausea, vomiting, dizziness, or stomach pain?"
-            ], choices: [{ text: "honestly the nausea has been pretty bad and it's getting worse", next: "3.0" }] },
+            ], choices: [{ text: "Yes, the nausea has been pretty bad and it's getting worse", next: "3.0" }] },
             { id: '3.0', messages: [
                 "I'm sorry you're dealing with that, thank you for telling us. Someone from your Beyond Health care team will follow up. If this feels urgent, please call the clinic at (505) 899-4414 or seek emergency care.",
+                "Here's a short guide that may help while you wait: https://care.beyondhealthnm.example/education/glp1-nausea",
                 "You also have coach and nutrition visits as part of your program. Were you able to keep your most recent coach or nutrition appointment?"
-            ], choices: [{ text: "no I missed the nutrition one last week, things got crazy", next: "4.0" }] },
+            ], choices: [{ text: "No, I missed the nutrition appointment last week", next: "4.0" }] },
             { id: '4.0', messages: [
-                "Got it, we want to help get you back on track. Would you like someone from Beyond Health to call you back to talk through the side effects and help reschedule your coach or nutrition visit?"
-            ], choices: [{ text: "yes please call me when you can", next: "5.0" }] },
+                "Got it, we want to help get you back on track. Would you like someone from Beyond Health to call you back to help reschedule your coach or nutrition visit?"
+            ], choices: [{ text: "Yes", next: "5.0" }] },
             { id: '5.0', messages: [
-                "Thank you. We've flagged this for the care team and someone will reach out during clinic hours.",
-                "Quick tip while you wait: smaller meals more often and staying hydrated can help with nausea. Your coach can tailor that with you.",
+                "Great, someone will reach out to you shortly. Alternatively, you can reschedule your appointment directly through our patient portal: https://portal.beyondhealthnm.example/appointments/reschedule",
                 "Reply HELP for help. Reply STOP to unsubscribe. Thanks for partnering with Beyond Health on your health goals."
             ], choices: [] }
         ]
@@ -520,13 +520,14 @@
             { id: '0.0', messages: [
                 "Hi {patient}, this is {hospital}. We're reaching out about an important part of your membership care plan.",
                 "Before we continue, can you confirm that you are {patient}?"
-            ], choices: [{ text: "yep this is me", next: "1.0" }] },
+            ], choices: [{ text: "Yes, this is me", next: "1.0" }] },
             { id: '1.0', messages: [
                 "Thank you.",
                 "Our records show you may be due for your annual wellness visit or a recommended preventive screening. Would you like help scheduling with Beyond Health?"
-            ], choices: [{ text: "yeah that would be great, I've been meaning to book something", next: "2.0" }] },
+            ], choices: [{ text: "Yes, I've been meaning to book something", next: "2.0" }] },
             { id: '2.0', messages: [
                 "Wonderful. A team member will reach out to help you schedule at a time that works for you.",
+                "You can also schedule online through our patient portal: https://portal.beyondhealthnm.example/appointments/schedule",
                 "Keeping your wellness visit current helps us catch issues early and personalize your care plan.",
                 "Reply HELP for help. Reply STOP to unsubscribe. Thank you for choosing Beyond Health."
             ], choices: [] }
@@ -540,10 +541,11 @@
             { id: '0.0', messages: [
                 "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.",
                 "You have an appointment on Thursday at 10:00 AM with Beyond Health in Albuquerque. Can you confirm, or do you need to cancel or reschedule?"
-            ], choices: [{ text: "yep I can make Thursday at 10", next: "1.0" }] },
+            ], choices: [{ text: "Yes, I can make Thursday at 10", next: "1.0" }] },
             { id: '1.0', messages: [
                 "You're confirmed. We look forward to seeing you.",
-                "A couple prep tips: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site.",
+                "A couple prep tips: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site: https://care.beyondhealthnm.example/education/pellet-visit-prep",
+                "Need to change your appointment? You can reschedule here: https://portal.beyondhealthnm.example/appointments/reschedule",
                 "Questions? Call (505) 899-4414. Reply HELP for help. Reply STOP to unsubscribe."
             ], choices: [] }
         ]
@@ -587,12 +589,21 @@
     function persist() { localStorage.setItem(STORE_KEY, JSON.stringify({ templates, activeId, settings })); }
 
     let templates, activeId, settings;
+    // BH demo pack scripts are force-synced so copy tweaks land without clearing localStorage.
+    const FORCE_SYNC_TEMPLATE_IDS = new Set([
+        BH_GLP1_TEMPLATE.id,
+        BH_WELLNESS_TEMPLATE.id,
+        BH_PREVISIT_TEMPLATE.id
+    ]);
     function ensureBundledTemplates() {
         templates = templates.filter(t => !RETIRED_TEMPLATE_IDS.has(t.id));
         BUNDLED_TEMPLATES.forEach(bundled => {
             const existing = templates.find(t => t.id === bundled.id);
             if (!existing) {
                 templates.push(JSON.parse(JSON.stringify(bundled)));
+            } else if (FORCE_SYNC_TEMPLATE_IDS.has(bundled.id)) {
+                existing.name = bundled.name;
+                existing.steps = JSON.parse(JSON.stringify(bundled.steps));
             } else {
                 // Keep script edits, but always sync the dropdown title from bundled.
                 existing.name = bundled.name;
