@@ -43,13 +43,13 @@ Dropdown templates (conversational AI / natural-language patient replies):
 - **Care Gaps / Cancer Screening**
 - **COPD Post-Discharge (Day 2)** — longitudinal
 - **CHF Post-Discharge (Day 2)** — longitudinal
-- **Beyond Health - GLP-1 Program Continuity** (hero demo)
-- **Beyond Health - Wellness Care Gap**
-- **Beyond Health - Pre-Visit Pellet/Weight Prep**
+- **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
+- **Wellness Care Gap**
+- **Pre-Visit Pellet/Weight Prep**
 
-Selecting a Beyond Health template auto-sets Patient = `Maria` and sender = `Beyond Health`.  
+Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti`.  
-Full Beyond Health pack: [`demos/beyond-health/`](demos/beyond-health/).
+Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
 

@@ -13,9 +13,9 @@
 | Care Gaps / Cancer Screening | Restored |
 | COPD Post-Discharge (Day 2) | Restored longitudinal |
 | CHF Post-Discharge (Day 2) | Restored longitudinal |
-| Beyond Health - GLP-1 Program Continuity | **Hero for tomorrow** |
-| Beyond Health - Wellness Care Gap | Supporting |
-| Beyond Health - Pre-Visit Pellet/Weight Prep | Supporting |
+| GLP-1 Program Continuity | **Hero** (set Hospital field per prospect) |
+| Wellness Care Gap | Supporting |
+| Pre-Visit Pellet/Weight Prep | Supporting |
 
 Cedars numeric / "reply 1" inpatient template is retired.
 

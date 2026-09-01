@@ -591,7 +591,7 @@
     /* ---- Beyond Health (Albuquerque DPC) conversational AI demo pack ---- */
     const BH_GLP1_TEMPLATE = {
         id: 'bh-glp1-continuity',
-        name: 'Beyond Health - GLP-1 Program Continuity',
+        name: 'GLP-1 Program Continuity',
         steps: [
             { id: '0.0', messages: [
                 "Hi {patient}, this is {hospital}. We're checking in on your weight management program and have a few quick questions about how things are going.",
@@ -622,7 +622,7 @@
 
     const BH_WELLNESS_TEMPLATE = {
         id: 'bh-wellness-care-gap',
-        name: 'Beyond Health - Wellness Care Gap',
+        name: 'Wellness Care Gap',
         steps: [
             { id: '0.0', messages: [
                 "Hi {patient}, this is {hospital}. We're reaching out about an important part of your membership care plan.",
@@ -642,7 +642,7 @@
 
     const BH_PREVISIT_TEMPLATE = {
         id: 'bh-previsit-prep',
-        name: 'Beyond Health - Pre-Visit Pellet/Weight Prep',
+        name: 'Pre-Visit Pellet/Weight Prep',
         steps: [
             { id: '0.0', messages: [
                 "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.",
@@ -698,8 +698,12 @@
     function ensureBundledTemplates() {
         templates = templates.filter(t => !RETIRED_TEMPLATE_IDS.has(t.id));
         BUNDLED_TEMPLATES.forEach(bundled => {
-            if (!templates.find(t => t.id === bundled.id)) {
+            const existing = templates.find(t => t.id === bundled.id);
+            if (!existing) {
                 templates.push(JSON.parse(JSON.stringify(bundled)));
+            } else {
+                // Keep script edits, but always sync the dropdown title from bundled.
+                existing.name = bundled.name;
             }
         });
     }
