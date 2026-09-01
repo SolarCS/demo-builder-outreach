@@ -44,14 +44,15 @@ Use these personas when walking the **Open Cases / intervention** moment after t
 
 ---
 
-## How to present without a live Evolve CP
+## Interactive Open Cases demo
 
-If Open Cases UI isn’t available in Demo Builder:
+Use the built-in Care Team Queue:
 
 1. Finish Maria’s SMS thread in the phone.  
-2. Flip to this seed list (or a simple slide / printed card).  
-3. Say: “In CipherOutreach, those answers create **Open Cases** for your coach or admin — here’s what the queue looks like for your GLP-1 panel this morning.”  
-4. Spend 60–90 seconds on Maria, then glance at James + Denise as drop-off archetypes.
+2. Open **Settings → Open Care Team Queue** (or go to `/open-cases/`).  
+3. Leave the toggle on **Escalation Workflow** and Advance through the hand-raise story.  
+4. Flip to **Open Cases** and walk Maria, then glance at James + Denise (GLP-1) or the Pre-Visit board.  
+5. Program toggle switches the queue between **GLP-1 Program Continuity** and **Pre-Visit Reminder / Prep**.
 
 ---
 

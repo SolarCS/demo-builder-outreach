@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherOutreach · Care Team Queue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #005A8C;
+            --brand-deep: #063A58;
+            --accent: #0EA5A4;
+            --warn: #C2410C;
+            --surface: #F4F7F9;
+            --line: #D7E0E7;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "DM Sans", system-ui, sans-serif;
+            color: #0F172A;
+            background:
+                radial-gradient(1200px 500px at 10% -10%, rgba(14,165,164,0.12), transparent 55%),
+                radial-gradient(900px 400px at 90% 0%, rgba(0,90,140,0.10), transparent 50%),
+                linear-gradient(180deg, #EEF3F7 0%, var(--surface) 40%, #E8EEF3 100%);
+        }
+        .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 20px 48px;
+        }
+        .card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            backdrop-filter: blur(8px);
+        }
+        .seg {
+            display: inline-flex;
+            background: #E8EEF3;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 4px;
+            gap: 2px;
+        }
+        .seg button {
+            border: 0;
+            background: transparent;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748B;
+            cursor: pointer;
+            transition: all .18s ease;
+        }
+        .seg button.active {
+            background: #fff;
+            color: var(--brand-deep);
+            box-shadow: 0 1px 3px rgba(15,23,42,.12);
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .pill-high { background: #FFF1F2; color: #BE123C; border-color: #FECDD3; }
+        .pill-med { background: #FFF7ED; color: #C2410C; border-color: #FED7AA; }
+        .pill-low { background: #F0FDF4; color: #15803D; border-color: #BBF7D0; }
+        .pill-open { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+        .pill-done { background: #F1F5F9; color: #475569; border-color: #E2E8F0; }
+        .stat {
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: #fff;
+        }
+        .stat .n { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: var(--brand-deep); }
+        .case-row {
+            display: grid;
+            grid-template-columns: 28px 1.3fr 1fr 1.2fr 90px 90px;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #EEF2F6;
+            cursor: pointer;
+            transition: background .15s ease;
+        }
+        .case-row:hover { background: #F8FBFD; }
+        .case-row.active { background: #F0F9FF; box-shadow: inset 3px 0 0 var(--accent); }
+        .case-row.resolved { opacity: 0.55; }
+        @media (max-width: 900px) {
+            .case-row { grid-template-columns: 1fr; gap: 6px; }
+        }
+        .step {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 18px;
+            opacity: 0.45;
+            transform: translateY(6px);
+            transition: all .35s ease;
+        }
+        .step.on { opacity: 1; transform: none; }
+        .step::before {
+            content: "";
+            position: absolute;
+            left: 7px;
+            top: 28px;
+            bottom: -18px;
+            width: 2px;
+            background: #D5DEE6;
+        }
+        .step:last-child::before { display: none; }
+        .step-dot {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #94A3B8;
+            background: #fff;
+        }
+        .step.on .step-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(14,165,164,0.15);
+        }
+        .sms-mini {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .bubble-p { color: #334155; }
+        .bubble-b { color: var(--brand-deep); font-weight: 600; }
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .15s ease;
+        }
+        .btn-primary { background: var(--brand); color: #fff; }
+        .btn-primary:hover { background: var(--brand-deep); }
+        .btn-ghost { background: #EEF2F6; color: #334155; }
+        .btn-ghost:hover { background: #E2E8F0; }
+        .btn-success { background: #0F766E; color: #fff; }
+        .fade-in { animation: fadeIn .28s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .linkish { color: #0284C7; text-decoration: underline; text-underline-offset: 2px; }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:var(--brand)">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] font-bold tracking-[0.14em] uppercase text-slate-500">CipherOutreach</div>
+                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 leading-none">Care Team Queue</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-600 max-w-2xl">
+                    Show what happens when a patient “raises their hand” in outreach — automated escalation into an actionable Open Cases queue for coaches and ops.
+                </p>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <a href="../index.html" class="btn btn-ghost"><i class="fa-solid fa-comment-sms mr-1"></i> Back to SMS Demo</a>
+                <div class="text-[11px] text-slate-500 mono">Beyond Health · Albuquerque</div>
+            </div>
+        </div>
+
+        <!-- Bucket header inspired by capabilities cards -->
+        <div class="card p-4 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-700 mb-1">Automated Recovery Workflows</div>
+                    <div class="text-sm text-slate-600">Toggle between the escalation story and the live Open Cases dashboard for this use case.</div>
+                </div>
+                <div class="seg" id="mode-toggle" role="tablist" aria-label="Workflow view">
+                    <button class="active" data-mode="escalation" onclick="setMode('escalation')">Escalation Workflow</button>
+                    <button data-mode="cases" onclick="setMode('cases')">Open Cases</button>
+                </div>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+                <span class="text-[11px] font-bold uppercase tracking-wide text-slate-500">Program</span>
+                <div class="seg" id="program-toggle">
+                    <button class="active" data-program="glp1" onclick="setProgram('glp1')">GLP-1 Program Continuity</button>
+                    <button data-program="previsit" onclick="setProgram('previsit')">Pre-Visit Reminder / Prep</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-escalation" class="grid lg:grid-cols-[1.1fr_0.9fr] gap-4">
+            <div class="card p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900" id="esc-title">How a hand-raise becomes work</h2>
+                        <p class="text-sm text-slate-500" id="esc-sub">Click Advance to walk the automated recovery path.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn btn-ghost" onclick="resetEscalation()"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="btn btn-primary" onclick="advanceEscalation()"><i class="fa-solid fa-forward-step mr-1"></i>Advance</button>
+                    </div>
+                </div>
+                <div id="escalation-steps"></div>
+            </div>
+            <div class="card p-5">
+                <div class="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-2">Presenter cue</div>
+                <div id="esc-cue" class="text-sm text-slate-700 leading-relaxed mb-4"></div>
+                <div class="rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="px-3 py-2 bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500">What staff will see next</div>
+                    <div id="esc-preview" class="p-3 text-sm text-slate-700"></div>
+                </div>
+                <button class="btn btn-success w-full mt-4" onclick="setMode('cases')">
+                    <i class="fa-solid fa-table-list mr-1"></i> Flip to Open Cases dashboard
+                </button>
+            </div>
+        </div>
+
+        <div id="view-cases" class="hidden">
+            <div class="grid sm:grid-cols-4 gap-3 mb-4" id="case-stats"></div>
+            <div class="card overflow-hidden">
+                <div class="px-4 py-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 bg-white/80">
+                    <div>
+                        <div class="font-extrabold text-slate-900" id="queue-title">Open Cases</div>
+                        <div class="text-[12px] text-slate-500" id="queue-sub">Filtered to active program</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn btn-ghost" onclick="resetCases()"><i class="fa-solid fa-rotate-left mr-1"></i>Reset queue</button>
+                        <button class="btn btn-ghost" onclick="setMode('escalation')"><i class="fa-solid fa-route mr-1"></i>Escalation story</button>
+                    </div>
+                </div>
+                <div class="case-row text-[10px] font-bold uppercase tracking-wide text-slate-400 bg-slate-50">
+                    <div></div><div>Patient</div><div>Issue</div><div>Last patient signal</div><div>Priority</div><div>Status</div>
+                </div>
+                <div id="case-list"></div>
+            </div>
+
+            <div id="case-detail" class="card p-5 mt-4 hidden fade-in"></div>
+        </div>
+    </div>
+
+<script>
+const PROGRAMS = {
+    glp1: {
+        label: 'GLP-1 Program Continuity',
+        queueLabel: 'GLP-1 / Weight Management',
+        hero: 'Maria Lopez',
+        escalation: [
+            {
+                title: 'Outreach check-in goes out',
+                body: 'Week-4 GLP-1 continuity SMS asks about medication, side effects, and coach/nutrition visits.',
+                sms: { bot: 'Have you been able to take your prescribed medication as directed?', patient: 'Yes, I’ve been taking it like they told me' },
+                cue: 'Start here after you finish the Maria SMS path — the conversation itself is the intake.',
+                preview: 'No case yet. Program enrollment is active; responses are being captured.'
+            },
+            {
+                title: 'Patient raises a clinical concern',
+                body: 'Maria reports worsening nausea. CipherOutreach maps the free-text reply to a Side Effect intent.',
+                sms: { bot: 'Are you having any side effects that concern you…?', patient: 'Yes, the nausea has been pretty bad and it’s getting worse' },
+                cue: 'This is the “hand raise.” Emphasize: Weave texts; Cipher structures risk.',
+                preview: 'Signal captured: Side Effect · High clinical concern'
+            },
+            {
+                title: 'Missed program touch + callback requested',
+                body: 'She also missed nutrition and asks for a human. Multiple intents stack on one encounter.',
+                sms: { bot: 'Would you like someone… to help reschedule…?', patient: 'Yes' },
+                cue: 'One SMS thread → three reasons a coach should intervene today.',
+                preview: 'Issues queued: Side Effect · Missed Visit · Callback Requested'
+            },
+            {
+                title: 'Automated recovery workflow opens a case',
+                body: 'Rules create an Open Case, assign a suggested owner, and surface SLA timing for same-business-day contact.',
+                sms: null,
+                cue: 'Flip the toggle to Open Cases and walk Maria end-to-end.',
+                preview: 'Case #BH-1042 created · Owner: Coach · Priority: High · SLA: today'
+            }
+        ],
+        cases: [
+            {
+                id: 'BH-1042', patient: 'Maria Lopez', age: 42, day: 'Week 4', channel: 'SMS',
+                issues: ['Side Effect', 'Missed Visit', 'Callback'], priority: 'High',
+                signal: 'Nausea worsening; missed nutrition; wants callback',
+                owner: 'Coach',
+                detail: 'Week-4 check-in captured clinical concern + missed program touch + explicit callback. Triage nausea per protocol, reschedule nutrition, close the loop in Open Cases.',
+                actions: ['Call Maria about nausea', 'Reschedule nutrition visit', 'Document & resolve']
+            },
+            {
+                id: 'BH-1048', patient: 'James Ortega', age: 55, day: 'Week 6', channel: 'Voice',
+                issues: ['Med Access'], priority: 'High',
+                signal: 'Could not pick up GLP-1 — pharmacy / cost delay',
+                owner: 'Admin / Coach',
+                detail: 'Drop-off at refill/access. Ops can intervene before the patient silently leaves the program.',
+                actions: ['Confirm pharmacy status', 'Offer assistance options', 'Update case notes']
+            },
+            {
+                id: 'BH-1051', patient: 'Denise Romero', age: 38, day: 'Week 8', channel: 'Voice',
+                issues: ['Silent / Unreached'], priority: 'Medium',
+                signal: 'No answer ×3; SMS nudge with no reply',
+                owner: 'Coach',
+                detail: 'Disengagement risk. Visibility into silent attrition — not buried in a texting inbox.',
+                actions: ['Try alternate number', 'Send portal nudge', 'Escalate if still dark']
+            },
+            {
+                id: 'BH-1055', patient: 'Anthony Chen', age: 47, day: 'Week 2', channel: 'SMS',
+                issues: ['Missed Coach Visit'], priority: 'Medium',
+                signal: 'Meds OK; cancelled coach — “too busy”',
+                owner: 'Coach',
+                detail: 'Early attrition signal. Offer alternate times or portal self-schedule.',
+                actions: ['Offer new coach slots', 'Send portal link', 'Confirm next touch']
+            },
+            {
+                id: 'BH-1060', patient: 'Patricia Hale', age: 61, day: 'Week 12', channel: 'SMS',
+                issues: ['Callback'], priority: 'Low',
+                signal: 'On meds; plateau — wants to talk before provider visit',
+                owner: 'Coach / Provider',
+                detail: 'Retention + visit opportunity. Not urgent clinically, but valuable for continuity.',
+                actions: ['Schedule coach callback', 'Prep provider note', 'Resolve when complete']
+            }
+        ]
+    },
+    previsit: {
+        label: 'Pre-Visit Reminder / Prep',
+        queueLabel: 'Pre-Visit · Pellet / Weight',
+        hero: 'Maria Lopez',
+        escalation: [
+            {
+                title: 'Appointment reminder goes out',
+                body: 'Thursday 10:00 AM hormone pellet / weight visit reminder asks Maria to confirm, cancel, or reschedule.',
+                sms: { bot: 'Can you confirm, or do you need to cancel or reschedule?', patient: 'Yes, I can make Thursday at 10' },
+                cue: 'Start from the Pre-Visit SMS template, then show what happens when confirmation isn’t clean.',
+                preview: 'Confirmed visits stay quiet. Exceptions create work.'
+            },
+            {
+                title: 'Prep guidance is pushed',
+                body: 'After confirm, outreach sends prep tips plus a blue prep-guide link for this visit type.',
+                sms: { bot: 'Here is your prep guide for this type of visit: https://care.beyondhealthnm.example/education/pellet-weight-visit-prep', patient: null },
+                cue: 'Highlight education push — not just “see you Thursday.”',
+                preview: 'Prep content delivered · no case needed yet'
+            },
+            {
+                title: 'Patient raises a barrier (demo fork)',
+                body: 'In a live program, replies like needing a ride, unclear prep, or wanting to reschedule auto-route to staff.',
+                sms: { bot: null, patient: 'Actually I may need to reschedule — mornings are hard this week' },
+                cue: 'Use this as the hand-raise moment even if your SMS path used a clean confirm.',
+                preview: 'Signal: Reschedule Request · Pre-Visit'
+            },
+            {
+                title: 'Open Case lands with ops / front desk',
+                body: 'Automated recovery opens a case with appointment context, preferred channel, and suggested next action.',
+                sms: null,
+                cue: 'Toggle to Open Cases and show the pre-visit morning board.',
+                preview: 'Case #BH-2201 · Front Desk · Priority: Medium · Appointment Thu 10:00 AM'
+            }
+        ],
+        cases: [
+            {
+                id: 'BH-2201', patient: 'Maria Lopez', age: 42, day: 'Thu 10:00 AM', channel: 'SMS',
+                issues: ['Reschedule Request'], priority: 'Medium',
+                signal: 'Confirmed, then asked to move mornings',
+                owner: 'Front Desk',
+                detail: 'Pre-visit reminder + prep went out. Patient now needs a new slot. Portal reschedule link already offered in SMS; staff can close the loop.',
+                actions: ['Offer alternate times', 'Send portal reschedule link', 'Update appointment status']
+            },
+            {
+                id: 'BH-2204', patient: 'Luis Mendoza', age: 51, day: 'Fri 9:30 AM', channel: 'SMS',
+                issues: ['Prep Question'], priority: 'Medium',
+                signal: 'Asked whether to pause GLP-1 before pellet visit',
+                owner: 'Clinical / Nurse',
+                detail: 'Prep guide was pushed; clinical clarification still needed so the visit isn’t wasted.',
+                actions: ['Nurse callback', 'Confirm med instructions', 'Resolve case']
+            },
+            {
+                id: 'BH-2207', patient: 'Ava Brooks', age: 36, day: 'Thu 2:00 PM', channel: 'SMS',
+                issues: ['Transportation'], priority: 'High',
+                signal: 'No ride home after procedure-style visit',
+                owner: 'Care Coord',
+                detail: 'Barrier that would become a no-show without intervention.',
+                actions: ['Arrange ride options', 'Offer later slot', 'Confirm attendance']
+            },
+            {
+                id: 'BH-2210', patient: 'Sam Patel', age: 44, day: 'Wed 11:15 AM', channel: 'Voice',
+                issues: ['No Confirm'], priority: 'High',
+                signal: 'Reminder + backup voice attempt — no confirmation',
+                owner: 'Front Desk',
+                detail: 'Unconfirmed appointment risk. Same board shows who still hasn’t answered.',
+                actions: ['Final SMS nudge', 'Call once', 'Release slot if needed']
+            },
+            {
+                id: 'BH-2213', patient: 'Elena Vargas', age: 58, day: 'Mon 8:45 AM', channel: 'SMS',
+                issues: ['Cancel'], priority: 'Low',
+                signal: 'Cancelled; asked to rebook next month',
+                owner: 'Front Desk',
+                detail: 'Clean cancel with rebook intent — keep the panel full without phone tag.',
+                actions: ['Send scheduling link', 'Book follow-up', 'Close case']
+            }
+        ]
+    }
+};
+
+let mode = 'escalation';
+let program = 'glp1';
+let escStep = 0;
+let selectedCaseId = null;
+let resolved = {};
+
+function setMode(next) {
+    mode = next;
+    document.querySelectorAll('#mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    document.getElementById('view-escalation').classList.toggle('hidden', mode !== 'escalation');
+    document.getElementById('view-cases').classList.toggle('hidden', mode !== 'cases');
+    if (mode === 'cases') renderCases();
+    else renderEscalation();
+}
+
+function setProgram(next) {
+    program = next;
+    escStep = 0;
+    selectedCaseId = null;
+    resolved = {};
+    document.querySelectorAll('#program-toggle button').forEach(b => b.classList.toggle('active', b.dataset.program === program));
+    if (mode === 'cases') renderCases();
+    else renderEscalation();
+}
+
+function prog() { return PROGRAMS[program]; }
+
+function renderEscalation() {
+    const p = prog();
+    document.getElementById('esc-title').textContent = p.label + ' · automated recovery';
+    document.getElementById('esc-sub').textContent = 'Walk how ' + p.hero + '’s reply becomes staff work.';
+    const wrap = document.getElementById('escalation-steps');
+    wrap.innerHTML = p.escalation.map((s, i) => {
+        const on = i <= escStep ? 'on' : '';
+        const sms = s.sms ? `<div class="sms-mini mt-2">
+            ${s.sms.bot ? `<div class="bubble-b mb-1">Outreach: ${escapeHtml(s.sms.bot)}</div>` : ''}
+            ${s.sms.patient ? `<div class="bubble-p">Patient: “${escapeHtml(s.sms.patient)}”</div>` : ''}
+        </div>` : '';
+        return `<div class="step ${on}">
+            <div class="step-dot"></div>
+            <div class="font-bold text-slate-900">${i + 1}. ${escapeHtml(s.title)}</div>
+            <div class="text-sm text-slate-600 mt-1">${escapeHtml(s.body)}</div>
+            ${sms}
+        </div>`;
+    }).join('');
+    const cur = p.escalation[escStep];
+    document.getElementById('esc-cue').textContent = cur.cue;
+    document.getElementById('esc-preview').textContent = cur.preview;
+}
+
+function advanceEscalation() {
+    const max = prog().escalation.length - 1;
+    if (escStep < max) escStep += 1;
+    else { setMode('cases'); return; }
+    renderEscalation();
+}
+function resetEscalation() { escStep = 0; renderEscalation(); }
+
+function renderCases() {
+    const p = prog();
+    const openCount = p.cases.filter(c => !resolved[c.id]).length;
+    const high = p.cases.filter(c => !resolved[c.id] && c.priority === 'High').length;
+    const sms = p.cases.filter(c => !resolved[c.id] && c.channel === 'SMS').length;
+    document.getElementById('case-stats').innerHTML = [
+        ['Open cases', openCount],
+        ['High priority', high],
+        ['From SMS today', sms],
+        ['Program filter', p.queueLabel]
+    ].map(([k,v], i) => `<div class="stat"><div class="text-[11px] font-bold uppercase tracking-wide text-slate-500">${k}</div><div class="n ${i===3?'text-lg pt-2':''}">${escapeHtml(String(v))}</div></div>`).join('');
+
+    document.getElementById('queue-title').textContent = 'Open Cases · ' + p.queueLabel;
+    document.getElementById('queue-sub').textContent = 'Beyond Health care team · sorted by priority';
+
+    const list = document.getElementById('case-list');
+    list.innerHTML = p.cases.map(c => {
+        const isRes = !!resolved[c.id];
+        const active = selectedCaseId === c.id ? 'active' : '';
+        return `<div class="case-row ${active} ${isRes ? 'resolved' : ''}" onclick="selectCase('${c.id}')">
+            <div class="text-slate-300"><i class="fa-solid fa-circle-dot"></i></div>
+            <div>
+                <div class="font-bold text-slate-900">${escapeHtml(c.patient)} <span class="text-slate-400 font-medium text-xs">· ${c.age}</span></div>
+                <div class="text-[11px] text-slate-500 mono">${escapeHtml(c.id)} · ${escapeHtml(c.day)} · ${escapeHtml(c.channel)}</div>
+            </div>
+            <div class="text-sm text-slate-700">${c.issues.map(i => `<span class="pill pill-open mr-1 mb-1">${escapeHtml(i)}</span>`).join('')}</div>
+            <div class="text-sm text-slate-600">${escapeHtml(c.signal)}</div>
+            <div><span class="pill ${c.priority==='High'?'pill-high':c.priority==='Medium'?'pill-med':'pill-low'}">${c.priority}</span></div>
+            <div><span class="pill ${isRes?'pill-done':'pill-open'}">${isRes?'Resolved':'Open'}</span></div>
+        </div>`;
+    }).join('');
+
+    if (!selectedCaseId) selectedCaseId = p.cases[0].id;
+    renderCaseDetail();
+}
+
+function selectCase(id) {
+    selectedCaseId = id;
+    renderCases();
+}
+
+function renderCaseDetail() {
+    const p = prog();
+    const c = p.cases.find(x => x.id === selectedCaseId) || p.cases[0];
+    const panel = document.getElementById('case-detail');
+    panel.classList.remove('hidden');
+    const isRes = !!resolved[c.id];
+    panel.innerHTML = `
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+            <div>
+                <div class="text-[11px] font-bold uppercase tracking-wide text-teal-700 mb-1">Case detail</div>
+                <h3 class="text-xl font-extrabold text-slate-900">${escapeHtml(c.patient)}</h3>
+                <div class="text-sm text-slate-500 mono">${escapeHtml(c.id)} · Owner: ${escapeHtml(c.owner)}</div>
+            </div>
+            <div class="flex gap-2">
+                ${isRes
+                    ? `<button class="btn btn-ghost" onclick="reopenCase('${c.id}')">Reopen</button>`
+                    : `<button class="btn btn-success" onclick="resolveCase('${c.id}')"><i class="fa-solid fa-check mr-1"></i>Resolve case</button>`}
+            </div>
+        </div>
+        <p class="text-sm text-slate-700 leading-relaxed mb-3">${escapeHtml(c.detail)}</p>
+        <div class="text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-2">Suggested actions</div>
+        <div class="flex flex-wrap gap-2 mb-3">
+            ${c.actions.map(a => `<span class="pill pill-open">${escapeHtml(a)}</span>`).join('')}
+        </div>
+        <div class="text-sm text-slate-600 bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <b>Talk track:</b> “This is the line of sight you don’t have in Weave — not just that we texted,
+            but that ${escapeHtml(c.patient.split(' ')[0])} needs a human for ${escapeHtml(c.issues.join(', ').toLowerCase())}.”
+        </div>
+    `;
+}
+
+function resolveCase(id) { resolved[id] = true; renderCases(); }
+function reopenCase(id) { delete resolved[id]; renderCases(); }
+function resetCases() { resolved = {}; selectedCaseId = prog().cases[0].id; renderCases(); }
+
+function escapeHtml(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+setMode('escalation');
+</script>
+</body>
+</html>
