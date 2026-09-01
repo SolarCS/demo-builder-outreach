@@ -524,9 +524,13 @@
             { id: '1.0', messages: [
                 "Thank you.",
                 "Our records show you may be due for your annual wellness visit or a recommended preventive screening. Would you like help scheduling with Beyond Health?"
-            ], choices: [{ text: "Yes, I've been meaning to book something", next: "2.0" }] },
+            ], choices: [{ text: "Yes, I'd like help scheduling", next: "2.0" }] },
             { id: '2.0', messages: [
-                "Wonderful. A team member will reach out to help you schedule at a time that works for you.",
+                "Great, a care team member will reach out to help you schedule your next visit.",
+                "Do you prefer to be contacted in the morning (9am-12pm), afternoon (12pm-4pm), or evening (4pm-6pm)?"
+            ], choices: [{ text: "The morning is best", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Thank you. We'll plan to reach you in the morning.",
                 "You can also schedule online through our patient portal: https://portal.beyondhealthnm.example/appointments/schedule",
                 "Keeping your wellness visit current helps us catch issues early and personalize your care plan.",
                 "Reply HELP for help. Reply STOP to unsubscribe. Thank you for choosing Beyond Health."
