@@ -544,11 +544,12 @@
         steps: [
             { id: '0.0', messages: [
                 "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.",
-                "You have an appointment on Thursday at 10:00 AM with Beyond Health in Albuquerque. Can you confirm, or do you need to cancel or reschedule?"
+                "You have a hormone pellet / weight management visit on Thursday at 10:00 AM with Beyond Health in Albuquerque. Can you confirm, or do you need to cancel or reschedule?"
             ], choices: [{ text: "Yes, I can make Thursday at 10", next: "1.0" }] },
             { id: '1.0', messages: [
                 "You're confirmed. We look forward to seeing you.",
-                "A couple prep tips: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site: https://care.beyondhealthnm.example/education/pellet-visit-prep",
+                "A few prep tips for your visit: please arrive 10 minutes early, bring a current medication list, and wear comfortable clothing that makes the insertion site easy to access.",
+                "Here is your prep guide for this type of visit: https://care.beyondhealthnm.example/education/pellet-visit-prep",
                 "Need to change your appointment? You can reschedule here: https://portal.beyondhealthnm.example/appointments/reschedule",
                 "Questions? Call (505) 899-4414. Reply HELP for help. Reply STOP to unsubscribe."
             ], choices: [] }
