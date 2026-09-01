@@ -3,9 +3,9 @@
 **Audience:** Ryan Baca, Head of Ops (decision maker)  
 **Cipher:** Peter (+ Kenny if presenting Demo Builder)  
 **Length:** ~45–50 min total · **~20–25 min product**  
-**Tool:** Outreach SMS Demo Builder (`index.html` — Beyond Health templates are bundled)  
-**Hero template:** Beyond Health — GLP-1 Program Continuity  
-**Settings:** Patient = `Maria` · Sender = `Beyond Health`
+**Tool:** Outreach SMS Demo Builder (`index.html`)  
+**Hero template:** GLP-1 Program Continuity  
+**Settings:** Patient = `Maria` · Hospital = `Beyond Health` (change Hospital for other prospects)
 
 **Do not demo:** rounding, post-discharge, ambient, Epic-only Enhanced AR.
 
@@ -13,9 +13,9 @@
 
 ## Pre-call checklist (15 min before)
 
-- [ ] Select **Beyond Health — GLP-1 Program Continuity** in Demo Builder (or import `BH-GLP1-Program-Continuity-SMS.xlsx`)  
-- [ ] Confirm Patient = Maria, Hospital = Beyond Health  
-- [ ] Optional: have Wellness + Pre-Visit templates ready for flips  
+- [ ] Select **GLP-1 Program Continuity** in Demo Builder  
+- [ ] Confirm Patient = Maria; set Hospital as needed (defaults to Beyond Health)  
+- [ ] Optional: have Wellness Care Gap + Pre-Visit Pellet/Weight Prep ready for flips  
 - [ ] Open `02-OPEN-CASES-SEED-LIST.md` (or print Maria + 2 supporting rows)  
 - [ ] Present mode ready (phone-only view)  
 - [ ] Align on Outreach-only / partial package talk (Validation ~$50k) — no full suite push  
