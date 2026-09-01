@@ -51,9 +51,6 @@ Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 [`drg-specific-outreach/`](drg-specific-outreach/) tool — full Day→Day longitudinal series,
 not single-conversation excerpts.
 
-**Care Team Queue / Open Cases** for Beyond Health GLP-1 and Pre-Visit demos:
-[`open-cases/`](open-cases/) — toggle between Escalation Workflow and Open Cases dashboard.
-
 **Important:** when adding a new single-thread use case, **add** a new dropdown entry. Do not
 remove or overwrite existing programs. Put new longitudinal DRG programs in
 `drg-specific-outreach/`, not in this dropdown.

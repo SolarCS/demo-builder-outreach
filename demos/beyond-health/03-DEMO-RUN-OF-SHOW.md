@@ -30,7 +30,7 @@
 | 0–5 | Rapport / frame | Acknowledge Press Ganey / PX background as peer curiosity, not a PX-score pitch. Confirm agenda: outreach only — no rounding. | “We’re here on automated outreach for your panel and programs — not the inpatient suite.” |
 | 5–10 | Reflect discovery | Manual Weave texts; GLP-1 coaches/nutrition/provider with **no drop-off visibility**; care-gap/wellness; education; reminders. Cash-pay retention = revenue. | “The gap isn’t messaging — it’s running the weight program with eyes on.” |
 | 10–18 | **Hero SMS** | Present Maria Week-4 thread end-to-end (risk path). Pause on side effect + missed nutrition + callback. | “She just told you three things your team would otherwise miss.” |
-| 18–23 | **Open Cases** | Open `/open-cases/` → Escalation Workflow Advance → flip to Open Cases; walk Maria; flash James + Denise. | “This is visibility into where patients drop off.” |
+| 18–23 | **Open Cases** | Walk Maria case; flash James (Rx) + Denise (silent) as drop-off types. | “This is visibility into where patients drop off.” |
 | 23–25 | Care-gap vignette | 60–90s Wellness template or verbal. Reframe ROI for cash-pay membership utilization, not Stars. | “Same engine for panel wellness — without payer jargon.” |
 | 25–27 | Pre-visit (optional) | Confirm + pellet/weight prep education vs Weave confirm-only. | “Confirm plus prep — and a queue when they cancel.” |
 | 27–35 | ROI / package | Staff hours, program retention, consolidate tools. Outreach-only scope. File-based enrollment. | “Partial platform that pays for itself on program retention + admin time.” |
@@ -45,7 +45,7 @@
 3. Restart thread → Present mode
 4. Advance path: identity → taking meds → nausea worse → education link → missed nutrition → Yes (callback) → portal reschedule link
 5. Pause on the blue education + portal URLs (push info + self-service reschedule)
-6. Exit present → **Open Care Team Queue** (`/open-cases/`) — Escalation toggle, then Open Cases
+6. Exit present → Open Cases seed list
 
 Confirm dropdown still shows TCM, Care Gaps, GLP-1, Wellness, and Pre-Visit before the call. (COPD/CHF multi-touch lives in the DRG-Specific Outreach tool.)
 
