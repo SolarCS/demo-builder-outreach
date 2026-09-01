@@ -40,8 +40,8 @@
 
 ## Demo Builder click path (hero)
 
-1. Template: **Beyond Health - GLP-1 Program Continuity**
-2. Settings → Patient `Maria`, Hospital `Beyond Health` (auto on select)
+1. Template: **GLP-1 Program Continuity**
+2. Settings → Patient `Maria`, Hospital as needed (defaults to Beyond Health)
 3. Restart thread → Present mode
 4. Advance natural-language path: identity → taking meds → nausea worse → missed nutrition → please call me → close
 5. Exit present → Open Cases seed list
