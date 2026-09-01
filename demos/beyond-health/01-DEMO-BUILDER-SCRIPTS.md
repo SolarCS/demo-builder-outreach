@@ -39,6 +39,13 @@ That path shows **education push**, **care-team callback**, and **self-service p
 3. Contact window → bot asks morning / afternoon / evening → `The morning is best`
 4. Close → morning preference confirmed + portal schedule URL
 
+## Pre-Visit Pellet/Weight Prep path
+
+1. Confirm Thursday 10:00 AM pellet / weight visit → `Yes, I can make Thursday at 10`
+2. Prep tips (arrive early, med list, comfortable clothing)
+3. Prep guide push → blue URL for this visit type
+4. Optional portal reschedule link + close
+
 ## Voice outline (Week 4)
 
 Same questions as SMS, no touch-tone menus. Patient can speak naturally; intents map to the same branches (adherence, side effect, missed visit, callback / reschedule).
