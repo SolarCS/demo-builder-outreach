@@ -547,11 +547,134 @@
         ]
     };
 
-    const BUNDLED_TEMPLATES = [TCM_TEMPLATE, CEDARS_INPATIENT_TEMPLATE];
+    /* ---- Beyond Health (Albuquerque DPC) — custom demo pack ---- */
+    const BH_GLP1_TEMPLATE = {
+        id: 'bh-glp1-continuity',
+        name: 'Beyond Health — GLP-1 Program Continuity',
+        steps: [
+            {
+                id: '0.0',
+                messages: [
+                    "Hi {patient}, this is {hospital}. We're checking in on your weight management / GLP-1 program.\n\nReply 1 to continue in English.\nReply STOP to opt out."
+                ],
+                choices: [{ text: '1 — Continue', next: '1.0' }]
+            },
+            {
+                id: '1.0',
+                messages: [
+                    "Thanks. This is a quick check-in from your Beyond Health care team — it only takes about a minute.\n\nAre we reaching {patient}?\n\nReply 1 if this is the patient.\nReply 2 if you are a caregiver.\nReply 3 if wrong number."
+                ],
+                choices: [{ text: '1 — Yes, this is Maria', next: '2.0' }]
+            },
+            {
+                id: '2.0',
+                messages: [
+                    "Great, thank you {patient}.\n\nOur records show you are enrolled in Beyond Health's weight management program and are due for your Week-4 check-in with your care team.\n\nHave you been able to take your prescribed medication as directed?\n\nReply 1 if yes — taking it as directed.\nReply 2 if you have missed doses or stopped.\nReply 3 if you have not been able to obtain your medication."
+                ],
+                choices: [{ text: '1 — Yes, I am taking it', next: '3.0' }]
+            },
+            {
+                id: '3.0',
+                messages: [
+                    "Thanks for confirming.\n\nAre you having any side effects that concern you (for example nausea, vomiting, dizziness, or stomach pain)?\n\nReply 1 if you are doing fine — no concerning side effects.\nReply 2 if you are having side effects or have questions for the care team."
+                ],
+                choices: [{ text: '2 — Yes, I have been nauseous and it is getting worse', next: '4.0' }]
+            },
+            {
+                id: '4.0',
+                messages: [
+                    "We're sorry you're dealing with that — thank you for letting us know. A member of your Beyond Health care team will follow up.\n\nIf this feels urgent, please call the clinic at (505) 899-4414 or seek emergency care.\n\nYou also have coach and nutrition visits as part of your program. Were you able to keep your most recent coach or nutrition appointment?\n\nReply 1 if yes — completed.\nReply 2 if you missed it or need to reschedule.\nReply 3 if you are not sure / need help."
+                ],
+                choices: [{ text: '2 — I missed my nutrition visit last week', next: '5.0' }]
+            },
+            {
+                id: '5.0',
+                messages: [
+                    "Got it — we want to get you back on track. Would you like someone from Beyond Health to call you back to discuss side effects and help reschedule your coach or nutrition visit?\n\nReply 1 if yes, please call me back.\nReply 2 if no, I'm all set for now."
+                ],
+                choices: [{ text: '1 — Yes, please call me back', next: '6.0' }]
+            },
+            {
+                id: '6.0',
+                messages: [
+                    "Thank you. We've flagged your responses for the care team and someone will reach out soon during clinic hours.\n\nQuick tip: small, frequent meals and staying hydrated can help with nausea — your coach can tailor this with you.\n\nReply HELP for help. Reply STOP to unsubscribe.\n\nThank you for partnering with Beyond Health on your health goals."
+                ],
+                choices: []
+            }
+        ]
+    };
 
+    const BH_WELLNESS_TEMPLATE = {
+        id: 'bh-wellness-care-gap',
+        name: 'Beyond Health — Wellness Care Gap',
+        steps: [
+            {
+                id: '0.0',
+                messages: [
+                    "Hi {patient}, this is {hospital}. We're reaching out about an important part of your membership care plan.\n\nReply 1 to continue. Reply STOP to opt out."
+                ],
+                choices: [{ text: '1 — Continue', next: '1.0' }]
+            },
+            {
+                id: '1.0',
+                messages: [
+                    "Thanks. Our records show you may be due for your annual wellness visit or a recommended preventive screening.\n\nWould you like help scheduling with Beyond Health?\n\nReply 1 if yes, please help me schedule.\nReply 2 if I already scheduled or completed this.\nReply 3 if not right now."
+                ],
+                choices: [{ text: '1 — Yes, please help me schedule', next: '2.0' }]
+            },
+            {
+                id: '2.0',
+                messages: [
+                    "Wonderful — a team member will reach out to help you schedule at a time that works for you.\n\nKeeping your wellness visit current helps us catch issues early and personalize your hormone, weight, and primary care plan.\n\nReply HELP for help. Reply STOP to unsubscribe.\n\nThank you for choosing Beyond Health."
+                ],
+                choices: []
+            }
+        ]
+    };
 
+    const BH_PREVISIT_TEMPLATE = {
+        id: 'bh-previsit-prep',
+        name: 'Beyond Health — Pre-Visit Pellet/Weight Prep',
+        steps: [
+            {
+                id: '0.0',
+                messages: [
+                    "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.\n\nReply 1 to review details. Reply STOP to opt out."
+                ],
+                choices: [{ text: '1 — Review appointment', next: '1.0' }]
+            },
+            {
+                id: '1.0',
+                messages: [
+                    "You have an appointment on Thursday at 10:00 AM with Beyond Health in Albuquerque.\n\nReply 1 to confirm.\nReply 2 to cancel.\nReply 3 to request a reschedule."
+                ],
+                choices: [{ text: '1 — Confirm my appointment', next: '2.0' }]
+            },
+            {
+                id: '2.0',
+                messages: [
+                    "You're confirmed — we look forward to seeing you.\n\nPrep tip: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site.\n\nQuestions? Call (505) 899-4414.\n\nReply HELP for help. Reply STOP to unsubscribe."
+                ],
+                choices: []
+            }
+        ]
+    };
+
+    const BUNDLED_TEMPLATES = [
+        TCM_TEMPLATE,
+        CEDARS_INPATIENT_TEMPLATE,
+        BH_GLP1_TEMPLATE,
+        BH_WELLNESS_TEMPLATE,
+        BH_PREVISIT_TEMPLATE
+    ];
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
+    const BH_DEMO_SETTINGS = { patient: "Maria", hospital: "Beyond Health" };
+    const BH_TEMPLATE_IDS = new Set([
+        BH_GLP1_TEMPLATE.id,
+        BH_WELLNESS_TEMPLATE.id,
+        BH_PREVISIT_TEMPLATE.id
+    ]);
 
     /* ---------------- Persistence ---------------- */
     const STORE_KEY = 'do_state_v1';
@@ -783,6 +906,11 @@
         activeId = id;
         if (id === CEDARS_INPATIENT_TEMPLATE.id) {
             settings.hospital = 'Cedars-Sinai';
+            fillSettings();
+            updateBranding();
+        } else if (BH_TEMPLATE_IDS.has(id)) {
+            settings.patient = BH_DEMO_SETTINGS.patient;
+            settings.hospital = BH_DEMO_SETTINGS.hospital;
             fillSettings();
             updateBranding();
         }

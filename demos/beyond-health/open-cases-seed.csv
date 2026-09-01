@@ -1,0 +1,6 @@
+patient_name,age,program_day,channel,issues,priority,status,last_response_summary,suggested_owner,demo_role
+Maria Lopez,42,Week 4,SMS,"Side Effect; Missed Visit; Callback Requested",High,Open,"Taking meds; nausea worsening; missed nutrition; wants callback",Coach,"Hero walkthrough"
+James Ortega,55,Week 6,Voice,Med Adherence - unable to obtain Rx,High,Open,"Could not pick up GLP-1; pharmacy/cost delay",Admin/Coach,"Drop-off: refill/access"
+Denise Romero,38,Week 8,Voice,Silent/Unreached,Medium,Open,"No answer x3; SMS nudge no reply",Coach,"Drop-off: disengagement"
+Anthony Chen,47,Week 2,SMS,Missed Visit - coach,Medium,Open,"Meds OK; cancelled coach too busy",Coach,"Early attrition"
+Patricia Hale,61,Week 12,SMS,Callback Requested - plateau,Low,Open,"On meds; no side effects; wants motivation/plateau talk before provider visit",Coach/Provider,"Retention + visit"

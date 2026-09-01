@@ -35,6 +35,17 @@ A ready-to-edit **TCM (Transitional Care Management) outreach** script ships as 
 sample. Use the **Export** button to download the current template in this exact format as a
 starting point for new ones.
 
+### Beyond Health demo pack
+
+Bundled templates (also as `.xlsx` in repo root / `demos/beyond-health/`):
+
+- **Beyond Health — GLP-1 Program Continuity** (hero — Week-4 risk path)
+- **Beyond Health — Wellness Care Gap**
+- **Beyond Health — Pre-Visit Pellet/Weight Prep**
+
+Selecting a Beyond Health template auto-sets Patient = `Maria` and sender = `Beyond Health`.
+Full scripts, Open Cases seeds, and run-of-show: [`demos/beyond-health/`](demos/beyond-health/).
+
 ## Presenting
 
 - **Advance** (button, the pulsing camera icon, or tapping a reply chip) steps the thread forward
