@@ -32,6 +32,13 @@ Bot asks in plain language. Maria answers with clear, natural replies:
 
 That path shows **education push**, **care-team callback**, and **self-service portal reschedule**.
 
+## Wellness Care Gap path
+
+1. Confirm identity → `Yes, this is me`
+2. Help scheduling? → `Yes, I'd like help scheduling`
+3. Contact window → bot asks morning / afternoon / evening → `The morning is best`
+4. Close → morning preference confirmed + portal schedule URL
+
 ## Voice outline (Week 4)
 
 Same questions as SMS, no touch-tone menus. Patient can speak naturally; intents map to the same branches (adherence, side effect, missed visit, callback / reschedule).
