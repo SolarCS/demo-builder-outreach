@@ -46,7 +46,7 @@
 4. Advance natural-language path: identity → taking meds → nausea worse → missed nutrition → please call me → close
 5. Exit present → Open Cases seed list
 
-Confirm dropdown still shows TCM, Care Gaps, COPD, and CHF before the call.
+Confirm dropdown still shows TCM, Care Gaps, GLP-1, Wellness, and Pre-Visit before the call. (COPD/CHF multi-touch lives in the DRG-Specific Outreach tool.)
 
 ---
 

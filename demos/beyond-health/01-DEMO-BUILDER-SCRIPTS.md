@@ -1,7 +1,7 @@
 # Beyond Health — Demo Builder Scripts
 
 **Account:** Beyond Health (Albuquerque, NM)  
-**Style:** Conversational AI outreach (same pattern as TCM / COPD / CHF)  
+**Style:** Conversational AI outreach (same pattern as TCM)  
 **Patient replies:** natural language, casual texting (no "reply 1/2", no em dashes)  
 **Tokens:** `{patient}` → Maria · `{hospital}` → Beyond Health
 
@@ -10,14 +10,13 @@
 | Dropdown name | Role |
 | --- | --- |
 | TCM Outreach (Sample) | Keep — inpatient / TCM conversational baseline |
-| Care Gaps / Cancer Screening | Restored |
-| COPD Post-Discharge (Day 2) | Restored longitudinal |
-| CHF Post-Discharge (Day 2) | Restored longitudinal |
+| Care Gaps / Cancer Screening | Clinical |
 | GLP-1 Program Continuity | **Hero** (set Hospital field per prospect) |
 | Wellness Care Gap | Supporting |
 | Pre-Visit Pellet/Weight Prep | Supporting |
 
-Cedars numeric / "reply 1" inpatient template is retired.
+Cedars numeric / "reply 1" inpatient template is retired.  
+**COPD / CHF** full multi-touch journeys live in `drg-specific-outreach/` (not Day-2 excerpts in this dropdown).
 
 ## Hero path (Maria, Week 4)
 
@@ -37,4 +36,5 @@ Same questions as SMS, no touch-tone menus. Patient can speak naturally; intents
 
 ## Rule for future use cases
 
-**Always add** a new dropdown template. **Never remove or overwrite** TCM, Care Gaps, COPD, CHF, or other existing programs unless the user explicitly asks to retire one.
+**Always add** a new dropdown template for single-thread demos. **Never remove or overwrite** existing programs unless the user explicitly asks to retire one.  
+Put new **longitudinal DRG** programs in `drg-specific-outreach/`.

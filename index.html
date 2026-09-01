@@ -478,115 +478,8 @@
         ]
     };
 
-    /* ---- COPD Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
-    const COPD_TEMPLATE = {
-        id: 'copd-post-discharge-day2',
-        name: 'COPD Post-Discharge (Day 2)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
-                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
-            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, thank you!",
-                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
-            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Perfect, thanks {patient}.",
-                "This is check-in 1 of 4 in your recovery series, with 7 short questions. Reply STOP anytime to opt out.",
-                "Let's get started! First, how are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "A little better than when I left, still getting my energy back", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, that is good to hear.",
-                "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?"
-            ], choices: [{ text: "Yes I think I understand them", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Thanks for letting us know.",
-                "Do you currently smoke e-cigarettes, cigarettes, or tobacco?"
-            ], choices: [{ text: "I used to but I've been trying to cut back since the hospital", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Thank you for sharing that. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking",
-                "Another important part of recovery is taking your medications as directed. Were you able to pick up all of your prescribed medications?"
-            ], choices: [{ text: "Yes I picked everything up from the pharmacy the day I got home", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "That's great to hear.",
-                "Do you feel like you understand all of your medications, or do you have any questions about them?"
-            ], choices: [{ text: "I did have a question about how often I need to take my blood pressure medication", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "Thank you for letting us know, we'll have someone from our care team reach out to answer that for you.",
-                "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?"
-            ], choices: [{ text: "Yes a little better day by day", next: "8.0" }] },
-            { id: '8.0', messages: [
-                "Ok, that's good to hear.",
-                "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?"
-            ], choices: [{ text: "Not yet, I wasn't really sure who I was supposed to call", next: "9.0" }] },
-            { id: '9.0', messages: [
-                "No problem, we'll have someone on our care team reach out to help you get that scheduled.",
-                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
-        ]
-    };
-
-    /* ---- CHF Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
-    const CHF_TEMPLATE = {
-        id: 'chf-post-discharge-day2',
-        name: 'CHF Post-Discharge (Day 2)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
-                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
-            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, thank you!",
-                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
-            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Perfect, thanks {patient}.",
-                "This is check-in 1 of 5 in your recovery series, with 10 short questions. Reply STOP anytime to opt out.",
-                "Let's get started! How are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "a little better than when I left, still taking it easy", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, that is good to hear.",
-                "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
-            ], choices: [{ text: "my scale said that I put on 3 pounds since the last time I weighed myself", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.",
-                "Have you experienced shortness of breath that limits your daily activities?"
-            ], choices: [{ text: "no not really, breathing has been ok", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Ok, that is great to hear.",
-                "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?"
-            ], choices: [{ text: "not yet I still need to call", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "Ok, thanks for letting us know. For scheduling assistance, please call 1-833-574-2273. We recommend scheduling your follow up appointment as soon as possible.",
-                "Have you been following the low-salt diet recommended by your doctor?"
-            ], choices: [{ text: "I've been trying to, reading labels and skipping the chips", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "That's fantastic. Please keep it up!",
-                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
-            ], choices: [{ text: "yes got them all from the pharmacy already", next: "8.0" }] },
-            { id: '8.0', messages: [
-                "That is great to hear.",
-                "Do you understand all of your medications?"
-            ], choices: [{ text: "yes I understand them", next: "9.0" }] },
-            { id: '9.0', messages: [
-                "Ok, thanks for letting us know.",
-                "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
-            ], choices: [{ text: "pretty much, I think I got it", next: "10.0" }] },
-            { id: '10.0', messages: [
-                "Thanks for letting us know.",
-                "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?"
-            ], choices: [{ text: "yes they called yesterday and set up a visit", next: "11.0" }] },
-            { id: '11.0', messages: [
-                "That is good to hear.",
-                "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
-            ], choices: [{ text: "no none of those", next: "12.0" }] },
-            { id: '12.0', messages: [
-                "Ok, that is great to hear.",
-                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
-        ]
-    };
+    /* COPD / CHF multi-touch journeys live in the DRG-Specific Outreach tool
+       (./drg-specific-outreach/). Do not re-add Day-2 excerpts here. */
 
     /* ---- Beyond Health (Albuquerque DPC) conversational AI demo pack ---- */
     const BH_GLP1_TEMPLATE = {
@@ -661,8 +554,6 @@
     const BUNDLED_TEMPLATES = [
         TCM_TEMPLATE,
         CAREGAPS_TEMPLATE,
-        COPD_TEMPLATE,
-        CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
         BH_PREVISIT_TEMPLATE
@@ -670,7 +561,10 @@
 
     const RETIRED_TEMPLATE_IDS = new Set([
         'cs-inpatient-post-discharge-v3',
-        'cedars-inpatient-post-discharge'
+        'cedars-inpatient-post-discharge',
+        // Moved to DRG-Specific Outreach tool (full multi-touch journeys)
+        'copd-post-discharge-day2',
+        'chf-post-discharge-day2'
     ]);
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
@@ -681,8 +575,6 @@
         BH_PREVISIT_TEMPLATE.id
     ]);
     const LONGITUDINAL_SETTINGS = {
-        [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
-        [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" }
     };
 

@@ -4,8 +4,7 @@ A lightweight, single-file web tool for demoing what the **CipherOutreach** SMS 
 experience looks like on a phone. Upload a script template, swap between templates per use
 case, edit the script live, and present an animated iMessage-style thread.
 
-> Live demo: enable GitHub Pages for this repo (Settings → Pages → Deploy from branch → `main` / root),
-> then open `https://<your-username>.github.io/demo-builder-outreach/`.
+> Live: https://demo-builder-outreach.tools.cipherhealth.dev/
 
 ## What it does
 
@@ -41,17 +40,20 @@ Dropdown templates (conversational AI / natural-language patient replies):
 
 - **TCM Outreach (Sample)** — inpatient / TCM post-discharge
 - **Care Gaps / Cancer Screening**
-- **COPD Post-Discharge (Day 2)** — longitudinal
-- **CHF Post-Discharge (Day 2)** — longitudinal
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
 - **Wellness Care Gap**
 - **Pre-Visit Pellet/Weight Prep**
 
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
-COPD/CHF auto-set Patient = `Patti`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
-**Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
+**DRG multi-touch journeys (COPD / CHF)** live in the separate
+[`drg-specific-outreach/`](drg-specific-outreach/) tool — full Day→Day longitudinal series,
+not single-conversation excerpts.
+
+**Important:** when adding a new single-thread use case, **add** a new dropdown entry. Do not
+remove or overwrite existing programs. Put new longitudinal DRG programs in
+`drg-specific-outreach/`, not in this dropdown.
 
 ## Presenting
 
@@ -67,6 +69,7 @@ It's a static file — just open `index.html` in a browser, or serve the folder:
 ```bash
 python3 -m http.server 8000
 # then open http://localhost:8000
+# DRG tool: http://localhost:8000/drg-specific-outreach/
 ```
 
 ## Tech
