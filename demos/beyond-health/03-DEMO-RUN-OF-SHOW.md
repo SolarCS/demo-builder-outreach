@@ -40,11 +40,13 @@
 
 ## Demo Builder click path (hero)
 
-1. Template: **Beyond Health GLP-1 Program Continuity** (or imported xlsx name)  
-2. Settings → Patient `Maria`, Hospital `Beyond Health`  
-3. Restart thread → Present mode  
-4. Advance: Continue → Identity → Taking meds → **Side effects yes** → **Missed nutrition** → **Callback yes** → Close  
+1. Template: **Beyond Health - GLP-1 Program Continuity**
+2. Settings → Patient `Maria`, Hospital `Beyond Health` (auto on select)
+3. Restart thread → Present mode
+4. Advance natural-language path: identity → taking meds → nausea worse → missed nutrition → please call me → close
 5. Exit present → Open Cases seed list
+
+Confirm dropdown still shows TCM, Care Gaps, COPD, and CHF before the call.
 
 ---
 

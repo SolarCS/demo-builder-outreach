@@ -454,219 +454,224 @@
         ]
     };
 
-    /* ---- Bundled: Cedars-Sinai Inpatient Post-Discharge (numeric / touch-tone replies) ---- */
-    const CEDARS_INPATIENT_TEMPLATE = {
-        "id": "cs-inpatient-post-discharge-v3",
-        "name": "Cedars-Sinai Inpatient Post-Discharge",
-        "steps": [
-            {
-                "id": "0.0",
-                "messages": [
-                    "Hello, this is Cedars-Sinai. We're reaching out today because we care about your health and recovery. Please read carefully as we ask you a few questions about how you're recovering at home. Thank you for participating and for choosing Cedars-Sinai.\n\nTo continue in English, reply 1. Para continuar en español, responda 2."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "1.0"
-                    }
-                ]
-            },
-            {
-                "id": "1.0",
-                "messages": [
-                    "Ok, thanks.",
-                    "If you recently left Cedars-Sinai, please reply 1. If you are the caregiver of the patient, reply 2. If you would like us to call you back later, reply 3. If we have reached the wrong number, reply 4. To opt out of this outreach, reply 5."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "2.0"
-                    }
-                ]
-            },
-            {
-                "id": "2.0",
-                "messages": [
-                    "Ok, thanks.",
-                    "This short survey will ask a few questions about how you're recovering at home. Okay, let's get started. How are you feeling now compared to when you left the hospital?\n\nReply 1 if you're feeling better, 2 if you're feeling the same, or 3 if you're feeling worse."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "3.0"
-                    }
-                ]
-            },
-            {
-                "id": "3.0",
-                "messages": [
-                    "Ok, that is fantastic!",
-                    "When you left the hospital, you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?\n\nReply 1 if you understand them, 2 if you do not understand them, or 3 if you did not receive these care instructions."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "4.0"
-                    }
-                ]
-            },
-            {
-                "id": "4.0",
-                "messages": [
-                    "Ok, that is very good to hear!",
-                    "Another important step in your recovery is taking your medications as directed. Have you been able to obtain all of your prescribed medications?\n\nReply 1 if you have, 2 if you have not been able to obtain all of your prescribed medications, or 3 if you were not prescribed any medications."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "5.0"
-                    }
-                ]
-            },
-            {
-                "id": "5.0",
-                "messages": [
-                    "That is great to hear.",
-                    "Do you understand all of your medications?\n\nReply 1 if you understand, or 2 if you have any questions."
-                ],
-                "choices": [
-                    {
-                        "text": "1",
-                        "next": "6.0"
-                    }
-                ]
-            },
-            {
-                "id": "6.0",
-                "messages": [
-                    "Ok, great!",
-                    "Please note: if you are having medical problems now or if you experience medical problems after this survey, please consult your physician, go to the nearest emergency room, or call 911.\n\nThank you for participating in this survey. Have a nice day. Goodbye."
-                ],
-                "choices": []
-            }
+    /* ---- Care Gaps / Cancer Screening (conversational AI) ---- */
+    const CAREGAPS_TEMPLATE = {
+        id: 'caregaps-cancer-screening',
+        name: 'Care Gaps / Cancer Screening',
+        steps: [
+            { id: '0.0', messages: [
+                "Hello, this is {hospital} with an important message about scheduling your routine cancer screenings. There is no cost for your appointment and we can arrange transportation if needed.",
+                "Before we continue, can you please confirm that you are the patient, {patient}."
+            ], choices: [{ text: "Yes, this is {patient}", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Thank you.",
+                "We care about you and your health. We've noticed that you are overdue for one or more cancer screenings. Routine screenings can detect cancer and save lives. Our staff would like to help you schedule your screening. Would you like us to call you to help schedule?"
+            ], choices: [{ text: "Yes, I'd like someone to call me and help schedule my screening", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Great. Thanks for letting us know.",
+                "When would be a good time for us to call you back?"
+            ], choices: [{ text: "Afternoons work best for me, anytime between 12 and 3", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Ok, great. Please expect our call in the next 3 business days.",
+                "Thank you for completing this conversation. We look forward to speaking with you soon. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+            ], choices: [] }
         ]
     };
 
-    /* ---- Beyond Health (Albuquerque DPC) — custom demo pack ---- */
+    /* ---- COPD Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
+    const COPD_TEMPLATE = {
+        id: 'copd-post-discharge-day2',
+        name: 'COPD Post-Discharge (Day 2)',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
+                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
+            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Great, thank you!",
+                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
+            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Perfect, thanks {patient}.",
+                "This is check-in 1 of 4 in your recovery series, with 7 short questions. Reply STOP anytime to opt out.",
+                "Let's get started! First, how are you feeling now compared to when you left the hospital?"
+            ], choices: [{ text: "A little better than when I left, still getting my energy back", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Ok, that is good to hear.",
+                "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?"
+            ], choices: [{ text: "Yes I think I understand them", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Thanks for letting us know.",
+                "Do you currently smoke e-cigarettes, cigarettes, or tobacco?"
+            ], choices: [{ text: "I used to but I've been trying to cut back since the hospital", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Thank you for sharing that. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking",
+                "Another important part of recovery is taking your medications as directed. Were you able to pick up all of your prescribed medications?"
+            ], choices: [{ text: "Yes I picked everything up from the pharmacy the day I got home", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "That's great to hear.",
+                "Do you feel like you understand all of your medications, or do you have any questions about them?"
+            ], choices: [{ text: "I did have a question about how often I need to take my blood pressure medication", next: "7.0" }] },
+            { id: '7.0', messages: [
+                "Thank you for letting us know, we'll have someone from our care team reach out to answer that for you.",
+                "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?"
+            ], choices: [{ text: "Yes a little better day by day", next: "8.0" }] },
+            { id: '8.0', messages: [
+                "Ok, that's good to hear.",
+                "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?"
+            ], choices: [{ text: "Not yet, I wasn't really sure who I was supposed to call", next: "9.0" }] },
+            { id: '9.0', messages: [
+                "No problem, we'll have someone on our care team reach out to help you get that scheduled.",
+                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+            ], choices: [] }
+        ]
+    };
+
+    /* ---- CHF Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
+    const CHF_TEMPLATE = {
+        id: 'chf-post-discharge-day2',
+        name: 'CHF Post-Discharge (Day 2)',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
+                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
+            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Great, thank you!",
+                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
+            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Perfect, thanks {patient}.",
+                "This is check-in 1 of 5 in your recovery series, with 10 short questions. Reply STOP anytime to opt out.",
+                "Let's get started! How are you feeling now compared to when you left the hospital?"
+            ], choices: [{ text: "a little better than when I left, still taking it easy", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Ok, that is good to hear.",
+                "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
+            ], choices: [{ text: "my scale said that I put on 3 pounds since the last time I weighed myself", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.",
+                "Have you experienced shortness of breath that limits your daily activities?"
+            ], choices: [{ text: "no not really, breathing has been ok", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Ok, that is great to hear.",
+                "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?"
+            ], choices: [{ text: "not yet I still need to call", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "Ok, thanks for letting us know. For scheduling assistance, please call 1-833-574-2273. We recommend scheduling your follow up appointment as soon as possible.",
+                "Have you been following the low-salt diet recommended by your doctor?"
+            ], choices: [{ text: "I've been trying to, reading labels and skipping the chips", next: "7.0" }] },
+            { id: '7.0', messages: [
+                "That's fantastic. Please keep it up!",
+                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
+            ], choices: [{ text: "yes got them all from the pharmacy already", next: "8.0" }] },
+            { id: '8.0', messages: [
+                "That is great to hear.",
+                "Do you understand all of your medications?"
+            ], choices: [{ text: "yes I understand them", next: "9.0" }] },
+            { id: '9.0', messages: [
+                "Ok, thanks for letting us know.",
+                "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
+            ], choices: [{ text: "pretty much, I think I got it", next: "10.0" }] },
+            { id: '10.0', messages: [
+                "Thanks for letting us know.",
+                "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?"
+            ], choices: [{ text: "yes they called yesterday and set up a visit", next: "11.0" }] },
+            { id: '11.0', messages: [
+                "That is good to hear.",
+                "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
+            ], choices: [{ text: "no none of those", next: "12.0" }] },
+            { id: '12.0', messages: [
+                "Ok, that is great to hear.",
+                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+            ], choices: [] }
+        ]
+    };
+
+    /* ---- Beyond Health (Albuquerque DPC) conversational AI demo pack ---- */
     const BH_GLP1_TEMPLATE = {
         id: 'bh-glp1-continuity',
-        name: 'Beyond Health — GLP-1 Program Continuity',
+        name: 'Beyond Health - GLP-1 Program Continuity',
         steps: [
-            {
-                id: '0.0',
-                messages: [
-                    "Hi {patient}, this is {hospital}. We're checking in on your weight management / GLP-1 program.\n\nReply 1 to continue in English.\nReply STOP to opt out."
-                ],
-                choices: [{ text: '1 — Continue', next: '1.0' }]
-            },
-            {
-                id: '1.0',
-                messages: [
-                    "Thanks. This is a quick check-in from your Beyond Health care team — it only takes about a minute.\n\nAre we reaching {patient}?\n\nReply 1 if this is the patient.\nReply 2 if you are a caregiver.\nReply 3 if wrong number."
-                ],
-                choices: [{ text: '1 — Yes, this is Maria', next: '2.0' }]
-            },
-            {
-                id: '2.0',
-                messages: [
-                    "Great, thank you {patient}.\n\nOur records show you are enrolled in Beyond Health's weight management program and are due for your Week-4 check-in with your care team.\n\nHave you been able to take your prescribed medication as directed?\n\nReply 1 if yes — taking it as directed.\nReply 2 if you have missed doses or stopped.\nReply 3 if you have not been able to obtain your medication."
-                ],
-                choices: [{ text: '1 — Yes, I am taking it', next: '3.0' }]
-            },
-            {
-                id: '3.0',
-                messages: [
-                    "Thanks for confirming.\n\nAre you having any side effects that concern you (for example nausea, vomiting, dizziness, or stomach pain)?\n\nReply 1 if you are doing fine — no concerning side effects.\nReply 2 if you are having side effects or have questions for the care team."
-                ],
-                choices: [{ text: '2 — Yes, I have been nauseous and it is getting worse', next: '4.0' }]
-            },
-            {
-                id: '4.0',
-                messages: [
-                    "We're sorry you're dealing with that — thank you for letting us know. A member of your Beyond Health care team will follow up.\n\nIf this feels urgent, please call the clinic at (505) 899-4414 or seek emergency care.\n\nYou also have coach and nutrition visits as part of your program. Were you able to keep your most recent coach or nutrition appointment?\n\nReply 1 if yes — completed.\nReply 2 if you missed it or need to reschedule.\nReply 3 if you are not sure / need help."
-                ],
-                choices: [{ text: '2 — I missed my nutrition visit last week', next: '5.0' }]
-            },
-            {
-                id: '5.0',
-                messages: [
-                    "Got it — we want to get you back on track. Would you like someone from Beyond Health to call you back to discuss side effects and help reschedule your coach or nutrition visit?\n\nReply 1 if yes, please call me back.\nReply 2 if no, I'm all set for now."
-                ],
-                choices: [{ text: '1 — Yes, please call me back', next: '6.0' }]
-            },
-            {
-                id: '6.0',
-                messages: [
-                    "Thank you. We've flagged your responses for the care team and someone will reach out soon during clinic hours.\n\nQuick tip: small, frequent meals and staying hydrated can help with nausea — your coach can tailor this with you.\n\nReply HELP for help. Reply STOP to unsubscribe.\n\nThank you for partnering with Beyond Health on your health goals."
-                ],
-                choices: []
-            }
+            { id: '0.0', messages: [
+                "Hi {patient}, this is {hospital}. We're checking in on your weight management program and have a few quick questions about how things are going.",
+                "Before we continue, are we texting with {patient}, a caregiver, or did we reach the wrong number?"
+            ], choices: [{ text: "hey yes this is Maria", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Great, thanks {patient}.",
+                "Our records show you're enrolled in Beyond Health's weight management program and you're due for your Week 4 check-in. Have you been able to take your prescribed medication as directed?"
+            ], choices: [{ text: "yeah I've been taking it like they told me", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Thanks for letting us know.",
+                "Are you having any side effects that concern you, like nausea, vomiting, dizziness, or stomach pain?"
+            ], choices: [{ text: "honestly the nausea has been pretty bad and it's getting worse", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "I'm sorry you're dealing with that, thank you for telling us. Someone from your Beyond Health care team will follow up. If this feels urgent, please call the clinic at (505) 899-4414 or seek emergency care.",
+                "You also have coach and nutrition visits as part of your program. Were you able to keep your most recent coach or nutrition appointment?"
+            ], choices: [{ text: "no I missed the nutrition one last week, things got crazy", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Got it, we want to help get you back on track. Would you like someone from Beyond Health to call you back to talk through the side effects and help reschedule your coach or nutrition visit?"
+            ], choices: [{ text: "yes please call me when you can", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Thank you. We've flagged this for the care team and someone will reach out during clinic hours.",
+                "Quick tip while you wait: smaller meals more often and staying hydrated can help with nausea. Your coach can tailor that with you.",
+                "Reply HELP for help. Reply STOP to unsubscribe. Thanks for partnering with Beyond Health on your health goals."
+            ], choices: [] }
         ]
     };
 
     const BH_WELLNESS_TEMPLATE = {
         id: 'bh-wellness-care-gap',
-        name: 'Beyond Health — Wellness Care Gap',
+        name: 'Beyond Health - Wellness Care Gap',
         steps: [
-            {
-                id: '0.0',
-                messages: [
-                    "Hi {patient}, this is {hospital}. We're reaching out about an important part of your membership care plan.\n\nReply 1 to continue. Reply STOP to opt out."
-                ],
-                choices: [{ text: '1 — Continue', next: '1.0' }]
-            },
-            {
-                id: '1.0',
-                messages: [
-                    "Thanks. Our records show you may be due for your annual wellness visit or a recommended preventive screening.\n\nWould you like help scheduling with Beyond Health?\n\nReply 1 if yes, please help me schedule.\nReply 2 if I already scheduled or completed this.\nReply 3 if not right now."
-                ],
-                choices: [{ text: '1 — Yes, please help me schedule', next: '2.0' }]
-            },
-            {
-                id: '2.0',
-                messages: [
-                    "Wonderful — a team member will reach out to help you schedule at a time that works for you.\n\nKeeping your wellness visit current helps us catch issues early and personalize your hormone, weight, and primary care plan.\n\nReply HELP for help. Reply STOP to unsubscribe.\n\nThank you for choosing Beyond Health."
-                ],
-                choices: []
-            }
+            { id: '0.0', messages: [
+                "Hi {patient}, this is {hospital}. We're reaching out about an important part of your membership care plan.",
+                "Before we continue, can you confirm that you are {patient}?"
+            ], choices: [{ text: "yep this is me", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Thank you.",
+                "Our records show you may be due for your annual wellness visit or a recommended preventive screening. Would you like help scheduling with Beyond Health?"
+            ], choices: [{ text: "yeah that would be great, I've been meaning to book something", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Wonderful. A team member will reach out to help you schedule at a time that works for you.",
+                "Keeping your wellness visit current helps us catch issues early and personalize your care plan.",
+                "Reply HELP for help. Reply STOP to unsubscribe. Thank you for choosing Beyond Health."
+            ], choices: [] }
         ]
     };
 
     const BH_PREVISIT_TEMPLATE = {
         id: 'bh-previsit-prep',
-        name: 'Beyond Health — Pre-Visit Pellet/Weight Prep',
+        name: 'Beyond Health - Pre-Visit Pellet/Weight Prep',
         steps: [
-            {
-                id: '0.0',
-                messages: [
-                    "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.\n\nReply 1 to review details. Reply STOP to opt out."
-                ],
-                choices: [{ text: '1 — Review appointment', next: '1.0' }]
-            },
-            {
-                id: '1.0',
-                messages: [
-                    "You have an appointment on Thursday at 10:00 AM with Beyond Health in Albuquerque.\n\nReply 1 to confirm.\nReply 2 to cancel.\nReply 3 to request a reschedule."
-                ],
-                choices: [{ text: '1 — Confirm my appointment', next: '2.0' }]
-            },
-            {
-                id: '2.0',
-                messages: [
-                    "You're confirmed — we look forward to seeing you.\n\nPrep tip: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site.\n\nQuestions? Call (505) 899-4414.\n\nReply HELP for help. Reply STOP to unsubscribe."
-                ],
-                choices: []
-            }
+            { id: '0.0', messages: [
+                "Hi {patient}, this is a reminder from {hospital} about your upcoming appointment.",
+                "You have an appointment on Thursday at 10:00 AM with Beyond Health in Albuquerque. Can you confirm, or do you need to cancel or reschedule?"
+            ], choices: [{ text: "yep I can make Thursday at 10", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "You're confirmed. We look forward to seeing you.",
+                "A couple prep tips: please arrive 10 minutes early, bring a current medication list, and review any pre-visit instructions your care team shared. For hormone pellet visits, follow your prep guide for the insertion site.",
+                "Questions? Call (505) 899-4414. Reply HELP for help. Reply STOP to unsubscribe."
+            ], choices: [] }
         ]
     };
 
+    // Bundled library: add new demos alongside existing clinical programs; never wipe them.
+    // Cedars numeric inpatient template intentionally retired (conversational TCM covers inpatient).
     const BUNDLED_TEMPLATES = [
         TCM_TEMPLATE,
-        CEDARS_INPATIENT_TEMPLATE,
+        CAREGAPS_TEMPLATE,
+        COPD_TEMPLATE,
+        CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
         BH_PREVISIT_TEMPLATE
     ];
+
+    const RETIRED_TEMPLATE_IDS = new Set([
+        'cs-inpatient-post-discharge-v3',
+        'cedars-inpatient-post-discharge'
+    ]);
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
     const BH_DEMO_SETTINGS = { patient: "Maria", hospital: "Beyond Health" };
@@ -675,9 +680,15 @@
         BH_WELLNESS_TEMPLATE.id,
         BH_PREVISIT_TEMPLATE.id
     ]);
+    const LONGITUDINAL_SETTINGS = {
+        [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
+        [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
+        [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" }
+    };
+
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v1';
+    const STORE_KEY = 'do_state_v2';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }
@@ -685,6 +696,7 @@
 
     let templates, activeId, settings;
     function ensureBundledTemplates() {
+        templates = templates.filter(t => !RETIRED_TEMPLATE_IDS.has(t.id));
         BUNDLED_TEMPLATES.forEach(bundled => {
             if (!templates.find(t => t.id === bundled.id)) {
                 templates.push(JSON.parse(JSON.stringify(bundled)));
@@ -904,13 +916,13 @@
     }
     function switchTemplate(id) {
         activeId = id;
-        if (id === CEDARS_INPATIENT_TEMPLATE.id) {
-            settings.hospital = 'Cedars-Sinai';
-            fillSettings();
-            updateBranding();
-        } else if (BH_TEMPLATE_IDS.has(id)) {
+        if (BH_TEMPLATE_IDS.has(id)) {
             settings.patient = BH_DEMO_SETTINGS.patient;
             settings.hospital = BH_DEMO_SETTINGS.hospital;
+            fillSettings();
+            updateBranding();
+        } else if (LONGITUDINAL_SETTINGS[id]) {
+            Object.assign(settings, LONGITUDINAL_SETTINGS[id]);
             fillSettings();
             updateBranding();
         }
@@ -969,7 +981,7 @@
                             <button onclick="delChoice(${sIdx},${cIdx})" class="text-slate-300 hover:text-red-500 text-sm px-1">&times;</button>
                         </div>
                     </div>`).join('')
-                : `<p class="text-[11px] text-slate-400 italic px-1 py-1">No reply — this is a closing/terminal step.</p>`}`;
+                : `<p class="text-[11px] text-slate-400 italic px-1 py-1">No reply - this is a closing/terminal step.</p>`}`;
             list.appendChild(card);
         });
     }

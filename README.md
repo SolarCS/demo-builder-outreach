@@ -35,16 +35,23 @@ A ready-to-edit **TCM (Transitional Care Management) outreach** script ships as 
 sample. Use the **Export** button to download the current template in this exact format as a
 starting point for new ones.
 
-### Beyond Health demo pack
+### Bundled outreach programs
 
-Bundled templates (also as `.xlsx` in repo root / `demos/beyond-health/`):
+Dropdown templates (conversational AI / natural-language patient replies):
 
-- **Beyond Health — GLP-1 Program Continuity** (hero — Week-4 risk path)
-- **Beyond Health — Wellness Care Gap**
-- **Beyond Health — Pre-Visit Pellet/Weight Prep**
+- **TCM Outreach (Sample)** — inpatient / TCM post-discharge
+- **Care Gaps / Cancer Screening**
+- **COPD Post-Discharge (Day 2)** — longitudinal
+- **CHF Post-Discharge (Day 2)** — longitudinal
+- **Beyond Health - GLP-1 Program Continuity** (hero demo)
+- **Beyond Health - Wellness Care Gap**
+- **Beyond Health - Pre-Visit Pellet/Weight Prep**
 
-Selecting a Beyond Health template auto-sets Patient = `Maria` and sender = `Beyond Health`.
-Full scripts, Open Cases seeds, and run-of-show: [`demos/beyond-health/`](demos/beyond-health/).
+Selecting a Beyond Health template auto-sets Patient = `Maria` and sender = `Beyond Health`.  
+COPD/CHF auto-set Patient = `Patti`.  
+Full Beyond Health pack: [`demos/beyond-health/`](demos/beyond-health/).
+
+**Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
 
 ## Presenting
 
