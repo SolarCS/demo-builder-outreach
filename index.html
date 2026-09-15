@@ -656,6 +656,50 @@
         ]
     };
 
+    /* ---- USC Verdugo Hills Hospital Post-Discharge (numeric / touch-tone SMS) ----
+       Demo path (English): Patient · Feeling worse (callback) · Understands discharge
+       instructions · Has meds · Has med questions (callback) · 5-star experience.
+       Alerts stay in the SMS copy only — no escalation banners in the phone UI. */
+    const USC_VHH_PD_TEMPLATE = {
+        id: 'usc-vhh-pd-outreach',
+        name: 'USC VHH Post-Discharge',
+        steps: [
+            { id: '0.0', messages: [
+                "Hello, this is USC Verdugo Hills Hospital reaching out about your recent visit. Throughout this message we will guide you through a few questions about how you're recovering at home. To continue in English, reply 1, հայերենով շարունակելու համար պատասխանեք 2։"
+            ], choices: [{ text: "1", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Ok, thanks.",
+                "If you recently left Verdugo Hills Hospital, please reply 1. If you are the caregiver of the patient, reply 2. If we have reached the wrong number, reply 3. Or if you would like us to call you back later, reply 4."
+            ], choices: [{ text: "1", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "This short survey will have 4 questions. At any time you can press 0 to repeat the current question or 9 to go back to the previous question and change your answer.",
+                "Let's get started!",
+                "How are you feeling now compared to when you left the hospital? If you're feeling better reply 1, if you're feeling the same reply 2, or if you're feeling worse or having new symptoms reply 3."
+            ], choices: [{ text: "3", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "We're sorry to hear that you're feeling worse. Someone on our care team will call you back within 2 business days. If you feel it cannot wait, please call your provider's office or 911.",
+                "Do you have any questions about your discharge instructions? Reply 1 for No. Reply 2 for Yes."
+            ], choices: [{ text: "1", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Ok, great!",
+                "Have you been able to obtain all of your discharge medications? Please reply 1 if you were not prescribed any new medications, reply 2 if you have obtained your discharge medications, or reply 3 if you have not obtained your discharge medications."
+            ], choices: [{ text: "2", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "That's great to hear.",
+                "Do you understand all of your discharge medications? Please reply 1 if you understand, reply 2 if you have any questions."
+            ], choices: [{ text: "2", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "Someone on our care team will call you back within 2 business days.",
+                "We aim to provide five star patient and family experience. Please indicate how many stars you would give USC Verdugo Hills Hospital on a scale of 1 to 5, where 5 is the best possible service."
+            ], choices: [{ text: "5", next: "7.0" }] },
+            { id: '7.0', messages: [
+                "We're glad to hear that! We'd love for you to share your experience. Would you please take a moment to leave us a review on Yelp or Google? ( https://g.page/r/CWvr40LU9aPwEBM/review ) You may also be receiving a survey in the mail where you can provide more detailed feedback.",
+                "If you answered a question requiring follow up from our team, please expect a call back within 2 business days. If you require information about your medical records visit https://www.keckmedicine.org/quality-transparency/records/ or call (626) 293-2400. Please note, if you have an urgent medical problem or concern, contact your doctor's office, go to the nearest emergency department, or call 911.",
+                "Thank you for participating in this survey. Have a nice day, goodbye!"
+            ], choices: [] }
+        ]
+    };
+
     // Bundled library: add new demos alongside existing clinical programs; never wipe them.
     // Cedars numeric inpatient template intentionally retired (conversational TCM covers inpatient).
     const BUNDLED_TEMPLATES = [
@@ -665,7 +709,8 @@
         CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
-        BH_PREVISIT_TEMPLATE
+        BH_PREVISIT_TEMPLATE,
+        USC_VHH_PD_TEMPLATE
     ];
 
     const RETIRED_TEMPLATE_IDS = new Set([
@@ -683,12 +728,13 @@
     const LONGITUDINAL_SETTINGS = {
         [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
-        [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" }
+        [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" },
+        [USC_VHH_PD_TEMPLATE.id]: { patient: "Margaret", hospital: "USC Verdugo Hills Hospital" }
     };
 
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v2';
+    const STORE_KEY = 'do_state_v3';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }

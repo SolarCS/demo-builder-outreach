@@ -37,18 +37,20 @@ starting point for new ones.
 
 ### Bundled outreach programs
 
-Dropdown templates (conversational AI / natural-language patient replies):
+Dropdown templates:
 
-- **TCM Outreach (Sample)** — inpatient / TCM post-discharge
-- **Care Gaps / Cancer Screening**
-- **COPD Post-Discharge (Day 2)** — longitudinal
-- **CHF Post-Discharge (Day 2)** — longitudinal
+- **TCM Outreach (Sample)** — inpatient / TCM post-discharge (conversational AI)
+- **Care Gaps / Cancer Screening** (conversational AI)
+- **COPD Post-Discharge (Day 2)** — longitudinal (conversational AI)
+- **CHF Post-Discharge (Day 2)** — longitudinal (conversational AI)
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
 - **Wellness Care Gap**
 - **Pre-Visit Pellet/Weight Prep**
+- **USC VHH Post-Discharge** — Verdugo Hills numeric / touch-tone SMS (reply 1/2/3)
 
-Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
+Those three Beyond Health templates auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti`.  
+USC VHH auto-sets Hospital = `USC Verdugo Hills Hospital`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
