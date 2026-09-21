@@ -88,6 +88,29 @@
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
+        /* ---- Longitudinal day pills (COPD / CHF) ---- */
+        .ed-pills { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+        .ed-pill {
+            font-size: 11px; font-weight: 700; color: #64748b; background: #f1f5f9;
+            padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.15s;
+        }
+        .ed-pill:hover { background: #e2e8f0; }
+        .ed-pill.active { background: var(--brand); color: #fff; }
+        #present-switcher {
+            position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+            display: none; gap: 6px; flex-wrap: wrap; justify-content: center;
+            max-width: 90%; z-index: 40; background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px); padding: 6px 8px; border-radius: 999px;
+            border: 1px solid #e2e8f0; box-shadow: 0 8px 20px rgba(15,23,42,0.08);
+        }
+        body.sidebar-hidden #present-switcher.has-pills { display: flex; }
+        .ps-pill {
+            font-size: 12px; font-weight: 700; color: #64748b;
+            padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: all 0.15s;
+        }
+        .ps-pill:hover { background: #f1f5f9; }
+        .ps-pill.active { background: var(--brand); color: #fff; }
+
         /* ---- Editor cards ---- */
         .step-card {
             background: white;
@@ -305,6 +328,8 @@
         <div class="scroll-area">
             <!-- EDITOR TAB -->
             <div class="tab-pane active" id="pane-editor">
+                <div id="touch-pills" class="ed-pills"></div>
+                <div id="journey-touch-meta" class="text-[11px] text-slate-500 font-medium mb-3 hidden"></div>
                 <div id="editor-list"></div>
                 <button onclick="addStep()" class="w-full border-2 border-dashed border-slate-200 text-slate-400 hover:text-slate-600 hover:border-slate-300 rounded-xl py-2.5 text-xs font-bold mb-3">
                     <i class="fa-solid fa-plus"></i> Add Step
@@ -367,6 +392,7 @@
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background:var(--brand)"><i class="fa-solid fa-sliders text-sm"></i></div>
             <span class="text-xs font-bold text-slate-700">Show Panel</span>
         </button>
+        <div id="present-switcher" aria-label="Check-in day switcher"></div>
 
         <div class="viewport-container">
             <div class="iphone-frame" id="iphone-frame">
@@ -481,7 +507,7 @@
     /* ---- Post Fall Episode / National Heritage for the Blind (SNF, conversational AI) ---- */
     const POST_FALL_NHB_TEMPLATE = {
         id: 'post-fall-nhb',
-        name: 'Post Fall Episode (NHB)',
+        name: 'Post Fall Episode',
         steps: [
             { id: '0.0', messages: [
                 "Hello, this is {hospital}. We are checking in after your recent fall and have a few short questions. Reply STOP anytime to opt out.",
@@ -513,115 +539,363 @@
         ]
     };
 
-    /* ---- COPD Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
+    /* ---- COPD Post-Discharge (conversational AI, full longitudinal) ---- */
     const COPD_TEMPLATE = {
-        id: 'copd-post-discharge-day2',
-        name: 'COPD Post-Discharge (Day 2)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
-                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
-            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, thank you!",
-                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
-            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Perfect, thanks {patient}.",
-                "This is check-in 1 of 4 in your recovery series, with 7 short questions. Reply STOP anytime to opt out.",
-                "Let's get started! First, how are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "A little better than when I left, still getting my energy back", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, that is good to hear.",
-                "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?"
-            ], choices: [{ text: "Yes I think I understand them", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Thanks for letting us know.",
-                "Do you currently smoke e-cigarettes, cigarettes, or tobacco?"
-            ], choices: [{ text: "I used to but I've been trying to cut back since the hospital", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Thank you for sharing that. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking",
-                "Another important part of recovery is taking your medications as directed. Were you able to pick up all of your prescribed medications?"
-            ], choices: [{ text: "Yes I picked everything up from the pharmacy the day I got home", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "That's great to hear.",
-                "Do you feel like you understand all of your medications, or do you have any questions about them?"
-            ], choices: [{ text: "I did have a question about how often I need to take my blood pressure medication", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "Thank you for letting us know, we'll have someone from our care team reach out to answer that for you.",
-                "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?"
-            ], choices: [{ text: "Yes a little better day by day", next: "8.0" }] },
-            { id: '8.0', messages: [
-                "Ok, that's good to hear.",
-                "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?"
-            ], choices: [{ text: "Not yet, I wasn't really sure who I was supposed to call", next: "9.0" }] },
-            { id: '9.0', messages: [
-                "No problem, we'll have someone on our care team reach out to help you get that scheduled.",
-                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
+        id: "copd-post-discharge",
+        name: "COPD Post-Discharge",
+        meta: "4 touches · 23 days",
+        journey: [
+            {
+                day: "Day 2", offset: 2, title: "Initial Recovery Check-In", questions: 7,
+                summary: "First 48 hours home. Mostly on track, with a couple follow-ups.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
+                        "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL.",
+                    ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "Great, thank you!",
+                        "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?",
+                    ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Perfect, thanks {patient}.",
+                        "This is check-in 1 of 4 in your recovery series, with 7 short questions. Reply STOP anytime to opt out.",
+                        "Let's get started! First, how are you feeling now compared to when you left the hospital?",
+                    ], choices: [{ text: "A little better than when I left, still getting my energy back", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, that is good to hear.",
+                        "When you left the hospital you were given care instructions to help you stay healthy at home. Do you feel like you understand all of your care instructions?",
+                    ], choices: [{ text: "Yes I think I understand them", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "Thanks for letting us know.",
+                        "Do you currently smoke e-cigarettes, cigarettes, or tobacco?",
+                    ], choices: [{ text: "I used to but I've been trying to cut back since the hospital", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Thank you for sharing that. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking",
+                        "Another important part of recovery is taking your medications as directed. Were you able to pick up all of your prescribed medications?",
+                    ], choices: [{ text: "Yes I picked everything up from the pharmacy the day I got home", next: "6.0" }] },
+                    { id: "6.0", messages: [
+                        "That's great to hear.",
+                        "Do you feel like you understand all of your medications, or do you have any questions about them?",
+                    ], choices: [{ text: "I did have a question about how often I need to take my blood pressure medication", next: "7.0" }] },
+                    { id: "7.0", messages: [
+                        "Thank you for letting us know, we'll have someone from our care team reach out to answer that for you.",
+                        "Some shortness of breath while recovering can be normal, but it shouldn't be getting worse. Has your shortness of breath improved since you left the hospital?",
+                    ], choices: [{ text: "Yes a little better day by day", next: "8.0" }] },
+                    { id: "8.0", messages: [
+                        "Ok, that's good to hear.",
+                        "It's important to schedule a follow-up appointment after leaving the hospital. Have you been able to schedule your follow-up with your doctor or pulmonologist?",
+                    ], choices: [{ text: "Not yet, I wasn't really sure who I was supposed to call", next: "9.0" }] },
+                    { id: "9.0", messages: [
+                        "No problem, we'll have someone on our care team reach out to help you get that scheduled.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 9", offset: 9, title: "Early Progress Check-In", questions: 5,
+                summary: "One week later. Starting to turn the corner.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 2 of 4, with 5 short questions. Reply STOP anytime to opt out.",
+                        "Let's pick up where we left off. How are you feeling now compared to when you left the hospital?",
+                    ], choices: [{ text: "A good bit better than last week, I've got more energy now", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "Ok, that's good to hear!",
+                        "Has your shortness of breath improved over the last 7 days?",
+                    ], choices: [{ text: "Definitely easier to breathe than it was", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, great.",
+                        "Have you been able to take all of your medications as directed?",
+                    ], choices: [{ text: "Yes I've kept up with all of them and I'm using the inhaler the way they showed me", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great.",
+                        "Have you been able to complete your follow-up visit with your doctor yet?",
+                    ], choices: [{ text: "Not quite, but I do have it on the calendar for this Friday", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "Ok, thanks for letting us know.",
+                        "Got it, can you tell us a little more? Is that because the appointment simply hasn't happened yet, or did you miss it?",
+                    ], choices: [{ text: "It just hasn't happened yet, it's coming up in a few days", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Ok, thanks for letting us know.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 16", offset: 16, title: "Continued Recovery Check-In", questions: 3,
+                summary: "Two weeks in. Steady improvement.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 3 of 4, with 3 short questions. Reply STOP anytime to opt out.",
+                        "How are you feeling now compared to when you left the hospital?",
+                    ], choices: [{ text: "Really good actually, almost back to my normal self", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "Ok, that is good to hear!",
+                        "Has your shortness of breath improved over the last 7 days?",
+                    ], choices: [{ text: "Yes, hardly any trouble breathing now unless I really overdo it", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that's good to hear.",
+                        "Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "Yes every day without missing a dose", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great.",
+                        "It's very important to keep avoiding cigarette smoke while you recover. For information and resources on how to quit, visit https://care.cipheroutreach.com/copd/quit-smoking",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 23", offset: 23, title: "Final Recovery Check-In", questions: 3,
+                summary: "Program close-out. Recovery on track.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 4 of 4, with 3 short questions. Reply STOP anytime to opt out.",
+                        "This is our last check-in of the series. How are you feeling now compared to when you left the hospital?",
+                    ], choices: [{ text: "Back to normal, I feel great. Thanks so much for checking in on me all this time", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "Ok, that is wonderful to hear!",
+                        "Has your shortness of breath improved over the last 7 days?",
+                    ], choices: [{ text: "All good now, my breathing is back to normal", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that's good to hear.",
+                        "Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "Yes, still sticking with all of them", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "Thank you for completing all four check-ins with us. We're so glad to see how far you've come.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
         ]
     };
+    COPD_TEMPLATE.steps = COPD_TEMPLATE.journey[0].steps;
 
-    /* ---- CHF Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
+    /* ---- CHF Post-Discharge (conversational AI, full longitudinal) ---- */
     const CHF_TEMPLATE = {
-        id: 'chf-post-discharge-day2',
-        name: 'CHF Post-Discharge (Day 2)',
-        steps: [
-            { id: '0.0', messages: [
-                "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
-                "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL."
-            ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
-            { id: '1.0', messages: [
-                "Great, thank you!",
-                "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?"
-            ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
-            { id: '2.0', messages: [
-                "Perfect, thanks {patient}.",
-                "This is check-in 1 of 5 in your recovery series, with 10 short questions. Reply STOP anytime to opt out.",
-                "Let's get started! How are you feeling now compared to when you left the hospital?"
-            ], choices: [{ text: "a little better than when I left, still taking it easy", next: "3.0" }] },
-            { id: '3.0', messages: [
-                "Ok, that is good to hear.",
-                "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?"
-            ], choices: [{ text: "my scale said that I put on 3 pounds since the last time I weighed myself", next: "4.0" }] },
-            { id: '4.0', messages: [
-                "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.",
-                "Have you experienced shortness of breath that limits your daily activities?"
-            ], choices: [{ text: "no not really, breathing has been ok", next: "5.0" }] },
-            { id: '5.0', messages: [
-                "Ok, that is great to hear.",
-                "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?"
-            ], choices: [{ text: "not yet I still need to call", next: "6.0" }] },
-            { id: '6.0', messages: [
-                "Ok, thanks for letting us know. For scheduling assistance, please call 1-833-574-2273. We recommend scheduling your follow up appointment as soon as possible.",
-                "Have you been following the low-salt diet recommended by your doctor?"
-            ], choices: [{ text: "I've been trying to, reading labels and skipping the chips", next: "7.0" }] },
-            { id: '7.0', messages: [
-                "That's fantastic. Please keep it up!",
-                "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
-            ], choices: [{ text: "yes got them all from the pharmacy already", next: "8.0" }] },
-            { id: '8.0', messages: [
-                "That is great to hear.",
-                "Do you understand all of your medications?"
-            ], choices: [{ text: "yes I understand them", next: "9.0" }] },
-            { id: '9.0', messages: [
-                "Ok, thanks for letting us know.",
-                "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
-            ], choices: [{ text: "pretty much, I think I got it", next: "10.0" }] },
-            { id: '10.0', messages: [
-                "Thanks for letting us know.",
-                "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?"
-            ], choices: [{ text: "yes they called yesterday and set up a visit", next: "11.0" }] },
-            { id: '11.0', messages: [
-                "That is good to hear.",
-                "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?"
-            ], choices: [{ text: "no none of those", next: "12.0" }] },
-            { id: '12.0', messages: [
-                "Ok, that is great to hear.",
-                "Thank you for completing this check-in. We'll reach out again soon as part of your recovery series. If you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
-            ], choices: [] }
+        id: "chf-post-discharge",
+        name: "CHF Post-Discharge",
+        meta: "5 touches · 30 days",
+        journey: [
+            {
+                day: "Day 2", offset: 2, title: "Initial CHF Recovery Check-In", questions: 10,
+                summary: "First 48 hours home. Mostly on track, with weight and follow-up needing attention.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital}. We're reaching out following your recent hospital visit to check in on how you are recovering at home. We'd like to ask you just a few quick questions about how you're doing since you left the hospital. Thank you for choosing {hospital}.",
+                        "To continue in English, just reply here. Para continuar en espanol, responda ESPANOL.",
+                    ], choices: [{ text: "English is fine thanks", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "Great, thank you!",
+                        "Before we start, can you confirm who we're texting with? Is this {patient}, a caregiver, or did we reach the wrong number?",
+                    ], choices: [{ text: "Yes this is {patient}", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Perfect, thanks {patient}.",
+                        "This is check-in 1 of 5 in your recovery series, with 10 short questions. Reply STOP anytime to opt out.",
+                        "Let's get started! How are you feeling now compared to when you left the hospital?",
+                    ], choices: [{ text: "a little better than when I left, still taking it easy", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, that is good to hear.",
+                        "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?",
+                    ], choices: [{ text: "my scale said that I put on 3 pounds since the last time I weighed myself", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "Okay, thank you for letting us know. We will want to discuss this with you and will have someone on our care team call you back shortly.",
+                        "Have you experienced shortness of breath that limits your daily activities?",
+                    ], choices: [{ text: "no not really, breathing has been ok", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Ok, that is great to hear.",
+                        "It is important to schedule a follow up appointment after leaving the hospital. Do you have a follow up appointment scheduled with your doctor?",
+                    ], choices: [{ text: "not yet I still need to call", next: "6.0" }] },
+                    { id: "6.0", messages: [
+                        "Ok, thanks for letting us know. For scheduling assistance, please call 1-833-574-2273. We recommend scheduling your follow up appointment as soon as possible.",
+                        "Have you been following the low-salt diet recommended by your doctor?",
+                    ], choices: [{ text: "I've been trying to, reading labels and skipping the chips", next: "7.0" }] },
+                    { id: "7.0", messages: [
+                        "That's fantastic. Please keep it up!",
+                        "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?",
+                    ], choices: [{ text: "yes got them all from the pharmacy already", next: "8.0" }] },
+                    { id: "8.0", messages: [
+                        "That is great to hear.",
+                        "Do you understand all of your medications?",
+                    ], choices: [{ text: "yes I understand them", next: "9.0" }] },
+                    { id: "9.0", messages: [
+                        "Ok, thanks for letting us know.",
+                        "When leaving the hospital you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?",
+                    ], choices: [{ text: "pretty much, I think I got it", next: "10.0" }] },
+                    { id: "10.0", messages: [
+                        "Thanks for letting us know.",
+                        "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?",
+                    ], choices: [{ text: "yes they called yesterday and set up a visit", next: "11.0" }] },
+                    { id: "11.0", messages: [
+                        "That is good to hear.",
+                        "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?",
+                    ], choices: [{ text: "no none of those", next: "12.0" }] },
+                    { id: "12.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 7", offset: 7, title: "Early Progress Check-In", questions: 7,
+                summary: "One week home. Weight trend, meds, follow-up, and diet.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 2 of 5, with 7 short questions. Reply STOP anytime to opt out.",
+                        "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?",
+                    ], choices: [{ text: "no it's been pretty steady this week", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible.",
+                        "Have you experienced shortness of breath that limits your daily activities?",
+                    ], choices: [{ text: "not really, breathing's been better than last week", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "yes every morning and night like they said", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great",
+                        "Have you been following the low-salt diet recommended by your doctor?",
+                    ], choices: [{ text: "yes sticking with it", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "That's fantastic. Please keep it up!",
+                        "Prior to discharge, Home Health may have been ordered for you to manage your care at home. Have you received a call from home health yet?",
+                    ], choices: [{ text: "yes nurse came by twice already", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "That is good to hear.",
+                        "Have you completed a follow-up visit with your doctor?",
+                    ], choices: [{ text: "not yet but it's scheduled for Thursday", next: "6.0" }] },
+                    { id: "6.0", messages: [
+                        "Ok, thanks for letting us know.",
+                        "What is the reason you did not attend your follow-up visit? Is it scheduled but hasn't happened yet, or is it not scheduled / did you miss it?",
+                    ], choices: [{ text: "it's on the calendar just hasn't happened yet", next: "7.0" }] },
+                    { id: "7.0", messages: [
+                        "Ok, thanks for letting us know.",
+                        "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?",
+                    ], choices: [{ text: "swelling's gone down and no chest pain", next: "8.0" }] },
+                    { id: "8.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 14", offset: 14, title: "Continued Recovery Check-In", questions: 5,
+                summary: "Two weeks in. Steady improvement on heart-failure self-care.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 3 of 5, with 5 short questions. Reply STOP anytime to opt out.",
+                        "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?",
+                    ], choices: [{ text: "no weight's been the same", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible.",
+                        "Have you experienced shortness of breath that limits your daily activities?",
+                    ], choices: [{ text: "no I'm doing ok with stairs and walking around", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "yes haven't missed any", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great",
+                        "Have you been following the low-salt diet recommended by your doctor?",
+                    ], choices: [{ text: "yes keeping to the low salt diet", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "That's fantastic. Please keep it up!",
+                        "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?",
+                    ], choices: [{ text: "no I'm feeling pretty good", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 21", offset: 21, title: "Late Recovery Check-In", questions: 5,
+                summary: "Three weeks out. Reinforcing daily weigh-ins and diet.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 4 of 5, with 5 short questions. Reply STOP anytime to opt out.",
+                        "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?",
+                    ], choices: [{ text: "all good still checking every morning", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible.",
+                        "Have you experienced shortness of breath that limits your daily activities?",
+                    ], choices: [{ text: "no shortness of breath", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "yes still on track with all of them", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great",
+                        "Have you been following the low-salt diet recommended by your doctor?",
+                    ], choices: [{ text: "yes getting used to it actually", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "That's fantastic. Please keep it up!",
+                        "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?",
+                    ], choices: [{ text: "none of those", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "We'll check in with you again over the next week to see how you're progressing.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
+            {
+                day: "Day 30", offset: 30, title: "Final Recovery Check-In", questions: 5,
+                summary: "Program close-out. CHF recovery on track at 30 days.",
+                steps: [
+                    { id: "0.0", messages: [
+                        "Hi {patient}, this is {hospital} checking in again on your recovery.",
+                        "This is check-in 5 of 5, with 5 short questions. Reply STOP anytime to opt out.",
+                        "It's important to weigh yourself daily. It's best to weigh yourself first thing in the morning after using the restroom. Have you gained 2 or more pounds within 24 hours since you last weighed yourself?",
+                    ], choices: [{ text: "no weight's been stable", next: "1.0" }] },
+                    { id: "1.0", messages: [
+                        "That's great! Please remember to record your weight daily using the same scale at the same time. If you do experience something like this, please call your doctor as soon as possible.",
+                        "Have you experienced shortness of breath that limits your daily activities?",
+                    ], choices: [{ text: "no I'm breathing fine", next: "2.0" }] },
+                    { id: "2.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Taking your medications as directed is an important part of your recovery. Have you been taking all of your medications as directed?",
+                    ], choices: [{ text: "yes still taking everything", next: "3.0" }] },
+                    { id: "3.0", messages: [
+                        "Ok, great",
+                        "Have you been following the low-salt diet recommended by your doctor?",
+                    ], choices: [{ text: "yes keeping it up", next: "4.0" }] },
+                    { id: "4.0", messages: [
+                        "That's fantastic. Please keep it up!",
+                        "Last question! Since leaving the hospital, have you been experiencing any swelling in the legs, chest pain, coughing, or tiredness?",
+                    ], choices: [{ text: "feeling good no swelling or pain thanks for checking in", next: "5.0" }] },
+                    { id: "5.0", messages: [
+                        "Ok, that is great to hear.",
+                        "Please note: if you are having medical problems now or later, please consult your healthcare provider, go to the nearest emergency department, or call 911.",
+                        "It has been our pleasure taking care of you during your recovery journey. Thank you for choosing {hospital}.",
+                        "Take care and have a great day. Reply STOP at any time to unsubscribe.",
+                    ], choices: [] },
+                ]
+            },
         ]
     };
+    CHF_TEMPLATE.steps = CHF_TEMPLATE.journey[0].steps;
 
     /* ---- Beyond Health (Albuquerque DPC) conversational AI demo pack ---- */
     const BH_GLP1_TEMPLATE = {
@@ -706,7 +980,9 @@
 
     const RETIRED_TEMPLATE_IDS = new Set([
         'cs-inpatient-post-discharge-v3',
-        'cedars-inpatient-post-discharge'
+        'cedars-inpatient-post-discharge',
+        'copd-post-discharge-day2',
+        'chf-post-discharge-day2'
     ]);
 
     const DEFAULT_SETTINGS = { patient: "Margaret", hospital: "Central Hospital" };
@@ -725,7 +1001,7 @@
 
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v3';
+    const STORE_KEY = 'do_state_v4';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }
@@ -761,13 +1037,23 @@
     })();
 
     function active() { return templates.find(t => t.id === activeId) || templates[0]; }
-    function steps() { return active().steps; }
+    function hasJourney(t) { return !!(t && Array.isArray(t.journey) && t.journey.length); }
+    function steps() {
+        const t = active();
+        if (hasJourney(t)) return t.journey[activeTouch].steps;
+        return t.steps;
+    }
+    function syncActiveTouchSteps() {
+        const t = active();
+        if (hasJourney(t)) t.steps = t.journey[activeTouch].steps;
+    }
 
     /* ---------------- Playback state ---------------- */
     let currentStep = -1;      // index of last revealed step
     let awaitingReply = false; // current step has a pending scripted reply
     let replied = {};          // index -> chosen choice index
     let isProcessing = false;
+    let activeTouch = 0;       // day index for longitudinal COPD / CHF journeys
 
     function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -932,16 +1218,17 @@
         }
     }
 
-    function applyAndRestart() { persist(); updateBranding(); renderEditor(); restartThread(); }
+    function applyAndRestart() { persist(); updateBranding(); renderTouchPills(); renderEditor(); restartThread(); }
     function resetDefaults() {
         if (!confirm('Reset to the built-in TCM sample template? Your other saved templates are kept.')) return;
         const existing = templates.findIndex(t => t.id === TCM_TEMPLATE.id);
         const fresh = JSON.parse(JSON.stringify(TCM_TEMPLATE));
         if (existing >= 0) templates[existing] = fresh; else templates.push(fresh);
         activeId = TCM_TEMPLATE.id;
+        activeTouch = 0;
         settings = Object.assign({}, DEFAULT_SETTINGS);
         persist();
-        fillSettings(); updateBranding(); renderLibrary(); renderEditor(); restartThread();
+        fillSettings(); updateBranding(); renderLibrary(); renderTouchPills(); renderEditor(); restartThread();
     }
 
     /* ---------------- Template library ---------------- */
@@ -957,6 +1244,8 @@
     }
     function switchTemplate(id) {
         activeId = id;
+        activeTouch = 0;
+        syncActiveTouchSteps();
         if (BH_TEMPLATE_IDS.has(id)) {
             settings.patient = BH_DEMO_SETTINGS.patient;
             settings.hospital = BH_DEMO_SETTINGS.hospital;
@@ -968,7 +1257,59 @@
             updateBranding();
         }
         persist();
+        renderTouchPills();
         renderEditor(); restartThread();
+    }
+    function selectTouch(i) {
+        const t = active();
+        if (!hasJourney(t) || i < 0 || i >= t.journey.length || i === activeTouch) return;
+        activeTouch = i;
+        syncActiveTouchSteps();
+        persist();
+        renderTouchPills();
+        renderEditor();
+        restartThread();
+    }
+    function renderTouchPills() {
+        const t = active();
+        const editorHost = document.getElementById('touch-pills');
+        const meta = document.getElementById('journey-touch-meta');
+        const present = document.getElementById('present-switcher');
+        if (!editorHost || !present || !meta) return;
+
+        editorHost.innerHTML = '';
+        present.innerHTML = '';
+        present.classList.remove('has-pills');
+
+        if (!hasJourney(t)) {
+            meta.classList.add('hidden');
+            meta.textContent = '';
+            return;
+        }
+
+        if (activeTouch >= t.journey.length) activeTouch = 0;
+        const touch = t.journey[activeTouch];
+        meta.classList.remove('hidden');
+        meta.innerHTML = `<i class="fa-solid fa-timeline mr-1"></i><b>${touch.day}</b> · ${touch.title}` +
+            (t.meta ? ` <span class="text-slate-400">(${t.meta})</span>` : '') +
+            (touch.summary ? `<div class="mt-1 text-slate-400 font-normal">${touch.summary}</div>` : '');
+
+        t.journey.forEach((touchDef, i) => {
+            const ed = document.createElement('button');
+            ed.type = 'button';
+            ed.className = 'ed-pill' + (i === activeTouch ? ' active' : '');
+            ed.textContent = touchDef.day;
+            ed.onclick = () => selectTouch(i);
+            editorHost.appendChild(ed);
+
+            const ps = document.createElement('button');
+            ps.type = 'button';
+            ps.className = 'ps-pill' + (i === activeTouch ? ' active' : '');
+            ps.textContent = touchDef.day;
+            ps.onclick = () => selectTouch(i);
+            present.appendChild(ps);
+        });
+        present.classList.add('has-pills');
     }
     function newId() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
     function renameTemplate() {
@@ -982,14 +1323,18 @@
         copy.name = active().name + ' (copy)';
         templates.push(copy);
         activeId = copy.id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
+        activeTouch = 0;
+        syncActiveTouchSteps();
+        persist(); renderLibrary(); renderTouchPills(); renderEditor(); restartThread();
     }
     function deleteTemplate() {
         if (templates.length <= 1) { alert('You need at least one template.'); return; }
         if (!confirm(`Delete template "${active().name}"?`)) return;
         templates = templates.filter(t => t.id !== activeId);
         activeId = templates[0].id;
-        persist(); renderLibrary(); renderEditor(); restartThread();
+        activeTouch = 0;
+        syncActiveTouchSteps();
+        persist(); renderLibrary(); renderTouchPills(); renderEditor(); restartThread();
     }
 
     /* ---------------- Editor ---------------- */
@@ -1143,9 +1488,12 @@
     }
 
     window.onload = () => {
+        activeTouch = 0;
+        syncActiveTouchSteps();
         fillSettings();
         updateBranding();
         renderLibrary();
+        renderTouchPills();
         renderEditor();
         updateScale();
         updateClock();
