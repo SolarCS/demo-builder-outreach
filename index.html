@@ -478,6 +478,41 @@
         ]
     };
 
+    /* ---- Post Fall Episode / National Heritage for the Blind (SNF, conversational AI) ---- */
+    const POST_FALL_NHB_TEMPLATE = {
+        id: 'post-fall-nhb',
+        name: 'Post Fall Episode (NHB)',
+        steps: [
+            { id: '0.0', messages: [
+                "Hello, this is {hospital}. We are checking in after your recent fall and have a few short questions. Reply STOP anytime to opt out.",
+                "Before we continue, can you confirm who we are texting with. Are you the patient, a caregiver, or did we reach the wrong number?"
+            ], choices: [{ text: "Yes this is {patient}", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Thank you.",
+                "How are you feeling since your fall?"
+            ], choices: [{ text: "I've been pretty sore and the pain is getting worse", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Ok thanks for letting us know, we will have someone on our care team call you back shortly. If you feel you are having a serious medical issue please contact your doctor's office, call 911, or go to the nearest emergency department.",
+                "Any new dizziness or lightheadedness when you stand or walk?"
+            ], choices: [{ text: "No not really, just the pain", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Have you been able to move around safely, or do you need help?"
+            ], choices: [{ text: "I've almost fallen twice trying to get to the bathroom", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Ok thanks for letting us know, we will have someone on our care team call you back shortly about getting around safely.",
+                "When you need help getting up or walking around the facility, have staff been able to help you?"
+            ], choices: [{ text: "Yes the nurses have been helping me when I need it", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Would you like someone from your care team to call and check in about staying safe after your fall?"
+            ], choices: [{ text: "Yes please have someone call me", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "Ok, we will have someone on our care team call you shortly.",
+                "Thank you for participating in this brief conversation.",
+                "Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day. Goodbye."
+            ], choices: [] }
+        ]
+    };
+
     /* ---- COPD Post-Discharge Day 2 (conversational AI, longitudinal) ---- */
     const COPD_TEMPLATE = {
         id: 'copd-post-discharge-day2',
@@ -661,6 +696,7 @@
     const BUNDLED_TEMPLATES = [
         TCM_TEMPLATE,
         CAREGAPS_TEMPLATE,
+        POST_FALL_NHB_TEMPLATE,
         COPD_TEMPLATE,
         CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
@@ -683,12 +719,13 @@
     const LONGITUDINAL_SETTINGS = {
         [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
-        [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" }
+        [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" },
+        [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" }
     };
 
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v2';
+    const STORE_KEY = 'do_state_v3';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }
