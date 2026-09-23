@@ -42,6 +42,7 @@ Dropdown templates (conversational AI / natural-language patient replies):
 - **TCM Outreach (Sample)** — inpatient / TCM post-discharge
 - **Care Gaps / Cancer Screening**
 - **Post Fall Episode** — National Heritage for the Blind SNF post-fall check-in
+- **IP PDO - VMFHS** — Virginia Mason Franciscan Health stroke inpatient post-discharge
 - **COPD Post-Discharge** — full longitudinal (Days 2, 9, 16, 23)
 - **CHF Post-Discharge** — full longitudinal (Days 2, 7, 14, 21, 30)
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
@@ -51,6 +52,7 @@ Dropdown templates (conversational AI / natural-language patient replies):
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti` and expose day pills to switch check-ins.  
 Post Fall Episode auto-sets Hospital = `National Heritage for the Blind`.  
+IP PDO - VMFHS auto-sets Hospital = `Virginia Mason Franciscan Health`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.

@@ -539,6 +539,51 @@
         ]
     };
 
+    /* ---- IP PDO / Virginia Mason Franciscan Health Stroke Navigator (conversational AI) ---- */
+    const IP_PDO_VMFHS_TEMPLATE = {
+        id: 'ip-pdo-vmfhs',
+        name: 'IP PDO - VMFHS',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi, I'm your {hospital} Stroke Navigator. Today I will be asking you a few questions about your recovery progress after your stroke. We appreciate your patience and participation, as we care about your health. Let's get started. Reply STOP anytime to opt out.",
+                "First, are you the patient who was recently discharged from a St. Francis Hospital, a caregiver or family member of the patient, or were you not recently discharged from the hospital with a stroke?"
+            ], choices: [{ text: "Yes this is {patient}, I was recently discharged after my stroke", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Okay great, then let's proceed.",
+                "Do you have any questions about your discharge instructions, your stroke, or about your recovery?"
+            ], choices: [{ text: "Yes I have a few questions about my discharge instructions and what to watch for", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Ok, no problem, we will have a nurse call you back shortly.",
+                "Another important step in your recovery is taking your medications as prescribed.",
+                "Do you have any questions about your medications or your medication schedule?"
+            ], choices: [{ text: "No I think I understand my medications", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Ok, great.",
+                "It is important that you schedule a follow-up appointment with your doctor.",
+                "Did you have an appointment scheduled with a healthcare provider before leaving the hospital?"
+            ], choices: [{ text: "No not yet, I would like help scheduling a follow-up appointment", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Okay, no problem, we will have someone from our care team call you back shortly.",
+                "Have you been checking your blood pressure daily?"
+            ], choices: [{ text: "Yes I've been checking it every morning", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Have you been tracking your blood pressure on a blood pressure tracking log?"
+            ], choices: [{ text: "Yes I've been writing the numbers down on my log", next: "6.0" }] },
+            { id: '6.0', messages: [
+                "Okay great, that is good to hear.",
+                "When checking your blood pressure, have you ever seen the top number be more than 140 or the bottom number be more than 90?"
+            ], choices: [{ text: "No both numbers have stayed under those", next: "7.0" }] },
+            { id: '7.0', messages: [
+                "Last question. Do you have any other questions, concerns, or comments that you wish to speak to the stroke program nurse about?"
+            ], choices: [{ text: "No that covers it for me, thank you", next: "8.0" }] },
+            { id: '8.0', messages: [
+                "Ok, great.",
+                "Thank you for participating in this conversation. Remember, if you have any of the following symptoms, please call 911 and get to the hospital immediately: sudden numbness or weakness of the face, arm or leg; trouble speaking or understanding; sudden trouble walking or loss of balance; sudden trouble seeing in one or both eyes; or a sudden, severe headache.",
+                "We hope this check-in has been helpful to you. You will be getting another outreach in 7 to 9 days to check on your recovery. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a nice day. Goodbye."
+            ], choices: [] }
+        ]
+    };
+
     /* ---- COPD Post-Discharge (conversational AI, full longitudinal) ---- */
     const COPD_TEMPLATE = {
         id: "copd-post-discharge",
@@ -971,6 +1016,7 @@
         TCM_TEMPLATE,
         CAREGAPS_TEMPLATE,
         POST_FALL_NHB_TEMPLATE,
+        IP_PDO_VMFHS_TEMPLATE,
         COPD_TEMPLATE,
         CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
@@ -996,12 +1042,13 @@
         [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" },
-        [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" }
+        [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" },
+        [IP_PDO_VMFHS_TEMPLATE.id]: { patient: "Margaret", hospital: "Virginia Mason Franciscan Health" }
     };
 
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v4';
+    const STORE_KEY = 'do_state_v5';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }
