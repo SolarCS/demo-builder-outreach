@@ -551,19 +551,19 @@
             { id: '1.0', messages: [
                 "Okay great, then let's proceed.",
                 "Do you have any questions about your discharge instructions, your stroke, or about your recovery?"
-            ], choices: [{ text: "Yes I have a few questions about my discharge instructions and what to watch for", next: "2.0" }] },
+            ], choices: [{ text: "No I understand my discharge instructions and how I'm recovering", next: "2.0" }] },
             { id: '2.0', messages: [
-                "Ok, no problem, we will have a nurse call you back shortly.",
+                "Okay, great, thanks for letting us know.",
                 "Another important step in your recovery is taking your medications as prescribed.",
                 "Do you have any questions about your medications or your medication schedule?"
-            ], choices: [{ text: "No I think I understand my medications", next: "3.0" }] },
+            ], choices: [{ text: "Yes I do, why do I have to take this medication every day?", next: "3.0" }] },
             { id: '3.0', messages: [
-                "Ok, great.",
+                "Ok, thanks, we will have a nurse call you back shortly to discuss your medications with you.",
                 "It is important that you schedule a follow-up appointment with your doctor.",
                 "Did you have an appointment scheduled with a healthcare provider before leaving the hospital?"
-            ], choices: [{ text: "No not yet, I would like help scheduling a follow-up appointment", next: "4.0" }] },
+            ], choices: [{ text: "Yes I already have my follow-up appointment scheduled", next: "4.0" }] },
             { id: '4.0', messages: [
-                "Okay, no problem, we will have someone from our care team call you back shortly.",
+                "Okay, great, thanks for letting us know.",
                 "Have you been checking your blood pressure daily?"
             ], choices: [{ text: "Yes I've been checking it every morning", next: "5.0" }] },
             { id: '5.0', messages: [
@@ -572,8 +572,9 @@
             { id: '6.0', messages: [
                 "Okay great, that is good to hear.",
                 "When checking your blood pressure, have you ever seen the top number be more than 140 or the bottom number be more than 90?"
-            ], choices: [{ text: "No both numbers have stayed under those", next: "7.0" }] },
+            ], choices: [{ text: "One time the top number was above 140", next: "7.0" }] },
             { id: '7.0', messages: [
+                "Ok, thanks, we will have a nurse call you shortly to discuss this with you.",
                 "Last question. Do you have any other questions, concerns, or comments that you wish to speak to the stroke program nurse about?"
             ], choices: [{ text: "No that covers it for me, thank you", next: "8.0" }] },
             { id: '8.0', messages: [
@@ -1048,7 +1049,7 @@
 
 
     /* ---------------- Persistence ---------------- */
-    const STORE_KEY = 'do_state_v5';
+    const STORE_KEY = 'do_state_v6';
     function load() {
         try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
     }
