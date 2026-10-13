@@ -33,6 +33,12 @@
             display: flex;
             flex-direction: column;
             z-index: 200;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        body.sidebar-hidden #config-panel {
+            transform: translateX(-100%);
+            margin-right: calc(var(--sidebar-width) * -1);
         }
         #preview-area {
             flex: 1;
@@ -46,6 +52,15 @@
             position: relative;
             overflow: hidden;
         }
+        #open-config-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 300;
+            display: none;
+            cursor: pointer;
+        }
+        body.sidebar-hidden #open-config-btn { display: flex; }
         .mode-toggle {
             display: flex;
             gap: 4px;
@@ -317,6 +332,9 @@
                     <p class="text-[11px] text-slate-500 font-medium">Voice Call Demo</p>
                 </div>
             </div>
+            <button onclick="toggleConfig()" title="Present mode (hide panel)" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
         </div>
 
         <div class="mode-toggle">
@@ -345,17 +363,21 @@
             </div>
         </div>
 
-        <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
+        <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] flex gap-2">
             <button onclick="resetToRinging()" class="mini-btn flex-1 text-white" style="background:var(--brand)">
                 <i class="fa-solid fa-rotate-left mr-1"></i> Reset to ringing
             </button>
-            <button onclick="document.body.classList.toggle('sidebar-hidden')" class="mini-btn bg-slate-800 text-white" title="Present mode">
+            <button onclick="toggleConfig()" class="mini-btn bg-slate-800 hover:bg-slate-700 text-white" title="Present mode">
                 <i class="fa-solid fa-expand"></i>
             </button>
         </div>
     </div>
 
     <div id="preview-area">
+        <button id="open-config-btn" onclick="toggleConfig()" class="bg-white p-3 rounded-full shadow-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all flex items-center gap-2 pr-4 group">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background:var(--brand)"><i class="fa-solid fa-sliders text-sm"></i></div>
+            <span class="text-xs font-bold text-slate-700">Show Panel</span>
+        </button>
         <div class="iphone-frame" id="iphone-frame">
             <div class="notch"></div>
             <div class="status-bar">
@@ -622,13 +644,10 @@
         frame.style.transform = `scale(${scale})`;
     }
 
-    // Present-mode: hide sidebar
-    const style = document.createElement('style');
-    style.textContent = `
-        body.sidebar-hidden #config-panel { display: none; }
-        body.sidebar-hidden #preview-area { width: 100%; }
-    `;
-    document.head.appendChild(style);
+    function toggleConfig() {
+        document.body.classList.toggle('sidebar-hidden');
+        setTimeout(updateScale, 305);
+    }
 
     renderDemoList();
     updateCaller();
