@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherOutreach · Voice Call Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iphone-width: 375px;
+            --iphone-height: 812px;
+            --sidebar-width: 400px;
+            --brand: #005A8C;
+            --ios-green: #34C759;
+            --ios-red: #FF3B30;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F8FAFC;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #config-panel {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            z-index: 200;
+        }
+        #preview-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(0,90,140,0.08), transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(52,199,89,0.06), transparent 45%),
+                #F1F5F9;
+            position: relative;
+            overflow: hidden;
+        }
+        .mode-toggle {
+            display: flex;
+            gap: 4px;
+            background: #F1F5F9;
+            padding: 4px;
+            border-radius: 12px;
+            margin: 12px 16px 0;
+        }
+        .mode-toggle a {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-radius: 9px;
+            color: #64748B;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .mode-toggle a.active {
+            background: white;
+            color: var(--brand);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .mode-toggle a:hover:not(.active) { color: #334155; }
+
+        .iphone-frame {
+            width: var(--iphone-width);
+            height: var(--iphone-height);
+            background: #000;
+            border-radius: 48px;
+            border: 12px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 2px #333,
+                0 40px 80px -20px rgba(0,0,0,0.45),
+                0 20px 40px -10px rgba(0,0,0,0.25);
+            transform-origin: center center;
+        }
+        .notch {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 160px; height: 32px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 60;
+        }
+        .status-bar {
+            position: absolute;
+            top: 14px; left: 30px; right: 30px;
+            display: flex; justify-content: space-between;
+            font-size: 12px; font-weight: 600; color: #fff;
+            z-index: 50;
+        }
+        .home-bar {
+            position: absolute;
+            bottom: 8px; left: 50%;
+            transform: translateX(-50%);
+            width: 130px; height: 5px;
+            background: rgba(255,255,255,0.35);
+            border-radius: 10px; z-index: 50;
+        }
+
+        /* ---- Call screens ---- */
+        .call-screen {
+            position: absolute; inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            z-index: 10;
+        }
+        .call-screen.active { display: flex; }
+
+        .call-wallpaper {
+            position: absolute; inset: 0;
+            background:
+                linear-gradient(160deg, #0b1f33 0%, #134e6f 40%, #1a6b8a 70%, #0d3d52 100%);
+            z-index: 0;
+        }
+        .call-wallpaper::after {
+            content: '';
+            position: absolute; inset: 0;
+            backdrop-filter: blur(0px);
+            background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08), transparent 55%);
+        }
+
+        .call-content {
+            position: relative; z-index: 2;
+            flex: 1; width: 100%;
+            display: flex; flex-direction: column;
+            align-items: center;
+            padding: 80px 28px 48px;
+        }
+
+        .caller-avatar {
+            width: 96px; height: 96px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2b8bb3, #005A8C);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; font-weight: 800; color: #fff;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+            margin-bottom: 20px;
+        }
+        .caller-name {
+            font-size: 28px; font-weight: 700;
+            letter-spacing: -0.02em;
+            text-align: center;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+        .caller-sub {
+            margin-top: 6px;
+            font-size: 15px; font-weight: 500;
+            color: rgba(255,255,255,0.75);
+        }
+
+        /* Ringing pulse rings */
+        .ring-wrap {
+            position: relative;
+            width: 96px; height: 96px;
+            margin-bottom: 20px;
+        }
+        .ring-wrap .caller-avatar { position: absolute; inset: 0; margin: 0; }
+        .ring-pulse {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.45);
+            animation: ringOut 2s ease-out infinite;
+        }
+        .ring-pulse:nth-child(2) { animation-delay: 0.65s; }
+        .ring-pulse:nth-child(3) { animation-delay: 1.3s; }
+        @keyframes ringOut {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(2.1); opacity: 0; }
+        }
+
+        .call-spacer { flex: 1; }
+
+        .call-actions {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 0 24px 20px;
+            gap: 40px;
+        }
+        .call-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            background: none; border: none; color: #fff; cursor: pointer;
+        }
+        .call-btn .orb {
+            width: 68px; height: 68px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .call-btn:hover .orb { transform: scale(1.06); }
+        .call-btn:active .orb { transform: scale(0.96); }
+        .call-btn .label { font-size: 13px; font-weight: 600; opacity: 0.9; }
+        .orb.decline { background: var(--ios-red); box-shadow: 0 8px 24px rgba(255,59,48,0.45); }
+        .orb.answer {
+            background: var(--ios-green);
+            box-shadow: 0 8px 24px rgba(52,199,89,0.45);
+            animation: answerPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes answerPulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(52,199,89,0.45); }
+            50% { box-shadow: 0 8px 36px rgba(52,199,89,0.75), 0 0 0 10px rgba(52,199,89,0.15); }
+        }
+        .orb.end { background: var(--ios-red); box-shadow: 0 8px 24px rgba(255,59,48,0.45); }
+        .orb.mute, .orb.speaker, .orb.more {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(8px);
+            font-size: 22px;
+        }
+        .orb.mute.active { background: rgba(255,255,255,0.85); color: #111; }
+
+        .in-call-timer {
+            font-size: 15px; font-weight: 500;
+            color: rgba(255,255,255,0.8);
+            font-variant-numeric: tabular-nums;
+            margin-top: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .audio-bars {
+            display: flex; align-items: flex-end; gap: 4px;
+            height: 28px; margin-top: 18px;
+        }
+        .audio-bars span {
+            width: 4px; border-radius: 2px;
+            background: rgba(255,255,255,0.75);
+            height: 8px;
+            animation: barBounce 0.9s ease-in-out infinite;
+        }
+        .audio-bars span:nth-child(1) { animation-delay: 0s; }
+        .audio-bars span:nth-child(2) { animation-delay: 0.12s; height: 16px; }
+        .audio-bars span:nth-child(3) { animation-delay: 0.24s; height: 22px; }
+        .audio-bars span:nth-child(4) { animation-delay: 0.08s; height: 12px; }
+        .audio-bars span:nth-child(5) { animation-delay: 0.2s; height: 18px; }
+        @keyframes barBounce {
+            0%, 100% { transform: scaleY(0.45); }
+            50% { transform: scaleY(1); }
+        }
+        .audio-bars.paused span { animation: none; opacity: 0.4; }
+
+        .in-call-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px 20px;
+            width: 100%;
+            max-width: 280px;
+            margin-bottom: 28px;
+            justify-items: center;
+        }
+
+        .demo-card {
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #fff;
+        }
+        .demo-card:hover { border-color: #94A3B8; }
+        .demo-card.active {
+            border-color: var(--brand);
+            background: #F0F9FF;
+            box-shadow: 0 0 0 1px var(--brand);
+        }
+        .input-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #64748B;
+            margin-bottom: 6px;
+        }
+        .txt-input {
+            width: 100%;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1E293B;
+            outline: none;
+        }
+        .txt-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(0,90,140,0.12); }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 16px; }
+        .mini-btn {
+            border: none; border-radius: 10px; padding: 10px 14px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="config-panel">
+        <div class="px-5 py-4 border-b border-slate-200 bg-white flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white" style="background:var(--brand)">
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+                <div>
+                    <h1 class="text-[15px] font-extrabold text-slate-800 leading-tight">CipherOutreach</h1>
+                    <p class="text-[11px] text-slate-500 font-medium">Voice Call Demo</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mode-toggle">
+            <a href="index.html"><i class="fa-solid fa-comment-sms mr-1"></i> SMS</a>
+            <a href="voice.html" class="active"><i class="fa-solid fa-phone mr-1"></i> Voice</a>
+        </div>
+
+        <div class="scroll-area">
+            <div class="mb-4">
+                <label class="input-label"><i class="fa-solid fa-hospital mr-1"></i> Caller display name</label>
+                <input type="text" id="set-caller" class="txt-input" value="UT Southwestern" oninput="updateCaller()">
+                <p class="text-[10px] text-slate-400 mt-1.5">Shown on the incoming-call screen as the organization placing the outreach call.</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="input-label"><i class="fa-solid fa-user mr-1"></i> Patient name</label>
+                <input type="text" id="set-patient" class="txt-input" value="Margaret" oninput="updateCaller()">
+            </div>
+
+            <label class="input-label mb-2"><i class="fa-solid fa-microphone-lines mr-1"></i> Voice demos</label>
+            <div id="demo-list" class="space-y-2"></div>
+
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed mt-5">
+                <i class="fa-solid fa-circle-info mr-1"></i>
+                The phone starts in a <b>ringing</b> state. Press the green <b>Answer</b> button to start the recorded outreach call. Use <b>End</b> or <b>Reset</b> to return to ringing.
+            </div>
+        </div>
+
+        <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
+            <button onclick="resetToRinging()" class="mini-btn flex-1 text-white" style="background:var(--brand)">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Reset to ringing
+            </button>
+            <button onclick="document.body.classList.toggle('sidebar-hidden')" class="mini-btn bg-slate-800 text-white" title="Present mode">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="preview-area">
+        <div class="iphone-frame" id="iphone-frame">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span id="clock">9:41</span>
+                <div class="flex gap-1.5 text-[11px]">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- RINGING -->
+            <div id="screen-ringing" class="call-screen active">
+                <div class="call-wallpaper"></div>
+                <div class="call-content">
+                    <p class="text-[13px] font-semibold uppercase tracking-widest text-white/60 mb-6">Incoming Call</p>
+                    <div class="ring-wrap">
+                        <div class="ring-pulse"></div>
+                        <div class="ring-pulse"></div>
+                        <div class="ring-pulse"></div>
+                        <div class="caller-avatar" id="avatar-ring">UT</div>
+                    </div>
+                    <div class="caller-name" id="name-ring">UT Southwestern</div>
+                    <div class="caller-sub">CipherOutreach · mobile</div>
+                    <div class="call-spacer"></div>
+                    <div class="call-actions">
+                        <button class="call-btn" onclick="declineCall()" title="Decline">
+                            <div class="orb decline"><i class="fa-solid fa-phone-slash"></i></div>
+                            <span class="label">Decline</span>
+                        </button>
+                        <button class="call-btn" onclick="answerCall()" title="Answer">
+                            <div class="orb answer"><i class="fa-solid fa-phone"></i></div>
+                            <span class="label">Answer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IN CALL -->
+            <div id="screen-incall" class="call-screen">
+                <div class="call-wallpaper"></div>
+                <div class="call-content">
+                    <p class="text-[13px] font-semibold uppercase tracking-widest text-white/60 mb-4">CipherOutreach</p>
+                    <div class="caller-avatar" id="avatar-call">UT</div>
+                    <div class="caller-name" id="name-call">UT Southwestern</div>
+                    <div class="in-call-timer" id="call-timer">00:00</div>
+                    <div class="audio-bars" id="audio-bars">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="call-spacer"></div>
+                    <div class="in-call-actions">
+                        <button class="call-btn" onclick="toggleMute()" title="Mute">
+                            <div class="orb mute" id="mute-orb"><i class="fa-solid fa-microphone-slash"></i></div>
+                            <span class="label">Mute</span>
+                        </button>
+                        <button class="call-btn" title="Keypad">
+                            <div class="orb more"><i class="fa-solid fa-table-cells"></i></div>
+                            <span class="label">Keypad</span>
+                        </button>
+                        <button class="call-btn" title="Speaker">
+                            <div class="orb speaker"><i class="fa-solid fa-volume-high"></i></div>
+                            <span class="label">Speaker</span>
+                        </button>
+                    </div>
+                    <button class="call-btn" onclick="endCall()" title="End call">
+                        <div class="orb end"><i class="fa-solid fa-phone" style="transform:rotate(135deg)"></i></div>
+                        <span class="label">End</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ENDED -->
+            <div id="screen-ended" class="call-screen">
+                <div class="call-wallpaper"></div>
+                <div class="call-content" style="justify-content:center">
+                    <div class="caller-avatar" id="avatar-ended">UT</div>
+                    <div class="caller-name" id="name-ended">UT Southwestern</div>
+                    <div class="caller-sub mt-2">Call Ended</div>
+                    <button onclick="resetToRinging()" class="mt-10 px-6 py-3 rounded-full bg-white/20 backdrop-blur text-white font-bold text-sm hover:bg-white/30 transition">
+                        <i class="fa-solid fa-phone mr-2"></i> Call again
+                    </button>
+                </div>
+            </div>
+
+            <div class="home-bar"></div>
+        </div>
+    </div>
+
+    <audio id="call-audio" preload="auto">
+        <source src="assets/audio/ut-southwestern-ip-pdo.mp3" type="audio/mpeg">
+        <source src="assets/audio/ut-southwestern-ip-pdo.m4a" type="audio/mp4">
+    </audio>
+
+    <script>
+    const DEMOS = [
+        {
+            id: 'utsw-ip-pdo',
+            title: 'UT Southwestern · IP PDO',
+            subtitle: 'Inpatient post-discharge outreach call (~2:28)',
+            caller: 'UT Southwestern',
+            initials: 'UT',
+            sources: [
+                { src: 'assets/audio/ut-southwestern-ip-pdo.mp3', type: 'audio/mpeg' },
+                { src: 'assets/audio/ut-southwestern-ip-pdo.m4a', type: 'audio/mp4' }
+            ]
+        }
+    ];
+
+    let activeDemoId = DEMOS[0].id;
+    let timerInterval = null;
+    let callSeconds = 0;
+    let muted = false;
+
+    const audio = document.getElementById('call-audio');
+
+    function activeDemo() {
+        return DEMOS.find(d => d.id === activeDemoId) || DEMOS[0];
+    }
+
+    function renderDemoList() {
+        const list = document.getElementById('demo-list');
+        list.innerHTML = DEMOS.map(d => `
+            <div class="demo-card ${d.id === activeDemoId ? 'active' : ''}" onclick="selectDemo('${d.id}')">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0" style="background:var(--brand)">${d.initials}</div>
+                    <div class="min-w-0">
+                        <div class="text-[13px] font-bold text-slate-800">${d.title}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">${d.subtitle}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function selectDemo(id) {
+        if (id === activeDemoId) return;
+        endCall(true);
+        activeDemoId = id;
+        const d = activeDemo();
+        document.getElementById('set-caller').value = d.caller;
+        loadAudio(d);
+        updateCaller();
+        renderDemoList();
+        resetToRinging();
+    }
+
+    function loadAudio(demo) {
+        audio.pause();
+        audio.innerHTML = demo.sources.map(s => `<source src="${s.src}" type="${s.type}">`).join('');
+        audio.load();
+    }
+
+    function initialsFrom(name) {
+        const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+        if (!parts.length) return 'CH';
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function updateCaller() {
+        const name = document.getElementById('set-caller').value.trim() || 'CipherHealth';
+        const initials = initialsFrom(name);
+        ['name-ring', 'name-call', 'name-ended'].forEach(id => {
+            document.getElementById(id).textContent = name;
+        });
+        ['avatar-ring', 'avatar-call', 'avatar-ended'].forEach(id => {
+            document.getElementById(id).textContent = initials;
+        });
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.call-screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        stopTimer();
+        callSeconds = 0;
+        document.getElementById('call-timer').textContent = '00:00';
+        timerInterval = setInterval(() => {
+            callSeconds += 1;
+            document.getElementById('call-timer').textContent = formatTime(callSeconds);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = null;
+    }
+
+    function answerCall() {
+        showScreen('screen-incall');
+        document.getElementById('audio-bars').classList.remove('paused');
+        muted = false;
+        document.getElementById('mute-orb').classList.remove('active');
+        audio.muted = false;
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+        if (playPromise && playPromise.catch) {
+            playPromise.catch(() => {
+                /* Autoplay blocked — user already clicked Answer, retry once */
+                audio.play().catch(() => {});
+            });
+        }
+        startTimer();
+    }
+
+    function declineCall() {
+        showScreen('screen-ended');
+        stopTimer();
+        audio.pause();
+        audio.currentTime = 0;
+    }
+
+    function endCall(silent) {
+        stopTimer();
+        audio.pause();
+        audio.currentTime = 0;
+        if (!silent) showScreen('screen-ended');
+    }
+
+    function resetToRinging() {
+        stopTimer();
+        audio.pause();
+        audio.currentTime = 0;
+        muted = false;
+        document.getElementById('mute-orb').classList.remove('active');
+        document.getElementById('audio-bars').classList.remove('paused');
+        showScreen('screen-ringing');
+    }
+
+    function toggleMute() {
+        muted = !muted;
+        audio.muted = muted;
+        document.getElementById('mute-orb').classList.toggle('active', muted);
+        document.getElementById('audio-bars').classList.toggle('paused', muted);
+    }
+
+    audio.addEventListener('ended', () => {
+        stopTimer();
+        document.getElementById('audio-bars').classList.add('paused');
+        showScreen('screen-ended');
+    });
+
+    function tickClock() {
+        const now = new Date();
+        const h = now.getHours();
+        const m = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${h % 12 || 12}:${m}`;
+    }
+
+    function updateScale() {
+        const frame = document.getElementById('iphone-frame');
+        const area = document.getElementById('preview-area');
+        if (!frame || !area) return;
+        const availW = area.clientWidth - 48;
+        const availH = area.clientHeight - 48;
+        const scale = Math.min(1, availW / 375, availH / 812);
+        frame.style.transform = `scale(${scale})`;
+    }
+
+    // Present-mode: hide sidebar
+    const style = document.createElement('style');
+    style.textContent = `
+        body.sidebar-hidden #config-panel { display: none; }
+        body.sidebar-hidden #preview-area { width: 100%; }
+    `;
+    document.head.appendChild(style);
+
+    renderDemoList();
+    updateCaller();
+    tickClock();
+    setInterval(tickClock, 30000);
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    </script>
+</body>
+</html>
