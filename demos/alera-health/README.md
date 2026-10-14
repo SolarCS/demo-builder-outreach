@@ -19,7 +19,7 @@ Voice and SMS for **Alera Health** (Ohio behavioral health network / ONEcare). T
 
 | File | Purpose |
 | --- | --- |
-| `Alera-IBHH-Voice-Script.docx` | Full voice script for building in Evolve: each question, its buckets, and the exact reply |
+| `Alera-IBHH-Voice-Script.docx` | Evolve voice script in the Outreach export layout (question, webform, numbered responses, issue panel, alert, next question) |
 | `01-USE-CASE-AND-SCRIPTS.md` | Same script in markdown, plus the SMS hero paths |
 | `02-OPEN-CASES-SEED-LIST.md` | Fictional personas for the queue |
 | `open-cases-seed.csv` | Same seeds as CSV |

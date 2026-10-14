@@ -7,6 +7,7 @@
 **Demo clinicians:** Kathy Smith (on-call, Tier 1) and Jose (assigned clinician, Tier 2)
 **Tokens in SMS:** `{patient}` → Denise · `{hospital}` → Riverside Behavioral Health
 **Voice hero:** Marcus
+**Evolve voice file:** `Alera-IBHH-Voice-Script.docx` (Outreach export layout)
 
 Voice and SMS use the same nodes, the same buckets, and the same configured replies. The only channel differences are date-of-birth verify, the spoken check-in, live transfer, and voicemail.
 
@@ -65,17 +66,19 @@ Add these to nodes A, B, C, D, E, and F. Same utterances, same next step. Do not
 
 ## Node A — Identity
 
-**Voice prompt:** "Hi, this is an automated assistant calling for {hospital}, in partnership with Alera Health. I'm looking for {patient}. Is this {patient}?"
+**Voice transition:** "Hi, this is an automated assistant calling for {hospital}, in partnership with Alera Health."
 
-**SMS prompt:** "Hi, this is {hospital} with Alera Health, using an automated text assistant. Before we continue, are we texting with {patient}?"
+**Voice question:** "Are we speaking with the patient, {patient}, or a caregiver?"
+
+**SMS prompt:** "Hi, this is {hospital} with Alera Health, using an automated text assistant. Are we texting with the patient, {patient}, or a caregiver?"
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Patient | "Yes", "This is Marcus", "Yes who is this", "Yeah" | Voice: "Thanks. For your privacy, can you tell me your date of birth?" SMS: no extra line, go to the enroll prompt | Voice B, SMS C | |
+| Patient | "Yes", "This is Marcus", "Yes who is this", "Yeah" | "Okay great, then let's proceed." The next question asks for the date of birth. SMS goes to the enroll prompt. | Voice B, SMS C | |
 | Wrong number | "Wrong number", "No one here by that name" | "I'm sorry to bother you. I'll take this number off our list." | End | Unable to Verify. Suppress. Do not name the program |
 | Caregiver | "This is his mom", "I'm his caregiver", "He isn't home" | "I can share that {patient} may qualify for a free care coordination program through {hospital}. I can't go into their care, and I can't sign them up unless they are on the line. Should we call back when they are available?" | D | |
-| Not a real person | "Are you a robot", "Are you a nurse", "Is this a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real. Is this {patient}?" | A, once | |
-| Unrecognized | | "Sorry, I didn't catch that. Is this {patient}?" | A, once, then the wrong-number reply | Unable to Verify |
+| Not a real person | "Are you a robot", "Are you a nurse", "Is this a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real." Then the question plays again. | A, once | |
+| Unrecognized | | "Sorry, I didn't catch that." Then the question plays again. | A, once, then the wrong-number reply | Unable to Verify |
 
 ---
 

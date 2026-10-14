@@ -48,7 +48,7 @@ They are choosing among about five vendors in the next 30 to 60 days. Lead with 
 
 ## Lines that matter
 
-- "I'm an automated assistant calling for Riverside Behavioral Health, in partnership with Alera Health."
+- "Are we speaking with the patient, Marcus, or a caregiver?"
 - "There is no cost to you, and this does not change your doctors or your benefits."
 - "Your coordinator can help you with that paperwork so your coverage stays active. I can't say how any new rule applies to you."
 - "Are you having thoughts of hurting yourself right now?"
