@@ -656,6 +656,53 @@
         ]
     };
 
+    /* ---- Alera Health (Ohio BH network) IBHH enrollment demo pack ---- */
+    const ALERA_IBHH_ENROLL_TEMPLATE = {
+        id: 'alera-ibhh-enrollment',
+        name: 'IBHH Program Enrollment',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi, this is {hospital} with Alera Health, using an automated text assistant.",
+                "Before we continue, are we texting with {patient}?"
+            ], choices: [{ text: "yes who is this", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Thanks {patient}. Because you get care at {hospital}, you qualify for a free program called the Integrated Behavioral Health Home. You'd have your own care coordinator to help with appointments, medicines, rides, and keeping your Medicaid active. It's voluntary and it doesn't change your doctors or your benefits. Would you like to enroll?"
+            ], choices: [{ text: "is this a scam lol", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "We will never ask for money or your Social Security number. You can confirm by calling {hospital} at (614) 555-0142. The program is voluntary and it doesn't change your doctors. Would you like to enroll?"
+            ], choices: [{ text: "i got a letter about medicaid changing and im worried", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Your coordinator can help with the paperwork so your coverage stays active. I can't say how any new rule applies to you. Would you like to enroll?"
+            ], choices: [{ text: "yes sign me up", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "Thank you, you're signed up. Is it okay if we text you program information at this number, or would you rather get a call?"
+            ], choices: [{ text: "text is better, im at work days", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Got it. Your {hospital} care coordinator will text you within 2 business days.",
+                "If you're ever in crisis, call or text 988, or call 911 if you're in danger. Reply HELP for help. Reply STOP to unsubscribe."
+            ], choices: [] }
+        ]
+    };
+
+    const ALERA_IBHH_SAFETY_TEMPLATE = {
+        id: 'alera-ibhh-safety',
+        name: 'IBHH Safety Escalation',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi, this is {hospital} with Alera Health, using an automated text assistant.",
+                "Before we continue, are we texting with {patient}?"
+            ], choices: [{ text: "yes this is denise", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Thanks {patient}. Because you get care at {hospital}, you qualify for a free program called the Integrated Behavioral Health Home. You'd have your own care coordinator to help with appointments, medicines, rides, and keeping your Medicaid active. It's voluntary and it doesn't change your doctors or your benefits. Would you like to enroll?"
+            ], choices: [{ text: "honestly i dont want to be here anymore", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "{patient}, thank you for telling us. You don't have to go through this alone.",
+                "If you're in danger now, call 911. You can call or text 988 anytime. A clinician from {hospital} is calling you right now. Please stay by your phone.",
+                "Reply HELP for help. Reply STOP to unsubscribe."
+            ], choices: [] }
+        ]
+    };
+
     // Bundled library: add new demos alongside existing clinical programs; never wipe them.
     // Cedars numeric inpatient template intentionally retired (conversational TCM covers inpatient).
     const BUNDLED_TEMPLATES = [
@@ -665,7 +712,9 @@
         CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
-        BH_PREVISIT_TEMPLATE
+        BH_PREVISIT_TEMPLATE,
+        ALERA_IBHH_ENROLL_TEMPLATE,
+        ALERA_IBHH_SAFETY_TEMPLATE
     ];
 
     const RETIRED_TEMPLATE_IDS = new Set([
@@ -679,6 +728,11 @@
         BH_GLP1_TEMPLATE.id,
         BH_WELLNESS_TEMPLATE.id,
         BH_PREVISIT_TEMPLATE.id
+    ]);
+    const ALERA_DEMO_SETTINGS = { patient: "Denise", hospital: "Riverside Behavioral Health" };
+    const ALERA_TEMPLATE_IDS = new Set([
+        ALERA_IBHH_ENROLL_TEMPLATE.id,
+        ALERA_IBHH_SAFETY_TEMPLATE.id
     ]);
     const LONGITUDINAL_SETTINGS = {
         [COPD_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
@@ -925,12 +979,18 @@
             settings.hospital = BH_DEMO_SETTINGS.hospital;
             fillSettings();
             updateBranding();
+        } else if (ALERA_TEMPLATE_IDS.has(id)) {
+            settings.patient = ALERA_DEMO_SETTINGS.patient;
+            settings.hospital = ALERA_DEMO_SETTINGS.hospital;
+            fillSettings();
+            updateBranding();
         } else if (LONGITUDINAL_SETTINGS[id]) {
             Object.assign(settings, LONGITUDINAL_SETTINGS[id]);
             fillSettings();
             updateBranding();
         }
         persist();
+        renderLibrary();
         renderEditor(); restartThread();
     }
     function newId() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
