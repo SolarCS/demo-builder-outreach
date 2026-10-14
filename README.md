@@ -46,10 +46,13 @@ Dropdown templates (conversational AI / natural-language patient replies):
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
 - **Wellness Care Gap**
 - **Pre-Visit Pellet/Weight Prep**
+- **IBHH Program Enrollment** (Alera Health; enrollment yes/no)
+- **IBHH Safety Escalation** (Alera Health; crisis text stops the script)
 
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti`.  
-Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
+The two IBHH templates auto-set Patient = `Denise` and Hospital = `Riverside Behavioral Health`.  
+Pack notes: [`demos/beyond-health/`](demos/beyond-health/), [`demos/alera-health/`](demos/alera-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
 
