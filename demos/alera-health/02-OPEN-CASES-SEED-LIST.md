@@ -13,7 +13,7 @@ Walk this queue after the Denise SMS path and the Marcus voice transfer. Filter 
 
 | # | Patient | Age | Channel | Issue | Tier | Status | Last response (summary) | Owner | Demo note |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | **Denise Carter** | 34 | SMS | Enrollment; Medicaid renewal help | 3 Routine | Open | Confirmed identity, worried about a Medicaid letter, said "yes sign me up", wants texts on workdays | Care coordinator | **Hero SMS.** The "yes" that counts toward engaged % |
+| 1 | **Denise Carter** | 34 | SMS | Enrollment; Medicaid renewal help | 3 Routine | Open | Confirmed identity, worried about a Medicaid letter, said "Yes sign me up", wants texts on workdays | Care coordinator | **Hero SMS.** The "yes" that counts toward engaged % |
 | 2 | **Marcus Hale** | 38 | Voice | Safety; out of medication; enrolled | 1 Immediate | Open | Enrolled and accepted texts. Out of meds about a week. "Some days I don't see the point." Answered "maybe" to current self-harm. Transfer to Kathy | Kathy Smith | **Hero voice.** Live transfer. Case stays open until Kathy closes it |
 | 3 | Andre Brooks | 29 | Voice | Caregiver worried; not enrolled | 2 Same day | Open | Mother answered. Says he has not picked up medicine and she is scared. He was not on the line, so he was not enrolled. Safe at the time of the call | Jose | Caregiver path. Do not enroll on mom's word |
 | 4 | Leon Price | 51 | Voice | Declined | 4 Close | Closed | "No thanks, I'm good." Suppressed from the campaign | None | Show the suppression, not a work item |
@@ -35,7 +35,7 @@ Alternate SMS safety thread (use only if voice transfer cannot be shown): replay
 - Enrolled: Yes
 - Text consent: Yes
 - Bucket path: Patient, Wants to verify, Coverage question, Wants to enroll, Prefers text
-- Raw reply stored for the coordinator: "text is better, im at work days"
+- Raw reply stored for the coordinator: "Text is better, I'm at work days"
 - Issues: Enrollment · Medicaid renewal help
 - SLA: coordinator texts within 2 business days
 - Safety: none

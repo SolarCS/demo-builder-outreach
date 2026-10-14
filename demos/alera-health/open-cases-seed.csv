@@ -1,5 +1,5 @@
 patient_name,age,provider,channel,issues,tier,status,last_response_summary,owner,counts_as_engaged,demo_role
-Denise Carter,34,Riverside Behavioral Health,SMS,Enrollment; Medicaid renewal help,3 Routine,Open,"Confirmed identity; worried about a Medicaid letter; yes sign me up; text on workdays",Care coordinator,Yes,Hero SMS
+Denise Carter,34,Riverside Behavioral Health,SMS,Enrollment; Medicaid renewal help,3 Routine,Open,"Confirmed identity; worried about a Medicaid letter; Yes sign me up; text on workdays",Care coordinator,Yes,Hero SMS
 Marcus Hale,38,Riverside Behavioral Health,Voice,Safety; out of medication; enrolled,1 Immediate,Open,"Enrolled and accepted texts; out of meds about a week; maybe to current self-harm; transfer to Kathy",Kathy Smith,Yes,Hero voice live transfer
 Andre Brooks,29,Riverside Behavioral Health,Voice,Caregiver worried; not enrolled,2 Same day,Open,"Mother answered; he has not picked up medicine; she is scared; he was not on the line",Jose,No,Caregiver path
 Leon Price,51,Riverside Behavioral Health,Voice,Declined,4 Close,Closed,"No thanks I'm good; suppressed from the campaign",None,No,Suppression

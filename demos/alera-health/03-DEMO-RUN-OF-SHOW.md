@@ -28,7 +28,7 @@ They are choosing among about five vendors in the next 30 to 60 days. Lead with 
 | Min | Segment | What to do | Landing line |
 | --- | --- | --- | --- |
 | 0–4 | Their problem | Engagement is the constraint: care managers are scarce, quality scores depend on contact, and HR1 makes coverage paperwork real on January 1, 2027. Alera normalizes the payer list. Clinicians should only see escalations. | "You don't need more dials. You need a yes, and a safe handoff when the call stops being about enrollment." |
-| 4–12 | **Hero SMS** | Play Denise. Name the bucket at each pause: Wants to verify, Coverage question, Wants to enroll, Prefers text. Point out that "at work days" is stored and does not change the reply. | "She counts as engaged at 'yes sign me up.' That is the Wants to enroll bucket. Coverage got the coverage reply, not a custom answer." |
+| 4–12 | **Hero SMS** | Play Denise. Name the bucket at each pause: Wants to verify, Coverage question, Wants to enroll, Prefers text. Point out that "at work days" is stored and does not change the reply. | "She counts as engaged at 'Yes sign me up.' That is the Wants to enroll bucket. Coverage got the coverage reply, not a custom answer." |
 | 12–20 | **Hero voice** | Same nodes. Marcus: Patient, Verified, Coverage question, Wants to enroll, Prefers text, then Safety on the check-in, then Yes or unclear, then Kathy. If transfer is not live, read the failed-transfer line and show **IBHH Safety Escalation**. | "Maybe is the Yes or unclear bucket. Unrecognized on that question uses the same reply. Kathy gets the call either way." |
 | 20–25 | **Open Cases** | Denise on the coordinator list. Marcus on Kathy's list. Rosa and Andre on Jose's list. Leon closed and suppressed. | "Three queues, one provider. Alera sees the rollup, Riverside sees its own panel." |
 | 25–30 | Pilot math | 2,000 to 3,000 members, one state, phone and text only. Engaged % = Enrolled (Yes) / list. Next to it: Tier 1 count, transfer connect rate, minutes to clinician. | "That's the number your data person can manage the pilot on." |
@@ -42,7 +42,7 @@ They are choosing among about five vendors in the next 30 to 60 days. Lead with 
 3. Restart, Present mode
 4. Advance and name the bucket: Patient → Wants to verify → Coverage question → Wants to enroll → Prefers text → 988 close
 5. Leave present mode. Open the seed list at Denise, then Marcus
-6. If voice is not built: switch to **IBHH Safety Escalation**, restart, advance identity → "i dont want to be here anymore" → clinician-is-calling close
+6. If voice is not built: switch to **IBHH Safety Escalation**, restart, advance identity → "Honestly I don't want to be here anymore" → clinician-is-calling close
 
 ---
 

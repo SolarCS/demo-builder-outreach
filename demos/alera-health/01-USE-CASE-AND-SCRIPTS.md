@@ -17,10 +17,10 @@ Voice and SMS use the same nodes, the same buckets, and the same configured repl
 The patient can answer in their own words. Outreach classifies that utterance into **one bucket configured on that question**, then plays **only the reply configured for that bucket**.
 
 - A bucket that is not on the question does not get an answer. "What are your hours?" on the enroll question hits **Unrecognized**, not a composed answer.
-- Question buckets (cost, coverage, "is this a scam", "are you a nurse") end by asking the enroll question again. Each of those buckets can fire **once**. The second time, play **Unrecognized**.
+- Question buckets (cost, coverage, "Is this a scam", "Are you a nurse") end by asking the enroll question again. Each of those buckets can fire **once**. The second time, play **Unrecognized**.
 - **Unrecognized** is a real bucket with its own reply. It is not a license to improvise.
 - On the safety question, **Unrecognized uses the same reply as Yes or unclear**, then transfers. Do not treat an odd answer as "probably fine."
-- The raw utterance is stored on the interaction so the coordinator can read "text is better, im at work days." The patient still hears the Prefers text reply, word for word.
+- The raw utterance is stored on the interaction so the coordinator can read "Text is better, I'm at work days." The patient still hears the Prefers text reply, word for word.
 - Do not turn on a generative fallback. If it cannot be said from the tables below, it is not said.
 
 ```mermaid
@@ -58,7 +58,7 @@ Add these to nodes A, B, C, D, E, and F. Same utterances, same next step. Do not
 
 | Bucket | Example utterances | Configured reply | Next |
 | --- | --- | --- | --- |
-| Safety | "i dont want to be here", "i want to hurt myself", "i might hurt someone", "overdose", "kill myself", "no point in being here" | Voice: go to node S with no extra words. SMS: send the SMS safety reply in node S and stop the thread | S, or SMS stop |
+| Safety | "I don't want to be here", "I want to hurt myself", "I might hurt someone", "Overdose", "Kill myself", "No point in being here" | Voice: go to node S with no extra words. SMS: send the SMS safety reply in node S and stop the thread | S, or SMS stop |
 | Unrecognized | anything that matches no bucket, including a second cost or coverage question | See the unrecognized row on that node | Once, then that node's exit |
 
 ---
@@ -71,10 +71,10 @@ Add these to nodes A, B, C, D, E, and F. Same utterances, same next step. Do not
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Patient | "yes", "this is marcus", "yes who is this", "yeah" | Voice: "Thanks. For your privacy, can you tell me your date of birth?" SMS: no extra line, go to the enroll prompt | Voice B, SMS C | |
-| Wrong number | "wrong number", "no one here by that name" | "I'm sorry to bother you. I'll take this number off our list." | End | Unable to Verify. Suppress. Do not name the program |
-| Caregiver | "this is his mom", "i'm his caregiver", "he isn't home" | "I can share that {patient} may qualify for a free care coordination program through {hospital}. I can't go into their care, and I can't sign them up unless they are on the line. Should we call back when they are available?" | D | |
-| Not a real person | "are you a robot", "are you a nurse", "is this a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real. Is this {patient}?" | A, once | |
+| Patient | "Yes", "This is Marcus", "Yes who is this", "Yeah" | Voice: "Thanks. For your privacy, can you tell me your date of birth?" SMS: no extra line, go to the enroll prompt | Voice B, SMS C | |
+| Wrong number | "Wrong number", "No one here by that name" | "I'm sorry to bother you. I'll take this number off our list." | End | Unable to Verify. Suppress. Do not name the program |
+| Caregiver | "This is his mom", "I'm his caregiver", "He isn't home" | "I can share that {patient} may qualify for a free care coordination program through {hospital}. I can't go into their care, and I can't sign them up unless they are on the line. Should we call back when they are available?" | D | |
+| Not a real person | "Are you a robot", "Are you a nurse", "Is this a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real. Is this {patient}?" | A, once | |
 | Unrecognized | | "Sorry, I didn't catch that. Is this {patient}?" | A, once, then the wrong-number reply | Unable to Verify |
 
 ---
@@ -87,7 +87,7 @@ SMS does not ask this. First name on node A is the SMS check.
 | --- | --- | --- | --- | --- |
 | Verified | date of birth matches the file | "Thank you." | C | |
 | Not a match | a different date | "That doesn't match what we have. Can you tell me your date of birth one more time?" | B retry | |
-| Refuses | "i'm not telling you that", "why do you need that" | "I can't continue without that. You can call {hospital} at (614) 555-0142. Goodbye." | End | Unable to Verify |
+| Refuses | "I'm not telling you that", "Why do you need that" | "I can't continue without that. You can call {hospital} at (614) 555-0142. Goodbye." | End | Unable to Verify |
 | Unrecognized | | "Sorry, I need your date of birth to continue. Can you say the month, day, and year?" | B retry | |
 
 **B retry:** Verified goes to C. Any other bucket except Safety plays the Refuses reply and ends.
@@ -104,13 +104,13 @@ On voice, say "Thanks, {patient}." before the prompt if you just verified the da
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Wants to enroll | "yes", "sign me up", "yeah okay", "i'm interested" | "Thank you, you're signed up. Is it okay if we text you program information at this number, or would you rather get a call?" | E | Enrolled (Yes). Tier 3 |
-| Does not want to enroll | "no", "no thanks", "i'm good", "not interested" | "That's completely fine. This is voluntary, and we won't contact you again about it. If you change your mind, call {hospital} at (614) 555-0142." | End | Declined. Suppress |
-| Cost question | "does this cost", "is this gonna cost me", "how much" | "There is no cost to you, and this does not change your doctors or your benefits. Would you like to enroll?" | C, once | |
-| Coverage question | "is my medicaid changing", "i got a letter about medicaid", "will i lose my insurance" | "Your coordinator can help with the paperwork so your coverage stays active. I can't say how any new rule applies to you. Would you like to enroll?" | C, once | |
-| Wants to verify | "is this a scam", "who is this really", "how did you get my number" | "We will never ask for money or your Social Security number. You can confirm by calling {hospital} at (614) 555-0142. The program is voluntary and it doesn't change your doctors. Would you like to enroll?" | C, once | |
-| Not a real person | "are you a nurse", "are you a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real. Would you like to enroll?" | C, once | |
-| Wants a person | "just have someone call me", "i don't want to do this on the phone" | "A care coordinator from {hospital} will call you within 2 business days. We won't enroll you unless you say yes." | End | Callback. Not engaged |
+| Wants to enroll | "Yes", "Sign me up", "Yeah okay", "I'm interested" | "Thank you, you're signed up. Is it okay if we text you program information at this number, or would you rather get a call?" | E | Enrolled (Yes). Tier 3 |
+| Does not want to enroll | "No", "No thanks", "I'm good", "Not interested" | "That's completely fine. This is voluntary, and we won't contact you again about it. If you change your mind, call {hospital} at (614) 555-0142." | End | Declined. Suppress |
+| Cost question | "Does this cost", "Is this gonna cost me", "How much" | "There is no cost to you, and this does not change your doctors or your benefits. Would you like to enroll?" | C, once | |
+| Coverage question | "Is my Medicaid changing", "I got a letter about Medicaid", "Will I lose my insurance" | "Your coordinator can help with the paperwork so your coverage stays active. I can't say how any new rule applies to you. Would you like to enroll?" | C, once | |
+| Wants to verify | "Is this a scam", "Who is this really", "How did you get my number" | "We will never ask for money or your Social Security number. You can confirm by calling {hospital} at (614) 555-0142. The program is voluntary and it doesn't change your doctors. Would you like to enroll?" | C, once | |
+| Not a real person | "Are you a nurse", "Are you a real person" | "I am an automated assistant. I am not a nurse, and I can't give medical advice. You can call {hospital} at (614) 555-0142 to confirm this is real. Would you like to enroll?" | C, once | |
+| Wants a person | "Just have someone call me", "I don't want to do this on the phone" | "A care coordinator from {hospital} will call you within 2 business days. We won't enroll you unless you say yes." | End | Callback. Not engaged |
 | Unrecognized | a second cost, coverage, or verify question, or anything else | "I want to make sure I understand. Would you like to enroll in the program, yes or no?" | C, once, then the Wants a person reply | Callback if they never hit Wants to enroll |
 
 SMS safety on this node does **not** ask node S. It sends the SMS block under node S and ends the thread.
@@ -123,9 +123,9 @@ Do not enroll. Do not ask an open "what time works" question. A clock time would
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Call back | "yes call later", "try after 5" | "We'll call back another time. {patient} can also call {hospital} at (614) 555-0142 and ask for care coordination. We still need them on the line to enroll." | End | Caregiver. Tier 3 |
-| Says no | "no", "don't call back" | "Okay. We won't leave details. They can call {hospital} at (614) 555-0142." | End | Caregiver |
-| Reports danger | "he's not safe", "i'm scared", "she hasn't picked up her medicine and something's wrong" | "Thank you for telling me. If they are in danger, call 911. You can call or text 988. I'm connecting you with Kathy, a clinician at {hospital}." | Transfer | Caregiver + Tier 1 |
+| Call back | "Yes call later", "Try after 5" | "We'll call back another time. {patient} can also call {hospital} at (614) 555-0142 and ask for care coordination. We still need them on the line to enroll." | End | Caregiver. Tier 3 |
+| Says no | "No", "Don't call back" | "Okay. We won't leave details. They can call {hospital} at (614) 555-0142." | End | Caregiver |
+| Reports danger | "He's not safe", "I'm scared", "She hasn't picked up her medicine and something's wrong" | "Thank you for telling me. If they are in danger, call 911. You can call or text 988. I'm connecting you with Kathy, a clinician at {hospital}." | Transfer | Caregiver + Tier 1 |
 | Unrecognized | | "Should we call back when {patient} is available? Yes or no." | D, once, then Says no | Caregiver |
 
 "Reports danger" is the caregiver safety bucket. It uses this reply, not a new one.
@@ -138,9 +138,9 @@ Only reached from **Wants to enroll**. The member is already engaged.
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Prefers text | "yes", "text me", "text is better, im at work days" | "Got it. Your {hospital} care coordinator will text you within 2 business days." Then the channel close | Voice F, SMS end | Text consent yes. Tier 3. Preference text |
-| Prefers a call | "call me", "don't text" | "Got it. Your {hospital} care coordinator will call you within 2 business days." Then the channel close | Voice F, SMS end | Text consent no. Tier 3. Preference call |
-| Stop | "stop", "leave me alone" | "You're signed up, and we won't text you. If you want off the program too, call {hospital} at (614) 555-0142. Goodbye." | End | Stays Enrolled (Yes) unless they clearly refuse the program. Suppress SMS |
+| Prefers text | "Yes", "Text me", "Text is better, I'm at work days" | "Got it. Your {hospital} care coordinator will text you within 2 business days." Then the channel close | Voice F, SMS end | Text consent yes. Tier 3. Preference text |
+| Prefers a call | "Call me", "Don't text" | "Got it. Your {hospital} care coordinator will call you within 2 business days." Then the channel close | Voice F, SMS end | Text consent no. Tier 3. Preference call |
+| Stop | "Stop", "Leave me alone" | "You're signed up, and we won't text you. If you want off the program too, call {hospital} at (614) 555-0142. Goodbye." | End | Stays Enrolled (Yes) unless they clearly refuse the program. Suppress SMS |
 | Unrecognized | | "Would you like a text, or a phone call?" | E, once, then Prefers a call | Preference call |
 
 **SMS close (append on Prefers text and Prefers a call):** "If you're ever in crisis, call or text 988, or call 911 if you're in danger. Reply HELP for help. Reply STOP to unsubscribe."
@@ -155,11 +155,11 @@ Only reached from **Wants to enroll**. The member is already engaged.
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| No issues | "no", "i'm good", "not today" | "Thank you. You're enrolled. If you're ever in crisis, call or text 988, or call 911 if you are in danger. Goodbye." | End | Enrolled (Yes) |
-| Medicine or care problem | "i ran out of my meds", "i haven't picked them up", "i need to see someone" | "Thank you. Jose, a clinician on your {hospital} team, will call you today. If that feels urgent before they reach you, call or text 988, or call 911. Goodbye." | End | Enrolled (Yes) + Tier 2, owner Jose |
+| No issues | "No", "I'm good", "Not today" | "Thank you. You're enrolled. If you're ever in crisis, call or text 988, or call 911 if you are in danger. Goodbye." | End | Enrolled (Yes) |
+| Medicine or care problem | "I ran out of my meds", "I haven't picked them up", "I need to see someone" | "Thank you. Jose, a clinician on your {hospital} team, will call you today. If that feels urgent before they reach you, call or text 988, or call 911. Goodbye." | End | Enrolled (Yes) + Tier 2, owner Jose |
 | Unrecognized | | "Thanks. You're enrolled, and your coordinator will reach out. If you need help sooner, call {hospital} at (614) 555-0142. Goodbye." | End | Enrolled (Yes) |
 
-Put "i don't see the point", "i don't want to be here", and "i might hurt myself" in the **Safety** bucket, not in Medicine or care problem. A sentence that contains both ("ran out of my meds" and "don't see the point") is Safety.
+Put "I don't see the point", "I don't want to be here", and "I might hurt myself" in the **Safety** bucket, not in Medicine or care problem. A sentence that contains both ("Ran out of my meds" and "Don't see the point") is Safety.
 
 ---
 
@@ -169,8 +169,8 @@ Put "i don't see the point", "i don't want to be here", and "i might hurt myself
 
 | Bucket | Example utterances | Configured reply | Next | Disposition |
 | --- | --- | --- | --- | --- |
-| Yes or unclear | "yes", "maybe", "i don't know", "kind of", silence | "I'm going to connect you right now with Kathy, a clinician on your {hospital} care team. Please stay on the line. If we get disconnected, call or text 988, or call 911 if you are in danger." | Transfer | Tier 1, owner Kathy Smith |
-| No | "no", "i'm not going to hurt myself" | "I'm glad you told me that. A clinician from {hospital} will call you today. If that changes, call or text 988, or call 911. Goodbye." | End | Tier 2, owner Jose |
+| Yes or unclear | "Yes", "Maybe", "I don't know", "Kind of", silence | "I'm going to connect you right now with Kathy, a clinician on your {hospital} care team. Please stay on the line. If we get disconnected, call or text 988, or call 911 if you are in danger." | Transfer | Tier 1, owner Kathy Smith |
+| No | "No", "I'm not going to hurt myself" | "I'm glad you told me that. A clinician from {hospital} will call you today. If that changes, call or text 988, or call 911. Goodbye." | End | Tier 2, owner Jose |
 | Unrecognized | anything else | Same reply as Yes or unclear | Transfer | Tier 1 |
 
 **SMS safety reply** (used instead of this question when Safety hits on a text):
@@ -193,18 +193,18 @@ These are bucket sequences. Every line is the configured reply for that bucket.
 
 | Step | Node | Bucket her text hits | What she sees |
 | --- | --- | --- | --- |
-| 0.0 | A | Patient ("yes who is this") | Identity prompt |
-| 1.0 | C | Wants to verify ("is this a scam lol") | Enroll prompt |
-| 2.0 | C | Coverage question ("i got a letter about medicaid changing and im worried") | Verify reply, enroll asked again |
-| 3.0 | C | Wants to enroll ("yes sign me up") | Coverage reply, enroll asked again |
-| 4.0 | E | Prefers text ("text is better, im at work days") | Signed-up prompt |
+| 0.0 | A | Patient ("Yes who is this") | Identity prompt |
+| 1.0 | C | Wants to verify ("Is this a scam lol") | Enroll prompt |
+| 2.0 | C | Coverage question ("I got a letter about Medicaid changing and I'm worried") | Verify reply, enroll asked again |
+| 3.0 | C | Wants to enroll ("Yes sign me up") | Coverage reply, enroll asked again |
+| 4.0 | E | Prefers text ("Text is better, I'm at work days") | Signed-up prompt |
 | 5.0 | | | Prefers text reply + 988 close |
 
 She is engaged at step 3.0, when Wants to enroll fires. "At work days" is on the transcript. It does not change the reply.
 
 ### SMS — IBHH Safety Escalation
 
-Same node A, then node C. Her reply "honestly i dont want to be here anymore" hits **Safety**. The thread sends the SMS safety reply and stops. Tier 1, Kathy Smith calls her. This template is the Safety bucket on the enroll question, for rooms where voice transfer cannot be shown.
+Same node A, then node C. Her reply "Honestly I don't want to be here anymore" hits **Safety**. The thread sends the SMS safety reply and stops. Tier 1, Kathy Smith calls her. This template is the Safety bucket on the enroll question, for rooms where voice transfer cannot be shown.
 
 ### Voice — Marcus
 
