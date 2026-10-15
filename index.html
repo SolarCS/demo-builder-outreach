@@ -1012,6 +1012,42 @@
         ]
     };
 
+    /* ---- IBHH Program Enrollment / Riverside Behavioral Health (from voice Outreach 1) ---- */
+    const IBHH_ENROLLMENT_TEMPLATE = {
+        id: 'ibhh-program-enrollment',
+        name: 'IBHH Program Enrollment',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi, this is your doctor's office texting on behalf of {hospital}. We're reaching out because we care about your health and wellbeing and, based on our records, you qualify for our free Integrated Behavioral Health program.",
+                "Before we tell you about the program, can you please confirm that we are speaking with the patient, {patient}, or a caregiver of the patient? You can also let us know if we have the wrong number or if you'd like us to follow up later."
+            ], choices: [{ text: "This is the patient, {patient}", next: "1.0" }] },
+            { id: '1.0', messages: [
+                "Okay great, then let's get started.",
+                "Because you receive care at {hospital}, you qualify for a free Integrated Behavioral Health program. You would have your own care coordinator to help with things like appointments, medicines, rides, and keeping your Medicaid active. It is voluntary and it does not change your doctors or your benefits.",
+                "Would you like to enroll in the program?"
+            ], choices: [{ text: "Yes, I'd like to enroll", next: "2.0" }] },
+            { id: '2.0', messages: [
+                "Great, a care coordinator from Riverside will call you back to discuss this with you and to get you enrolled in the program.",
+                "Before we wrap up, we have just a couple questions about your overall wellbeing.",
+                "First, how are you feeling today?"
+            ], choices: [{ text: "I'm feeling just okay", next: "3.0" }] },
+            { id: '3.0', messages: [
+                "Thank you for sharing that. If at anytime you are feeling overwhelmed, unsafe, or having thoughts of hurting yourself, you can call or text the national crisis hotline at 988 to get the care and support you need.",
+                "It is also important that you are taking your medications as prescribed.",
+                "Do you have any concerns or questions about your medications?"
+            ], choices: [{ text: "I don't understand why I have to take my medication everyday", next: "4.0" }] },
+            { id: '4.0', messages: [
+                "I understand you have a question about your medication. We will have someone from your care team call you back shortly to discuss this with you.",
+                "Before we end, are there any other concerns you'd like to share?"
+            ], choices: [{ text: "No, I don't have any other concerns", next: "5.0" }] },
+            { id: '5.0', messages: [
+                "Okay, no problem.",
+                "Please note, if you are having a medical emergency please call 911 or go to the nearest emergency department.",
+                "Thank you for participating. Have a nice day, goodbye. Reply HELP for help. Reply STOP to unsubscribe."
+            ], choices: [] }
+        ]
+    };
+
     // Bundled library: add new demos alongside existing clinical programs; never wipe them.
     // Cedars numeric inpatient template intentionally retired (conversational TCM covers inpatient).
     const BUNDLED_TEMPLATES = [
@@ -1023,7 +1059,8 @@
         CHF_TEMPLATE,
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
-        BH_PREVISIT_TEMPLATE
+        BH_PREVISIT_TEMPLATE,
+        IBHH_ENROLLMENT_TEMPLATE
     ];
 
     const RETIRED_TEMPLATE_IDS = new Set([
@@ -1045,7 +1082,8 @@
         [CHF_TEMPLATE.id]: { patient: "Patti", hospital: "Central Hospital" },
         [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" },
         [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" },
-        [IP_PDO_VMFHS_TEMPLATE.id]: { patient: "Margaret", hospital: "Virginia Mason Franciscan Health" }
+        [IP_PDO_VMFHS_TEMPLATE.id]: { patient: "Margaret", hospital: "Virginia Mason Franciscan Health" },
+        [IBHH_ENROLLMENT_TEMPLATE.id]: { patient: "Kenny", hospital: "Riverside Behavioral Health" }
     };
 
 

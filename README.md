@@ -58,11 +58,13 @@ Dropdown templates (conversational AI / natural-language patient replies):
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
 - **Wellness Care Gap**
 - **Pre-Visit Pellet/Weight Prep**
+- **IBHH Program Enrollment** — Riverside Behavioral Health Integrated Behavioral Health enroll + wellness/meds check-in (from voice Outreach 1)
 
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti` and expose day pills to switch check-ins.  
 Post Fall Episode auto-sets Hospital = `National Heritage for the Blind`.  
 IP PDO - VMFHS auto-sets Hospital = `Virginia Mason Franciscan Health`.  
+IBHH Program Enrollment auto-sets Patient = `Kenny` and Hospital = `Riverside Behavioral Health`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
