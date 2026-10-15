@@ -293,6 +293,22 @@
             background: #F0F9FF;
             box-shadow: 0 0 0 1px var(--brand);
         }
+        .demo-card .remove-demo {
+            border: none;
+            background: #FEE2E2;
+            color: #DC2626;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            opacity: 0.85;
+            transition: opacity 0.15s, background 0.15s;
+        }
+        .demo-card .remove-demo:hover { opacity: 1; background: #FECACA; }
         .input-label {
             display: block;
             font-size: 11px;
@@ -356,6 +372,15 @@
 
             <label class="input-label mb-2"><i class="fa-solid fa-microphone-lines mr-1"></i> Voice demos</label>
             <div id="demo-list" class="space-y-2"></div>
+
+            <button type="button" onclick="document.getElementById('audio-upload').click()" class="w-full mt-3 border-2 border-dashed border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-700 rounded-xl py-3 text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                <i class="fa-solid fa-upload"></i> Upload audio for this demo
+            </button>
+            <input type="file" id="audio-upload" class="hidden" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.webm,.caf" onchange="handleAudioUpload(this)">
+            <p class="text-[10px] text-slate-400 mt-1.5 leading-relaxed">
+                MP3, M4A, WAV, and similar formats. Uploaded calls stay in this browser until you remove them — handy for swapping recordings per account demo.
+            </p>
+            <p id="upload-status" class="text-[11px] font-semibold mt-2 hidden"></p>
 
             <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[11px] text-blue-800 leading-relaxed mt-5">
                 <i class="fa-solid fa-circle-info mr-1"></i>
@@ -471,13 +496,14 @@
     </audio>
 
     <script>
-    const DEMOS = [
+    const BUILTIN_DEMOS = [
         {
             id: 'utsw-ip-pdo',
             title: 'UT Southwestern · IP PDO',
             subtitle: 'Inpatient post-discharge outreach call (~2:28)',
             caller: 'UT Southwestern',
             initials: 'UT',
+            custom: false,
             sources: [
                 { src: 'assets/audio/ut-southwestern-ip-pdo.mp3', type: 'audio/mpeg' },
                 { src: 'assets/audio/ut-southwestern-ip-pdo.m4a', type: 'audio/mp4' }
@@ -485,27 +511,144 @@
         }
     ];
 
-    let activeDemoId = DEMOS[0].id;
+    const DB_NAME = 'cipher-voice-demos';
+    const DB_STORE = 'uploads';
+    const DB_VERSION = 1;
+
+    let customDemos = [];
+    let activeDemoId = BUILTIN_DEMOS[0].id;
     let timerInterval = null;
     let callSeconds = 0;
     let muted = false;
 
     const audio = document.getElementById('call-audio');
 
+    function allDemos() {
+        return BUILTIN_DEMOS.concat(customDemos);
+    }
+
     function activeDemo() {
-        return DEMOS.find(d => d.id === activeDemoId) || DEMOS[0];
+        return allDemos().find(d => d.id === activeDemoId) || BUILTIN_DEMOS[0];
+    }
+
+    function openUploadDb() {
+        return new Promise((resolve, reject) => {
+            const req = indexedDB.open(DB_NAME, DB_VERSION);
+            req.onupgradeneeded = () => {
+                const db = req.result;
+                if (!db.objectStoreNames.contains(DB_STORE)) {
+                    db.createObjectStore(DB_STORE, { keyPath: 'id' });
+                }
+            };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error || new Error('IndexedDB open failed'));
+        });
+    }
+
+    async function persistUpload(record) {
+        const db = await openUploadDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(DB_STORE, 'readwrite');
+            tx.objectStore(DB_STORE).put(record);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+
+    async function deletePersistedUpload(id) {
+        const db = await openUploadDb();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(DB_STORE, 'readwrite');
+            tx.objectStore(DB_STORE).delete(id);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+
+    async function loadPersistedUploads() {
+        try {
+            const db = await openUploadDb();
+            const rows = await new Promise((resolve, reject) => {
+                const tx = db.transaction(DB_STORE, 'readonly');
+                const req = tx.objectStore(DB_STORE).getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => reject(req.error);
+            });
+            customDemos = rows.map(row => {
+                const blob = row.blob instanceof Blob ? row.blob : new Blob([row.blob], { type: row.mimeType || 'audio/mpeg' });
+                const url = URL.createObjectURL(blob);
+                return {
+                    id: row.id,
+                    title: row.title,
+                    subtitle: row.subtitle || 'Uploaded audio · this browser',
+                    caller: row.caller,
+                    initials: row.initials || initialsFrom(row.caller),
+                    custom: true,
+                    fileName: row.fileName || '',
+                    sources: [{ src: url, type: row.mimeType || blob.type || 'audio/mpeg' }]
+                };
+            });
+        } catch (err) {
+            console.warn('Could not load saved voice uploads', err);
+            customDemos = [];
+        }
+    }
+
+    function mimeFromFile(file) {
+        if (file.type) return file.type;
+        const name = (file.name || '').toLowerCase();
+        if (name.endsWith('.mp3')) return 'audio/mpeg';
+        if (name.endsWith('.m4a') || name.endsWith('.aac')) return 'audio/mp4';
+        if (name.endsWith('.wav')) return 'audio/wav';
+        if (name.endsWith('.ogg')) return 'audio/ogg';
+        if (name.endsWith('.webm')) return 'audio/webm';
+        if (name.endsWith('.caf')) return 'audio/x-caf';
+        return 'audio/mpeg';
+    }
+
+    function titleFromFileName(name) {
+        const base = String(name || 'Uploaded call').replace(/\.[^.]+$/, '');
+        return base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Uploaded call';
+    }
+
+    function formatBytes(n) {
+        if (!n && n !== 0) return '';
+        if (n < 1024) return `${n} B`;
+        if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;
+        return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function setUploadStatus(msg, isError) {
+        const el = document.getElementById('upload-status');
+        if (!msg) {
+            el.classList.add('hidden');
+            el.textContent = '';
+            return;
+        }
+        el.classList.remove('hidden');
+        el.className = `text-[11px] font-semibold mt-2 ${isError ? 'text-red-600' : 'text-emerald-700'}`;
+        el.textContent = msg;
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
 
     function renderDemoList() {
         const list = document.getElementById('demo-list');
-        list.innerHTML = DEMOS.map(d => `
+        list.innerHTML = allDemos().map(d => `
             <div class="demo-card ${d.id === activeDemoId ? 'active' : ''}" onclick="selectDemo('${d.id}')">
                 <div class="flex items-start gap-3">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0" style="background:var(--brand)">${d.initials}</div>
-                    <div class="min-w-0">
-                        <div class="text-[13px] font-bold text-slate-800">${d.title}</div>
-                        <div class="text-[11px] text-slate-500 mt-0.5">${d.subtitle}</div>
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0" style="background:var(--brand)">${escapeHtml(d.initials)}</div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-[13px] font-bold text-slate-800">${escapeHtml(d.title)}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">${escapeHtml(d.subtitle)}</div>
                     </div>
+                    ${d.custom ? `<button type="button" class="remove-demo" title="Remove uploaded audio" onclick="event.stopPropagation(); removeCustomDemo('${d.id}')"><i class="fa-solid fa-trash text-[11px]"></i></button>` : ''}
                 </div>
             </div>
         `).join('');
@@ -525,8 +668,87 @@
 
     function loadAudio(demo) {
         audio.pause();
-        audio.innerHTML = demo.sources.map(s => `<source src="${s.src}" type="${s.type}">`).join('');
+        audio.removeAttribute('src');
+        audio.innerHTML = (demo.sources || []).map(s => `<source src="${s.src}" type="${s.type || ''}">`).join('');
+        if (demo.sources && demo.sources[0] && !demo.sources[0].type) {
+            audio.src = demo.sources[0].src;
+        }
         audio.load();
+    }
+
+    async function handleAudioUpload(input) {
+        const file = input.files && input.files[0];
+        input.value = '';
+        if (!file) return;
+
+        if (!/^audio\//i.test(file.type) && !/\.(mp3|m4a|wav|ogg|aac|webm|caf)$/i.test(file.name || '')) {
+            setUploadStatus('Please choose an audio file (MP3, M4A, WAV, etc.).', true);
+            return;
+        }
+
+        const mime = mimeFromFile(file);
+        const title = titleFromFileName(file.name);
+        const callerInput = document.getElementById('set-caller').value.trim();
+        const caller = callerInput || title;
+        const id = `upload-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const url = URL.createObjectURL(file);
+        const demo = {
+            id,
+            title,
+            subtitle: `Uploaded · ${formatBytes(file.size)} · this browser`,
+            caller,
+            initials: initialsFrom(caller),
+            custom: true,
+            fileName: file.name,
+            sources: [{ src: url, type: mime }]
+        };
+
+        try {
+            await persistUpload({
+                id,
+                title: demo.title,
+                subtitle: demo.subtitle,
+                caller: demo.caller,
+                initials: demo.initials,
+                fileName: file.name,
+                mimeType: mime,
+                blob: file,
+                savedAt: Date.now()
+            });
+        } catch (err) {
+            console.warn('Could not persist upload (still usable this session)', err);
+        }
+
+        customDemos.push(demo);
+        endCall(true);
+        activeDemoId = id;
+        document.getElementById('set-caller').value = caller;
+        loadAudio(demo);
+        updateCaller();
+        renderDemoList();
+        resetToRinging();
+        setUploadStatus(`Ready: “${title}” — Answer the phone to play it.`);
+    }
+
+    async function removeCustomDemo(id) {
+        const demo = customDemos.find(d => d.id === id);
+        if (!demo) return;
+        (demo.sources || []).forEach(s => {
+            if (s.src && String(s.src).startsWith('blob:')) URL.revokeObjectURL(s.src);
+        });
+        customDemos = customDemos.filter(d => d.id !== id);
+        try { await deletePersistedUpload(id); } catch (err) { console.warn(err); }
+
+        if (activeDemoId === id) {
+            activeDemoId = BUILTIN_DEMOS[0].id;
+            const d = activeDemo();
+            document.getElementById('set-caller').value = d.caller;
+            loadAudio(d);
+            updateCaller();
+            resetToRinging();
+        }
+        renderDemoList();
+        setUploadStatus('Removed uploaded audio.');
     }
 
     function initialsFrom(name) {
@@ -649,12 +871,16 @@
         setTimeout(updateScale, 305);
     }
 
-    renderDemoList();
-    updateCaller();
-    tickClock();
-    setInterval(tickClock, 30000);
-    updateScale();
-    window.addEventListener('resize', updateScale);
+    async function boot() {
+        await loadPersistedUploads();
+        renderDemoList();
+        updateCaller();
+        tickClock();
+        setInterval(tickClock, 30000);
+        updateScale();
+        window.addEventListener('resize', updateScale);
+    }
+    boot();
     </script>
 </body>
 </html>

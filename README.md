@@ -41,7 +41,9 @@ A separate presenter page for **voice / IVR-style outreach** lives at
 [`voice.html`](voice.html) (also via the **SMS | Voice** toggle in the sidebar). The phone
 starts ringing; **Answer** plays a recorded outreach call.
 
-Bundled recording: **UT Southwestern · IP PDO** (`assets/audio/`). SMS behavior is unchanged.
+Bundled recording: **UT Southwestern · IP PDO** (`assets/audio/`). Use **Upload audio for this
+demo** in the Voice sidebar to swap in an account-specific recording (MP3/M4A/WAV/etc.); uploads
+stay in that browser until removed. SMS behavior is unchanged.
 
 ### Bundled outreach programs
 
