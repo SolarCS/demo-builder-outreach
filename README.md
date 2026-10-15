@@ -35,20 +35,36 @@ A ready-to-edit **TCM (Transitional Care Management) outreach** script ships as 
 sample. Use the **Export** button to download the current template in this exact format as a
 starting point for new ones.
 
+## Voice Call Demo
+
+A separate presenter page for **voice / IVR-style outreach** lives at
+[`voice.html`](voice.html) (also via the **SMS | Voice** toggle in the sidebar). The phone
+starts ringing; **Answer** plays a recorded outreach call.
+
+Bundled recording: **UT Southwestern · IP PDO** (`assets/audio/`). Use **Upload audio for this
+demo** in the Voice sidebar to swap in an account-specific recording (MP3/M4A/WAV/etc.); uploads
+stay in that browser until removed. SMS behavior is unchanged.
+
 ### Bundled outreach programs
 
 Dropdown templates (conversational AI / natural-language patient replies):
 
 - **TCM Outreach (Sample)** — inpatient / TCM post-discharge
 - **Care Gaps / Cancer Screening**
-- **COPD Post-Discharge (Day 2)** — longitudinal
-- **CHF Post-Discharge (Day 2)** — longitudinal
+- **Post Fall Episode** — National Heritage for the Blind SNF post-fall check-in
+- **IP PDO - VMFHS** — Virginia Mason Franciscan Health stroke inpatient post-discharge
+- **COPD Post-Discharge** — full longitudinal (Days 2, 9, 16, 23)
+- **CHF Post-Discharge** — full longitudinal (Days 2, 7, 14, 21, 30)
 - **GLP-1 Program Continuity** (hero demo; org name set via Hospital field)
 - **Wellness Care Gap**
 - **Pre-Visit Pellet/Weight Prep**
+- **IBHH Program Enrollment** — Riverside Behavioral Health Integrated Behavioral Health enroll + wellness/meds check-in (from voice Outreach 1)
 
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
-COPD/CHF auto-set Patient = `Patti`.  
+COPD/CHF auto-set Patient = `Patti` and expose day pills to switch check-ins.  
+Post Fall Episode auto-sets Hospital = `National Heritage for the Blind`.  
+IP PDO - VMFHS auto-sets Hospital = `Virginia Mason Franciscan Health`.  
+IBHH Program Enrollment auto-sets Patient = `Kenny` and Hospital = `Riverside Behavioral Health`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
