@@ -1012,6 +1012,142 @@
         ]
     };
 
+    /* ---- Westminster LTC Post-Discharge (longitudinal: 24h / 48h / Day 7 / Day 14) ---- */
+    const WESTMINSTER_LTC_TEMPLATE = {
+        id: 'westminster-ltc-pd',
+        name: 'Westminster LTC Post-Discharge',
+        meta: '4 touches · 14 days',
+        journey: [
+            {
+                day: '24 Hours', offset: 1, title: '24-Hour Home Check-In', questions: 7,
+                summary: 'First day home. Feeling about the same; med question, home health not yet scheduled, PCP needs help.',
+                steps: [
+                    { id: '0.0', messages: [
+                        "Hi. This is {hospital}. We're reaching out following your recent stay with us and have just a few questions we'd like to ask to understand how you're recovering at home.",
+                        "Before we begin, can you please confirm we are speaking with the patient, {patient}, or if you are a caregiver of the patient? You can also let us know if we have the wrong number or if you'd like us to follow up later."
+                    ], choices: [{ text: "This is {patient}, I'm the patient", next: '1.0' }] },
+                    { id: '1.0', messages: [
+                        "Okay, thank you, then let's get started.",
+                        "How are you feeling now compared to when you left our facility?"
+                    ], choices: [{ text: "About the same, still a little weak and moving slow", next: '2.0' }] },
+                    { id: '2.0', messages: [
+                        "Okay, thank you for letting me know.",
+                        "When leaving our facility, you were given care instructions to help you stay healthy at home. Do you understand all of your care instructions?"
+                    ], choices: [{ text: "Yes I think I understand them, my daughter looked them over with me", next: '3.0' }] },
+                    { id: '3.0', messages: [
+                        "Okay, great, thanks for letting us know.",
+                        "Another important step in your recovery is taking your medications as directed. Have you been able to get all of your prescribed medications?"
+                    ], choices: [{ text: "Yes, my daughter picked them all up from the pharmacy yesterday", next: '4.0' }] },
+                    { id: '4.0', messages: [
+                        "Okay, I'm glad to hear that.",
+                        "Do you have any questions about any of your medications?"
+                    ], choices: [{ text: "Yes, I don't understand why I have to take the water pill twice a day", next: '5.0' }] },
+                    { id: '5.0', messages: [
+                        "I understand that you do have a question about one of your medications. We will have someone from our care team call you back shortly to discuss this with you.",
+                        "Following your discharge, you should have been contacted to schedule a home health visit. Has someone contacted you to schedule this visit, or have you already scheduled this visit?"
+                    ], choices: [{ text: "No, nobody has called me about home health yet", next: '6.0' }] },
+                    { id: '6.0', messages: [
+                        "Okay, no problem. You should expect to receive a call to schedule this visit.",
+                        "Another important step in your recovery is scheduling a follow up appointment with your doctor. Have you been able to schedule an appointment with your doctor's office?"
+                    ], choices: [{ text: "Not yet, I get confused with the phone menus and could use some help", next: '7.0' }] },
+                    { id: '7.0', messages: [
+                        "Ok no problem, we will have someone on our care team call you to help schedule an appointment.",
+                        "We have just one more question for you. Would you like to share any feedback about your visit?"
+                    ], choices: [{ text: "No I'm all set, the nurses were very kind", next: '8.0' }] },
+                    { id: '8.0', messages: [
+                        "Okay, no problem.",
+                        "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
+                        "Thank you for choosing {hospital} and for participating in this conversation. Have a nice day, goodbye. Reply HELP for help. Reply STOP to unsubscribe."
+                    ], choices: [] }
+                ]
+            },
+            {
+                day: '48 Hours', offset: 2, title: '48-Hour Progress Check-In', questions: 4,
+                summary: 'Day 2 home. Feeling a bit better; meds on track; home health scheduled; still waiting on PCP.',
+                steps: [
+                    { id: '0.0', messages: [
+                        "Hi {patient}, this is {hospital} checking in again on how you're doing at home.",
+                        "This is a short 48-hour check-in with a few quick questions. Reply STOP anytime to opt out.",
+                        "How are you feeling today?"
+                    ], choices: [{ text: "A little better than yesterday, still tired but I slept okay", next: '1.0' }] },
+                    { id: '1.0', messages: [
+                        "I am glad to hear.",
+                        "Have you been taking your medications as directed?"
+                    ], choices: [{ text: "Yes, I've been taking them with breakfast and dinner like they showed me", next: '2.0' }] },
+                    { id: '2.0', messages: [
+                        "Okay, I'm glad to hear that.",
+                        "Has your home health visit been scheduled, or has someone from home health already come by?"
+                    ], choices: [{ text: "Yes they called this morning and the nurse is coming tomorrow afternoon", next: '3.0' }] },
+                    { id: '3.0', messages: [
+                        "Okay great, thank you for letting us know.",
+                        "Have you been able to see your primary care doctor, or is that appointment still being scheduled?"
+                    ], choices: [{ text: "Not yet, I'm still waiting for someone to help me get that on the calendar", next: '4.0' }] },
+                    { id: '4.0', messages: [
+                        "Ok no problem, we will have someone on our care team call you to help schedule an appointment.",
+                        "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
+                        "We'll check in with you again soon to see how you're progressing at home.",
+                        "Thank you for choosing {hospital}. Reply HELP for help. Reply STOP to unsubscribe. Have a nice day."
+                    ], choices: [] }
+                ]
+            },
+            {
+                day: 'Day 7', offset: 7, title: 'One-Week Check-In', questions: 4,
+                summary: 'One week home. Feeling weaker; home health active; PCP done; offer return to Westminster vs hospital.',
+                steps: [
+                    { id: '0.0', messages: [
+                        "Hi {patient}, this is {hospital} with your one-week check-in.",
+                        "Just a few short questions today. Reply STOP anytime to opt out.",
+                        "How are you feeling today compared to when you left our facility?"
+                    ], choices: [{ text: "I've been more tired and unsteady on my feet the last couple days, it's worrying me", next: '1.0' }] },
+                    { id: '1.0', messages: [
+                        "I'm sorry to hear that. We will have someone from our care team call you back shortly to discuss this with you. If you feel you're having a serious medical issue please contact your doctor's office or go to the nearest emergency department.",
+                        "If you need more support recovering, we can help arrange a return to {hospital} rather than going to the hospital, when that is the safer option. Would you like someone to call you about coming back to our community?"
+                    ], choices: [{ text: "Yes please, I'd rather come back to Westminster than end up in the hospital again", next: '2.0' }] },
+                    { id: '2.0', messages: [
+                        "Thank you for letting us know. Someone from our care team will call you shortly to talk through a return to {hospital}.",
+                        "Has your home health nurse been able to visit you at home?"
+                    ], choices: [{ text: "Yes, she's been by twice this week and checked my blood pressure", next: '3.0' }] },
+                    { id: '3.0', messages: [
+                        "Okay great, thank you for letting us know.",
+                        "Have you seen your primary care doctor since leaving our facility?"
+                    ], choices: [{ text: "Yes, I saw Dr. Patel on Tuesday, my daughter drove me", next: '4.0' }] },
+                    { id: '4.0', messages: [
+                        "That is good to hear. It is important that you keep and attend your scheduled appointments.",
+                        "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
+                        "We'll check in with you again soon to see how you're progressing at home.",
+                        "Thank you for choosing {hospital}. Reply HELP for help. Reply STOP to unsubscribe. Have a nice day."
+                    ], choices: [] }
+                ]
+            },
+            {
+                day: 'Day 14', offset: 14, title: 'Two-Week Follow-Up', questions: 3,
+                summary: 'Program close-out. Feeling steadier; meds and visits on track; remind facility is available.',
+                steps: [
+                    { id: '0.0', messages: [
+                        "Hi {patient}, this is {hospital} with your two-week check-in.",
+                        "This is our last short check-in in the series. Reply STOP anytime to opt out.",
+                        "How are you feeling today?"
+                    ], choices: [{ text: "Much better, I'm steadier on my feet and getting around the house okay", next: '1.0' }] },
+                    { id: '1.0', messages: [
+                        "I am glad to hear.",
+                        "Are you still taking your medications as directed?"
+                    ], choices: [{ text: "Yes every day, I keep them in that weekly pill box so I don't miss any", next: '2.0' }] },
+                    { id: '2.0', messages: [
+                        "Okay, I'm glad to hear that.",
+                        "Have your home health visits and doctor's appointments been going okay?"
+                    ], choices: [{ text: "Yes, home health wrapped up last week and I have another doctor visit next month", next: '3.0' }] },
+                    { id: '3.0', messages: [
+                        "That is good to hear.",
+                        "Please note, if you have an urgent medical problem or concern, please contact your doctor's office or go to the nearest emergency department.",
+                        "Thank you for choosing {hospital} and for participating in these check-ins. If you ever need extra support recovering at home, we are here to help arrange a return to our community rather than the hospital whenever that is the safer option.",
+                        "Have a nice day, goodbye. Reply HELP for help. Reply STOP to unsubscribe."
+                    ], choices: [] }
+                ]
+            }
+        ]
+    };
+    WESTMINSTER_LTC_TEMPLATE.steps = WESTMINSTER_LTC_TEMPLATE.journey[0].steps;
+
     /* ---- IBHH Program Enrollment / Riverside Behavioral Health (from voice Outreach 1) ---- */
     const IBHH_ENROLLMENT_TEMPLATE = {
         id: 'ibhh-program-enrollment',
@@ -1060,7 +1196,8 @@
         BH_GLP1_TEMPLATE,
         BH_WELLNESS_TEMPLATE,
         BH_PREVISIT_TEMPLATE,
-        IBHH_ENROLLMENT_TEMPLATE
+        IBHH_ENROLLMENT_TEMPLATE,
+        WESTMINSTER_LTC_TEMPLATE
     ];
 
     const RETIRED_TEMPLATE_IDS = new Set([
@@ -1083,7 +1220,8 @@
         [CAREGAPS_TEMPLATE.id]: { patient: "Margaret", hospital: "Central Hospital" },
         [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" },
         [IP_PDO_VMFHS_TEMPLATE.id]: { patient: "Margaret", hospital: "Virginia Mason Franciscan Health" },
-        [IBHH_ENROLLMENT_TEMPLATE.id]: { patient: "Kenny", hospital: "Riverside Behavioral Health" }
+        [IBHH_ENROLLMENT_TEMPLATE.id]: { patient: "Kenny", hospital: "Riverside Behavioral Health" },
+        [WESTMINSTER_LTC_TEMPLATE.id]: { patient: "Michael", hospital: "Westminster Senior Living Community" }
     };
 
 
