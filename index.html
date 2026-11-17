@@ -1184,6 +1184,42 @@
         ]
     };
 
+    /* ---- Endoscopy Pre-Procedure Assessment (GI clinic, 5 screening questions) ---- */
+    const ENDOSCOPY_PREASSESS_TEMPLATE = {
+        id: 'endoscopy-preassess',
+        name: 'Endoscopy Pre-Procedure Assessment',
+        steps: [
+            { id: '0.0', messages: [
+                "Hi {patient}, this is {hospital}. We are reaching out to ask you a few questions ahead of your upcoming endoscopy visit so our team can make sure you are prepared and safe for your procedure.",
+                "Before we continue, can you please confirm that we are speaking with the patient, {patient}, or a caregiver of the patient? You can also let us know if we have the wrong number."
+            ], choices: [{ text: "Yes this is {patient}", next: '1.0' }] },
+            { id: '1.0', messages: [
+                "Thank you. We have 5 short questions. Reply STOP anytime to opt out.",
+                "Do you use oxygen at home? Have you recently been in the hospital or had a stroke, a blood clot, or a new heart or lung problem?"
+            ], choices: [{ text: "I don't use oxygen but I was in the hospital last month for a blood clot in my leg", next: '2.0' }] },
+            { id: '2.0', messages: [
+                "Thank you for sharing that. Based on your response we will want to discuss this with you, someone from our care team will call you back shortly to discuss this.",
+                "Do you have sleep apnea, or have you had trouble with medicine that helped you relax or sleep during a test or surgery?"
+            ], choices: [{ text: "No sleep apnea and sedation has always been fine for me", next: '3.0' }] },
+            { id: '3.0', messages: [
+                "Thank you for sharing that with us.",
+                "Do you take a medicine to prevent blood clots, treat diabetes, help with weight loss, or a medicine like Jardiance or Farxiga for your heart or kidneys?"
+            ], choices: [{ text: "Yes I take Eliquis for the clot and also Ozempic", next: '4.0' }] },
+            { id: '4.0', messages: [
+                "Thank you for sharing that. Based on your response we will want to discuss this with you, someone from our care team will call you back shortly to discuss this.",
+                "Have you had trouble with bowel prep before, or do you often have a hard time having a bowel movement?"
+            ], choices: [{ text: "Last time the prep didn't clear me out well, it was really hard", next: '5.0' }] },
+            { id: '5.0', messages: [
+                "Thank you for sharing that. Based on your response we will want to discuss this with you, someone from our care team will call you back shortly to discuss this.",
+                "Do you need help finding an adult to take you home, getting your prep, or using the directions?"
+            ], choices: [{ text: "No I should be fine, my daughter is taking me and we already picked up the prep", next: '6.0' }] },
+            { id: '6.0', messages: [
+                "Thank you for sharing that with us.",
+                "Thank you for completing this pre-procedure assessment. Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day."
+            ], choices: [] }
+        ]
+    };
+
     // Bundled library: add new demos alongside existing clinical programs; never wipe them.
     // Cedars numeric inpatient template intentionally retired (conversational TCM covers inpatient).
     const BUNDLED_TEMPLATES = [
@@ -1197,7 +1233,8 @@
         BH_WELLNESS_TEMPLATE,
         BH_PREVISIT_TEMPLATE,
         IBHH_ENROLLMENT_TEMPLATE,
-        WESTMINSTER_LTC_TEMPLATE
+        WESTMINSTER_LTC_TEMPLATE,
+        ENDOSCOPY_PREASSESS_TEMPLATE
     ];
 
     const RETIRED_TEMPLATE_IDS = new Set([
@@ -1221,7 +1258,8 @@
         [POST_FALL_NHB_TEMPLATE.id]: { patient: "Margaret", hospital: "National Heritage for the Blind" },
         [IP_PDO_VMFHS_TEMPLATE.id]: { patient: "Margaret", hospital: "Virginia Mason Franciscan Health" },
         [IBHH_ENROLLMENT_TEMPLATE.id]: { patient: "Kenny", hospital: "Riverside Behavioral Health" },
-        [WESTMINSTER_LTC_TEMPLATE.id]: { patient: "Michael", hospital: "Westminster Senior Living Community" }
+        [WESTMINSTER_LTC_TEMPLATE.id]: { patient: "Michael", hospital: "Westminster Senior Living Community" },
+        [ENDOSCOPY_PREASSESS_TEMPLATE.id]: { patient: "Linda", hospital: "Summit Gastroenterology" }
     };
 
 

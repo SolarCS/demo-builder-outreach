@@ -60,6 +60,7 @@ Dropdown templates (conversational AI / natural-language patient replies):
 - **Pre-Visit Pellet/Weight Prep**
 - **IBHH Program Enrollment** — Riverside Behavioral Health Integrated Behavioral Health enroll + wellness/meds check-in (from voice Outreach 1)
 - **Westminster LTC Post-Discharge** — senior living / LTC series (24h, 48h, Day 7, Day 14) for meds, home health, PCP, and facility return vs hospital
+- **Endoscopy Pre-Procedure Assessment** — GI clinic 5-question pre-visit screen (health history, sedation, medicines, bowel prep, help getting ready)
 
 Those three auto-set Patient = `Maria` and Hospital = `Beyond Health` (change Hospital for other prospects).  
 COPD/CHF auto-set Patient = `Patti` and expose day pills to switch check-ins.  
@@ -67,6 +68,7 @@ Post Fall Episode auto-sets Hospital = `National Heritage for the Blind`.
 IP PDO - VMFHS auto-sets Hospital = `Virginia Mason Franciscan Health`.  
 IBHH Program Enrollment auto-sets Patient = `Kenny` and Hospital = `Riverside Behavioral Health`.  
 Westminster LTC Post-Discharge auto-sets Patient = `Michael` and Hospital = `Westminster Senior Living Community`.  
+Endoscopy Pre-Procedure Assessment auto-sets Patient = `Linda` and Hospital = `Summit Gastroenterology`.  
 Pack notes: [`demos/beyond-health/`](demos/beyond-health/).
 
 **Important:** when adding a new use case, **add** a new dropdown entry. Do not remove or overwrite existing programs.
