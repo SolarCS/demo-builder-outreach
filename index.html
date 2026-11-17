@@ -1199,10 +1199,10 @@
             ], choices: [{ text: "I don't use oxygen but I was in the hospital last month for a blood clot in my leg", next: '2.0' }] },
             { id: '2.0', messages: [
                 "Thank you for sharing that. Based on your response we will want to discuss this with you, someone from our care team will call you back shortly to discuss this.",
-                "Do you have sleep apnea, or have you had trouble with medicine that helped you relax or sleep during a test or surgery?"
+                "Do you have sleep apnea, or have you ever had difficulty with sedation medicine that was used to help you relax or sleep during a test or surgery?"
             ], choices: [{ text: "No sleep apnea and sedation has always been fine for me", next: '3.0' }] },
             { id: '3.0', messages: [
-                "Thank you for sharing that with us.",
+                "Thank you for letting us know.",
                 "Do you take a medicine to prevent blood clots, treat diabetes, help with weight loss, or a medicine like Jardiance or Farxiga for your heart or kidneys?"
             ], choices: [{ text: "Yes I take Eliquis for the clot and also Ozempic", next: '4.0' }] },
             { id: '4.0', messages: [
@@ -1214,7 +1214,7 @@
                 "Do you need help finding an adult to take you home, getting your prep, or using the directions?"
             ], choices: [{ text: "No I should be fine, my daughter is taking me and we already picked up the prep", next: '6.0' }] },
             { id: '6.0', messages: [
-                "Thank you for sharing that with us.",
+                "Thank you for letting us know.",
                 "Thank you for completing this pre-procedure assessment. Please note, if you have an urgent medical problem or concern, please contact your doctor's office, call 911, or go to the nearest emergency department. Reply HELP for help. Reply STOP to unsubscribe.\n\nHave a great day."
             ], choices: [] }
         ]
@@ -1280,6 +1280,10 @@
             } else {
                 // Keep script edits, but always sync the dropdown title from bundled.
                 existing.name = bundled.name;
+                // Force-refresh Endoscopy copy when we ship approved wording updates.
+                if (bundled.id === 'endoscopy-preassess') {
+                    existing.steps = JSON.parse(JSON.stringify(bundled.steps));
+                }
             }
         });
     }
